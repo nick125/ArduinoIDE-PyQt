@@ -1,0 +1,34 @@
+Attempt at a pyqt interface for arduino
+
+Work in progress on a new Arduino interface with the Qt toolkit.
+
+Work in progress
+* Loads files into scincilla
+* list pde files
+* shows help
+
+todo
+* compile
+* upload
+
+
+
+
+
+
+=========================================
+With a view to later using this as a base for a proper c++ version
+
+Some simple suggestions
+* add nice comments
+* use Qt objects instead of python, eg QString - this will make porting to c++ easier
+* test QSintilla http://www.riverbankcomputing.co.uk/static/Docs/QScintilla2/classQsciScintilla.html
+
+
+Dev Notes
+icons.ico contains a list of icon names
+icons.icon where Icon() is template eg Icon(Ico.Save)
+
+the main window is passeed arround to each widget as main. so self.main in each classQsciScintilla
+There is one settings() - this is created as self.main.settings.*
+

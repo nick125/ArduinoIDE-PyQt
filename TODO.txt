@@ -1,0 +1,6 @@
+* User style preferance (eg Clenlooks, Mosaic) - use pyqt to query styles available and 
+
+* Setting up QScintzilla
+* load file in Editor as option
+
+
