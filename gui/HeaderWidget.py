@@ -6,7 +6,7 @@ from PyQt4 import QtCore, QtGui
 #from gui.icons import Icon 
 
 
-class HeaderWidget(QtGui.QDockWidget):
+class DEADHeaderWidget(QtGui.QDockWidget):
 
 	def __init__(self, main):
 		QtGui.QDockWidget.__init__(self)

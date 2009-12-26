@@ -2,6 +2,7 @@
 
 from PyQt4 import QtCore, QtGui
 
+import gui.widgets
 
 from gui.icons import Ico 
 from gui.icons import Icon 
@@ -25,9 +26,11 @@ class SketchListWidget(QtGui.QDockWidget):
 		if display_mode == self.MODE_USER:
 			self.dir_to_browse = self.main.settings.sketchbooks_path()
 			self.title = "Sketches"
+			self.ico = Ico.Sketches
 		else:
 			self.dir_to_browse = self.main.settings.examples_path()
 			self.title = "Examples"
+			self.ico = Ico.Examples
 
 		containerWidget = QtGui.QWidget()
 		self.setWidget(containerWidget)
@@ -37,10 +40,8 @@ class SketchListWidget(QtGui.QDockWidget):
 		mainLayout.setSpacing(0)
 		containerWidget.setLayout(mainLayout)
 
-		label   = QtGui.QLabel(self.title)
-		label.setStyleSheet("background-color: black; color: white; font-size: 18pt;")
-
-		mainLayout.addWidget(label)
+		headLabel = gui.widgets.HeaderLabel(self, self.main, icon=Ico.Help, title=self.title, color="purple", wash_to="green")
+		mainLayout.addWidget(headLabel)
 
 		#######################################
 		## Tree
@@ -61,7 +62,7 @@ class SketchListWidget(QtGui.QDockWidget):
 	#################################################################
 	def on_tree_clicked(self, item, col):
 		return
-		print "on_tree_clicked", item, col
+		#print "on_tree_clicked", item, col
 		data = item.data(0, QtCore.Qt.UserRole)
 		print data
 		if not data.isNull():
@@ -70,20 +71,21 @@ class SketchListWidget(QtGui.QDockWidget):
 		
 
 	def on_tree_double_clicked(self, item, col):
-		print "on_tree_double_clicked", item, col
+		#print "on_tree_double_clicked", item, col
 		#print "on_tree_clicked", item, col
 		data = item.data(0, QtCore.Qt.UserRole)
 		print data
 		if not data.isNull():
 			#if data.toString() == "pde":
-			print "YES", data.toString()
-			pdeFile = QtCore.QFile(data.toString())
-			if not pdeFile.open(QtCore.QIODevice.ReadOnly | QtCore.QIODevice.Text):
-				print "oops"
-				return
-			all_file = pdeFile.readAll()
-			all_file_string = QtCore.QString(all_file)
-			self.emit(QtCore.SIGNAL("open_sketch"), data.toString(), all_file_string)
+			#print "YES", data.toString()
+			self.emit(QtCore.SIGNAL("open_sketch"), data.toString())
+			#pdeFile = QtCore.QFile(data.toString())
+			#if not pdeFile.open(QtCore.QIODevice.ReadOnly | QtCore.QIODevice.Text):
+			#	print "oops"
+			#	return
+			#all_file = pdeFile.readAll()
+			#all_file_string = QtCore.QString(all_file)
+			
 
 		#progFile = QtCore.QFile(prog_file)
 		#if not progFile.open(QtCore.QIODevice.ReadOnly | QtCore.QIODevice.Text):
@@ -114,7 +116,7 @@ class SketchListWidget(QtGui.QDockWidget):
 
 			subDir = QtCore.QDir(fileInfo.filePath())
 			for sItem in subDir.entryInfoList(QtCore.QDir.AllEntries | QtCore.QDir.NoDotAndDotDot):
-				print sItem.fileName()
+				#print sItem.fileName()
 				if sItem.fileName() == "applet":
 					pass ## igonore TODO - maybe option to hide/show all files
 				else:

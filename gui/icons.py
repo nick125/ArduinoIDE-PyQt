@@ -15,15 +15,23 @@ class Icon(QtGui.QIcon):
 class Ico:
 	Arduino = 'arduino.png'
 
+	BootloaderBurn = 'transmit_go.png'
+	Bootloaders = 'transmit_blue.png'
+
+	Board = 'brick.png'
+	Boards = 'bricks.png'
+
 	## sketch Related
+	Sketches = 'page_copying.png'
 	Sketch = 'page.png'
 	Compile = 'arrow_in.png'
 	Upload = 'arrow_join.png'
 
 
 	## Help
+	Help = 'help.png'
 	HelpDoc = 'page_white.png'
-
+	
 	## Directories
 	Folder = 'folder.png'
 

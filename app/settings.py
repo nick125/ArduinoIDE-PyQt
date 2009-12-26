@@ -5,6 +5,16 @@ from PyQt4 import QtCore, QtGui
 
 import config
 
+"""
+Quick Notes
+
+Class that is rooted to this __file__
+parent = app_root is expected to be parent on this.
+This objject is shared globally as self.main.settings.*
+
+For some mad reason I want to push the "path" requests though this class.. so its all in one place..
+
+"""
 
 class Settings(QtCore.QObject):
 
@@ -27,8 +37,8 @@ class Settings(QtCore.QObject):
 		## TODO - user QT settings
 		return  QtCore.QString(os.path.abspath( os.path.dirname(__file__)	+  '/../' ))
 
-	#def icon_path(self):
-	#	return  os.path.abspath( os.path.dirname(__file__)	+  '/../../images/' )
+	def icons_path(self):
+		return  self.app_path().append("/images/icons/")
 
 	def help_path(self):
 		return self.arduino_path().append("/reference/")
@@ -41,3 +51,6 @@ class Settings(QtCore.QObject):
 
 	def hardware_path(self):
 		return self.arduino_path().append("/hardware/")
+
+	def keywords_path(self):
+		return self.app_path().append("/keywords")

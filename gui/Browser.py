@@ -13,10 +13,10 @@ class Browser(QtWebKit.QWebView):
 
 
 			html_str = self.main.ut.get_file_contents(html_file_name)
-			to_do_file_name = self.main.settings.app_path().append("/README")
+			to_do_file_name = self.main.settings.app_path().append("/README.txt")
 			readme = self.main.ut.get_file_contents(to_do_file_name)
-			print readme
-			print html_str.replace("###__README__###", readme)
+			#print readme
+			html_str.replace("###__README__###", readme)
 			self.setHtml(html_str)
 			self.show()
 

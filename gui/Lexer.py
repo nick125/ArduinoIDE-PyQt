@@ -2,14 +2,19 @@
 
 import sys
 from PyQt4 import QtCore, QtGui
-from PyQt4.Qsci import QsciScintilla, QsciLexerCustom
+from PyQt4.Qsci import QsciScintilla, QsciLexerCPP, QsciLexerCustom
 
 #########################################################################
 ## Lexer
 #########################################################################
 
+class ArduinoLexer(QsciLexerCPP):
 
-class ArduinoLexer(QsciLexerCustom):
+	def __init__(self, parent):
+		QsciLexerCPP.__init__(self, parent)
+
+
+class DEADArduinoLexer(QsciLexerCustom):
 	def __init__(self, parent):
 		QsciLexerCustom.__init__(self, parent)
 		self._styles = {
@@ -100,7 +105,7 @@ class ArduinoLexer(QsciLexerCustom):
 			# Try to uncomment the following line to see in the console
 			# how Scintiallla works. You have to think in terms of isolated
 			# lines rather than globally on the whole text.
-			print line
+			#print line
 
 			length = len(line)
 			# We must take care of empty lines.

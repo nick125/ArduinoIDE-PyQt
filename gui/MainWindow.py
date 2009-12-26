@@ -1,15 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from PyQt4 import QtGui, QtCore
+from PyQt4 import QtCore, QtGui
 
 import app.settings
 import app.util
-import app.hardware
+import app.Boards
+import app.Bootloaders
 
-from gui.HeaderWidget import HeaderWidget
+from gui.HelpWidgets import HelpDockWidget
 from gui.Browser import Browser
 
-from gui.HelpWidget import HelpWidget
+from gui.Boards import BoardsDialog
+from gui.Bootloaders import BootloadersDialog
+
+
 from gui.SketchListWidget import SketchListWidget
 from gui.EditorWidget import EditorWidget
 
@@ -21,6 +25,7 @@ class MainWindow(QtGui.QMainWindow):
 
 	def __init__(self, parent=None):
 		QtGui.QMainWindow.__init__(self)
+		self.DEV = True
 
 		# TODO - User customisable style
 		QtGui.QApplication.setStyle(QtGui.QStyleFactory.create('Cleanlooks'))
@@ -35,15 +40,54 @@ class MainWindow(QtGui.QMainWindow):
 		self.setMinimumHeight(900)
 		self.setDockNestingEnabled(True)
 		self.setDockOptions(QtGui.QMainWindow.ForceTabbedDocks)
+
+		self.topToolBar = QtGui.QToolBar()
+		self.topToolBar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
+		self.addToolBar( self.topToolBar )
+		if self.DEV:
+			self.topToolBar.addAction("Load Keywords", self.on_dev_load_keywords)
+
 		##########################################################
 		## Main Menus
 		##########################################################
 		menuFiles 	= self.menuBar().addMenu( "Files" )
 		menuEdit 	= self.menuBar().addMenu( "Edit" )
 		menuSketch  = self.menuBar().addMenu( "Sketch" )
-		menuTools 	= self.menuBar().addMenu( "Tools" )
+		
 		menuHelp 	= self.menuBar().addMenu( "Help" )
 
+		##############################
+		## Tools Menu
+		##############################
+		menuTools 	= self.menuBar().addMenu( "Tools" )
+
+		## Boards
+		self.actionGroupBoards = QtGui.QActionGroup(self)
+		self.actionGroupBoards.setExclusive(True)
+		self.connect(self.actionGroupBoards, QtCore.SIGNAL("triggered(QAction *)"), self.on_action_board_select)
+		self.menuBoards = menuTools.addMenu(Icon(Ico.Board), "Select Board")
+		boards = app.hardware.Boards(self)
+		for b in boards.index():
+			act = self.menuBoards.addAction( b ) #, self.on_board_selected)
+			act.setCheckable(True)
+			self.actionGroupBoards.addAction(act)
+		act = menuTools.addAction(Icon(Ico.Boards), "Boards Overview", self.on_action_boards)
+		self.topToolBar.addAction(act)
+		menuTools.addSeparator()
+
+		## Bootloaders
+		self.actionGroupBootLoaders = QtGui.QActionGroup(self)
+		self.actionGroupBootLoaders.setExclusive(True)
+		self.connect(self.actionGroupBootLoaders, QtCore.SIGNAL("triggered(QAction *)"), self.on_action_bootloader_burn)
+		self.menuBootLoaders = menuTools.addMenu(Icon(Ico.BootloaderBurn), "Burn Bootloader")
+		programmers = app.hardware.Programmers(self)
+		for p in programmers.index():
+			act = self.menuBootLoaders.addAction( p ) #, self.on_programmer_selected)
+			act.setCheckable(True)
+			self.actionGroupBootLoaders.addAction(act)
+		act = menuTools.addAction(Icon(Ico.Bootloaders), "Bootloaders Overview", self.on_action_bootloaders)
+		self.topToolBar.addAction(act)
+		menuTools.addSeparator()
 
 		##########################################################
 		## Header Label 
@@ -78,21 +122,62 @@ class MainWindow(QtGui.QMainWindow):
 		##########################################################
 		## Right Dock
 		##########################################################
-		helpWidget = HelpWidget(self)
-		self.addDockWidget(QtCore.Qt.RightDockWidgetArea, helpWidget)
+		helpDockWidget = HelpDockWidget(self, self)
+		self.addDockWidget(QtCore.Qt.RightDockWidgetArea, helpDockWidget)
 
+		##########################################################
+		## Status Bar
+		##########################################################
+		self.statusBar().addPermanentWidget(QtGui.QLabel("Board:"))
+		self.lblBoard = QtGui.QLabel("-- none --")
+		self.statusBar().addPermanentWidget(self.lblBoard)
 
-		self.load_programmers()
+		self.statusBar().addPermanentWidget(QtGui.QLabel("Bootloader:"))
+		self.lblBootloader = QtGui.QLabel("-- none --")
+		self.statusBar().addPermanentWidget(self.lblBootloader)
 
-
-	def load_programmers(self):
-		programmers = app.hardware.Programmers(self)
 		
 
+	#########################################
+	## Board Stuff
+	def on_action_boards(self):
+		print "boards"
+		d = BoardsDialog(self, self)
+		d.show()
 
-	def on_open_sketch(self, file_path, file_contents):
+	def on_action_board_select(self, act):
+		print "on_action_board", act
+		self.lblBoard.setText(act.text())
+
+	#########################################
+	## Bootloader Stuff
+	def on_action_bootloaders(self):
+		d = BootLoadersDialog(self, self)
+		d.show()
+
+	def on_action_bootloader_burn(self, act):
+		print "on_action_bootloader_burn", act
+		self.lblBootloader.setText(act.text())
+
+
+
+	def on_open_sketch(self, file_path):
 		fileInfo = QtCore.QFileInfo(file_path)
 		newEditor = EditorWidget(self)
-		newEditor.set_source(file_contents)
+		newEditor.open_file(fileInfo.filePath())
 		newTab = self.mainTabWidget.addTab(newEditor, Icon(Ico.Sketch), fileInfo.fileName())
 		self.mainTabWidget.setCurrentIndex(newTab)
+
+
+	def on_dev_load_keywords(self):
+		import app.keywords
+		
+		keyw = app.keywords.Keywords(self)
+		print keyw.index()
+"""
+class StatusWidget(QtCore.QWidget):
+
+		def __init__(self, parent, label="label", value="value",):
+			QtCore.QWidget.__init__(self, parent)
+"""
+		

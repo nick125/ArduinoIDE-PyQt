@@ -1,6 +1,7 @@
 Attempt at a pyqt interface for arduino
 
-Work in progress on a new Arduino interface with the Qt toolkit.
+Work in progress on a new Arduino interface with the Qt toolkit. 
+This is fun and a proof of concept. 
 
 Work in progress
 * Loads files into scincilla
@@ -11,6 +12,9 @@ todo
 * compile
 * upload
 
+Thanks, credit and sources
+* Arduino Makefile - http://armedgeek.net/arduino:makefile
+* arduino_make.sh - http://arkku.com/misc/arduino_make.sh
 
 
 

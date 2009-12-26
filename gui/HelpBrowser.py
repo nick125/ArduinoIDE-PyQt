@@ -2,6 +2,8 @@
 
 from PyQt4 import QtCore, QtGui, QtWebKit
 
+import gui.HelpWidgets
+
 from gui.icons import Icon
 from gui.icons import Ico
 	
@@ -9,20 +11,33 @@ from gui.icons import Ico
 ## Help Dialog
 ##########################################################################	
 	
-class HelpBrowser(QtGui.QWidget):
+class HelpBrowserDialog(QtGui.QDialog):
 
-	def __init__(self, parent):
-		QtGui.QWidget.__init__(self, parent)
+	def __init__(self, parent, main):
+		QtGui.QDialog.__init__(self, parent)
+		self.main = main
 
-		self.setWindowIcon(dIcon(dIco.Help))
+		self.setWindowIcon(Icon(Ico.Help))
 		self.setWindowTitle("Help")
-		self.setMinimumWidth(500)
+		self.setMinimumWidth(800)
 		self.setMinimumHeight(500)
 
 		layout = QtGui.QVBoxLayout()
+		layout.setContentsMargins(0,0,0,0)
+		layout.setSpacing(0)
 		self.setLayout( layout )
 
-		self.browser = QtWebKit.QWebView()
-		layout.addWidget( self.browser )
+		splitter = QtGui.QSplitter(self)
+		layout.addWidget(splitter)
 
-		
+		self.helpWidget = gui.HelpWidgets.HelpWidget(self, self.main)
+		splitter.addWidget(self.helpWidget)
+		#splitter.setStretchFactor(0, 1)
+
+		self.browser = QtWebKit.QWebView()
+		splitter.addWidget( self.browser )
+		#splitter.setStretchFactor(0, 5)
+
+	def load_help_page(self, page):
+		url_str = QtCore.QString("file://").append(page)
+		self.browser.load(QtCore.QUrl(url_str))
