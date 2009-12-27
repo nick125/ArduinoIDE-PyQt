@@ -36,10 +36,9 @@ class APIBrowser(QtGui.QWidget):
 	class COLS:
 		icon = 0
 		description = 1
-		parap = 2
-		section = 3
-		function = 4
-		folder = 5
+		section = 2
+		function = 3
+		folder = 4
 	
 	def __init__(self, parent, main):
 		QtGui.QWidget.__init__(self)
@@ -91,6 +90,8 @@ class APIBrowser(QtGui.QWidget):
 		self.folderactionGroup.addAction(self.actionDeleteFolder)
 		toolbar.addSeparator()
 
+		self.actionWriteApiFile = toolbar.addAction(Icon(Ico.WriteFile), "Write API file", self.on_write_api_file)
+
 		
 		#toolbar.addWidget(self.chkExtendedNodes)
 		#headerLayout.addWidget(lblTitle)
@@ -116,7 +117,56 @@ class APIBrowser(QtGui.QWidget):
 		self.tree.header().setStretchLastSection(True)
 		self.tree.setColumnWidth(0, 300)
 
+		self.api_lines = None
 		self.load()
+
+	def on_write_api_file(self):
+		rootItem = self.tree.invisibleRootItem()
+		self.api_lines = []
+		print "write-api-----------------------------------------------"
+		self.extract_api(rootItem)
+		for l in self.api_lines:
+			print l
+		api_string = "\n".join(self.api_lines)
+		file_path = self.main.settings.def_path().append("/autocomplete.txt")
+		#print file_path
+		self.main.ut.write_file(file_path, api_string)
+
+	def extract_api(self, treeItem):
+		#print "extract"
+		if treeItem.childCount() > 0:
+			for idx in range(0, treeItem.childCount()):
+				item = treeItem.child(idx)
+				#print item
+				if item.text(self.COLS.function).length() > 0:
+					file_path = item.data(self.COLS.icon, QtCore.Qt.UserRole).toString()
+					api = self.main.ut.load_yaml(file_path)
+					#for a in api:
+						#print a
+					#api_str = ''
+					if 'parameters_type' in api and api['parameters_type'] == 'variable':
+						func_name = str(api['function'])
+						if func_name.find(".") > 1:
+							self.api_lines.append(api['function'] + "()")
+							func_name = api['function'].split(".")[1]
+							#func_name
+							#self.api_lines.append(api_str)
+							#func_name = api['function']
+						for dic in api['parameters']:
+							api_str = func_name
+							api_str = api_str + "(" + dic.keys()[0] + ") " + api['summary']
+							self.api_lines.append(api_str)
+
+					else:
+						api_str = api['function']
+						l = []
+						for dic in api['parameters']:
+							l.append(dic.keys()[0]) #, dic.values()[0]
+						api_str += "(" + ", ".join(l) + ") " #+ dic.values()[0]
+						self.api_lines.append(api_str)
+							
+				else:
+					self.extract_api(item)
 
 	##################################################
 	## Function Actions
@@ -200,7 +250,8 @@ class APIBrowser(QtGui.QWidget):
 	def walk_dir(self, sub_dir, folder, parentItem):
 	
 		for file_entry in sub_dir.entryInfoList(QtCore.QDir.Files | QtCore.QDir.NoDotAndDotDot):
-			self.add_yaml_function_node(file_entry, folder, parentItem)
+			if file_entry.suffix() == 'yaml':
+				self.add_yaml_function_node(file_entry, folder, parentItem)
 	
 		for folder_entry in sub_dir.entryInfoList(QtCore.QDir.Dirs | QtCore.QDir.NoDotAndDotDot):
 			n_folder = folder + folder_entry.fileName() + "/"
@@ -218,23 +269,44 @@ class APIBrowser(QtGui.QWidget):
 	def add_yaml_function_node(self, sub_entry, folder, parentNode):
 		api = self.main.ut.load_yaml(sub_entry.filePath())
 		#print api
+		## TODO Qtify
+		if 'section' in api and api['section']:
+			section =  api['section']
+		else:
+			section = "#"
+		#items = self.tree.findItems(section_path, QtCore.Qt.MatchExactly, self.COLS.section)
+		#print items, section_path
+		#if len(items) == 0:
+		#	sectionItem = QtGui.QTreeWidgetItem(parentNode)
+		#	sectionItem.setText(self.COLS.icon, api['section'])
+		#	sectionItem.setText(self.COLS.section, section_path)
+		#items = self.tree.findItems(section_path, QtCore.Qt.MatchExactly, self.COLS.section)
+		#print "Second", items, section_path
+		#"""
+		#else:
+		#	print items
+
+		#print api
 		funkFileItem = QtGui.QTreeWidgetItem(parentNode)
 		funkFileItem.setIcon(self.COLS.icon, Icon(Ico.Function))
 		funkFileItem.setText(self.COLS.icon, sub_entry.fileName())
-		funkFileItem.setText(self.COLS.icon, api['syntax'])
+		if 'syntax' in api:
+			funkFileItem.setText(self.COLS.icon, api['syntax'])
 		funkFileItem.setText(self.COLS.description, api['summary'])
 		funkFileItem.setText(self.COLS.function, api['function'])
 		funkFileItem.setText(self.COLS.folder, folder)
+		funkFileItem.setText(self.COLS.section, section)
 		funkFileItem.setData(self.COLS.icon, QtCore.Qt.UserRole, QtCore.QVariant(sub_entry.filePath()))
 		#self.tree.setItemExpanded(funkFileItem, True)
 		if self.chkExtendedNodes.isChecked():
 			if len(api['parameters']) > 0: ##TODO Qt'ify python code
-				for ap in api['parameters']:
-					kidd = QtGui.QTreeWidgetItem(funkFileItem)
-					kidd.setIcon(self.COLS.icon, Icon(Ico.Green))
-					kidd.setText(self.COLS.icon, ap.keys()[0])
-					kidd.setText(self.COLS.description, ap.values()[0])
-					kidd.setData(self.COLS.icon, QtCore.Qt.UserRole, QtCore.QVariant(sub_entry.filePath()))
+				if 'paramaters_type' in api and 'parameters_type' =='fixed':
+					for ap in api['parameters']:
+						kidd = QtGui.QTreeWidgetItem(funkFileItem)
+						kidd.setIcon(self.COLS.icon, Icon(Ico.Green))
+						kidd.setText(self.COLS.icon, ap.keys()[0])
+						kidd.setText(self.COLS.description, ap.values()[0])
+						kidd.setData(self.COLS.icon, QtCore.Qt.UserRole, QtCore.QVariant(sub_entry.filePath()))
 	
 			if 'return' in api:
 				kidd = QtGui.QTreeWidgetItem(funkFileItem)

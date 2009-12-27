@@ -17,6 +17,7 @@ class FunctionEditDialog(QtGui.QDialog):
 		self.function_file = function_file
 		self.path = path
 		self.paths = paths
+		self.dic = None
 		#print function_file, path, paths
 
 		self.setMinimumWidth(1100)
@@ -68,7 +69,7 @@ class FunctionEditDialog(QtGui.QDialog):
 		gridLayout.addWidget(self.txtSyntax, row, 1)
 		gridLayout.addWidget(QtGui.QLabel(""), row, 2)
 
-		## Tooltip
+		## Summary
 		row  += 1
 		gridLayout.addWidget(QtGui.QLabel("Summary:"), row, 0, QtCore.Qt.AlignRight)
 		self.txtSummary = QtGui.QLineEdit()
@@ -86,6 +87,14 @@ class FunctionEditDialog(QtGui.QDialog):
 		toolbar = QtGui.QToolBar()
 		toolbar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
 		grpLayout.addWidget(toolbar)
+
+
+		self.radioFixed = QtGui.QRadioButton("Fixed params", self)
+		toolbar.addWidget(self.radioFixed)
+		self.radioVariable = QtGui.QRadioButton("Variable params", self)
+		toolbar.addWidget(self.radioVariable)
+		toolbar.addSeparator()
+
 		toolbar.addAction(Icon(Ico.Add), "Add", self.on_add_parameter)
 		toolbar.addAction(Icon(Ico.Remove), "Remove", self.on_remove_parameter)
 		toolbar.addSeparator()
@@ -101,10 +110,12 @@ class FunctionEditDialog(QtGui.QDialog):
 
 		## Returns
 		row  += 1
-		gridLayout.addWidget(QtGui.QLabel("Return:"), row, 0, QtCore.Qt.AlignRight)
+		self.chkReturn = QtGui.QCheckBox("Return")
+		self.connect(self.chkReturn, QtCore.SIGNAL("toggled(bool)"), self.on_chk_return)
+		gridLayout.addWidget(self.chkReturn, row, 0, QtCore.Qt.AlignRight)
 		self.txtReturn = QtGui.QLineEdit()
-		gridLayout.addWidget(self.txtReturn, row, 1)
-		gridLayout.addWidget(QtGui.QLabel("eg milliseconds elapsed"), row, 2)
+		gridLayout.addWidget(self.txtReturn, row, 1, 1, 2)
+		#gridLayout.addWidget(QtGui.QLabel("eg milliseconds elapsed"), row, 2)
 
 		## Description
 		row  += 1
@@ -145,6 +156,15 @@ class FunctionEditDialog(QtGui.QDialog):
 		if self.function_file:
 			self.load_file()
 
+	def on_chk_return(self):
+		self.txtReturn.setEnabled( self.chkReturn.isChecked() )
+		if self.chkReturn.isChecked():
+			self.txtReturn.setText( self.dic['return'] )
+			self.txtReturn.setFocus()
+		else:
+			self.txtReturn.setText( '' )
+			
+
 	def on_cancel(self):
 		self.reject()
 
@@ -184,16 +204,26 @@ class FunctionEditDialog(QtGui.QDialog):
 		#print string
 		#print "LOAD", file_name
 		data = yaml.load(str(string))
-		
+		self.dic = data
+
 		self.txtFunction.setText(data['function'])
 		#self.txtLib.setText(data['lib'])
 		self.txtSection.setText(data['section'])
 		self.txtSyntax.setText(data['syntax'])
 		self.txtSummary.setText(data['summary'])
 		if 'return' in data:
-			self.txtReturn.setText(data['return'])
-
-		#self.txtParameters.setPlainText(data['parameters'])
+			if data['return'] != '':
+				self.txtReturn.setText(data['return'])
+				self.txtReturn.setEnabled(True)
+				self.chkReturn.setChecked(True)
+			else:
+				self.txtReturn.setText("")
+				self.txtReturn.setEnabled(False)
+				self.chkReturn.setChecked(False)
+		if 'parameters_type' in data and data['parameters_type'] == 'variable':
+			self.radioVariable.setChecked(True)
+		else:
+			self.radioFixed.setChecked(True)
 		self.txtDescription.setPlainText(data['description'])
 		self.txtExample.setPlainText(data['example'])
 
@@ -239,8 +269,9 @@ class FunctionEditDialog(QtGui.QDialog):
 		dic['return'] = str(self.txtReturn.text())
 		dic['description'] = str(self.txtDescription.toPlainText())
 		dic['example'] = str(self.txtExample.toPlainText())
+		dic['parameters_type'] = 'fixed' if self.radioFixed.isChecked() else 'variable'
 		dic['parameters'] = []
-		print dic
+		print dic['parameters_type']
 		rootItem = self.tree.invisibleRootItem()
 		for idx in range(0, rootItem.childCount()):
 			kid = rootItem.child(idx)

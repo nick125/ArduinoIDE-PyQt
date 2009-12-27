@@ -57,3 +57,5 @@ class Ico:
 	Blue = 'bullet_blue.png'
 	Black = 'bullet_black.png'
 	Refresh = 'refresh.gif'
+
+	WriteFile = 'book_next'

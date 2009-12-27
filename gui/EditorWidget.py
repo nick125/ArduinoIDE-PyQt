@@ -63,10 +63,10 @@ class EditorWidget(QtGui.QWidget):
 	
 		## Aarduino API Functions
 		self.arduinoFunctionsAPI = QsciAPIs(self.lexer)
-		keywords_file = self.main.settings.keywords_path().append("/arduino.txt")
+		keywords_file = self.main.settings.def_path().append("/autocomplete.txt")
 		#print keywords_file
 		self.arduinoFunctionsAPI.load(keywords_file)
-		self.load_keywords()
+		#self.load_keywords()
 		"""self.arduinoFunctionsAPI.add("INPUT")
 		self.arduinoFunctionsAPI.add("OUTPUT")
 		self.arduinoFunctionsAPI.add("DEFAULT")

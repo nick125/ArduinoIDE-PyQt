@@ -100,7 +100,7 @@ class MainWindow(QtGui.QMainWindow):
 		## Left Dock
 		##########################################################
 		userSketchesWidget = SketchListWidget(self, SketchListWidget.MODE_USER)
-		#self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, userSketchesWidget)	
+		self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, userSketchesWidget)	
 		self.connect(userSketchesWidget, QtCore.SIGNAL("open_sketch"), self.on_open_sketch)
 		#exampleSketchesWidget = SketchListWidget(self, SketchListWidget.MODE_EXAMPES)
 		#self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, exampleSketchesWidget)	
