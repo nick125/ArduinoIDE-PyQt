@@ -27,7 +27,7 @@ class EditorWidget(QtGui.QWidget):
 		mainLayout.addWidget(toolbar)
 
 		### Action Buttons
-		self.actionCompile = toolbar.addAction(Icon(Ico.Compile), "Compile and Compile", self.on_compile)
+		self.actionCompile = toolbar.addAction(Icon(Ico.Compile), "Save and Compile", self.on_compile)
 		self.chkAutoUpload = QtGui.QCheckBox("Upload after compile")
 		self.chkAutoUpload.setCheckState(QtCore.Qt.Checked)
 		toolbar.addWidget(self.chkAutoUpload)
@@ -62,18 +62,20 @@ class EditorWidget(QtGui.QWidget):
 		self.editor.setLexer(self.lexer)
 	
 		## Aarduino API Functions
-		arduinoFunctionsAPI = QsciAPIs(self.lexer)
+		self.arduinoFunctionsAPI = QsciAPIs(self.lexer)
 		keywords_file = self.main.settings.keywords_path().append("/arduino.txt")
 		#print keywords_file
-		arduinoFunctionsAPI.load(keywords_file)
-		#arduinoFunctionsAPI.add("INPUT")
-		#arduinoFunctionsAPI.add("OUTPUT")
-		#arduinoFunctionsAPI.add("DEFAULT")
-		#arduinoFunctionsAPI.add("OUTPUT")
-		#apis.add("test123");
-		#apis.add("foobar");
-		arduinoFunctionsAPI.prepare()
-		self.lexer.setAPIs(arduinoFunctionsAPI)
+		self.arduinoFunctionsAPI.load(keywords_file)
+		self.load_keywords()
+		"""self.arduinoFunctionsAPI.add("INPUT")
+		self.arduinoFunctionsAPI.add("OUTPUT")
+		self.arduinoFunctionsAPI.add("DEFAULT")
+		self.arduinoFunctionsAPI.add("OUTPUT")
+		self.arduinoFunctionsAPI.add("LOW")
+		self.arduinoFunctionsAPI.add("HIGH")
+		"""
+		self.arduinoFunctionsAPI.prepare()
+		self.lexer.setAPIs(self.arduinoFunctionsAPI)
 
 		## Aarduino Constants
 		"""
@@ -125,4 +127,21 @@ class EditorWidget(QtGui.QWidget):
 		print "upload"
 
 
-
+	def load_keywords(self):
+		words_file = self.main.settings.keywords_path().append("/keywords_ripped.txt")
+		words_str = self.main.ut.get_file_contents(words_file)
+		word_lines = words_str.split("\n")
+		for line in word_lines:
+			#print line
+			line = line.trimmed()
+			#print "..", line
+			if line.length() > 0:
+				if not line.startsWith("#"):
+					line = str(line)
+					parts = line.split(" ")
+					#print parts
+					for p in parts:
+						print "==", p
+					keyword = parts[0]
+					print "#%s#" % keyword
+					self.arduinoFunctionsAPI.add(keyword)

@@ -12,7 +12,8 @@ class ArduinoLexer(QsciLexerCPP):
 
 	def __init__(self, parent):
 		QsciLexerCPP.__init__(self, parent)
-
+		font = self.defaultFont()
+		
 
 class DEADArduinoLexer(QsciLexerCustom):
 	def __init__(self, parent):

@@ -4,6 +4,7 @@ from PyQt4 import QtCore, QtGui
 
 import app.hardware 
 
+import gui.widgets
 from gui.icons import Ico 
 from gui.icons import Icon 
 
@@ -22,10 +23,10 @@ class BoardsDialog(QtGui.QDialog):
 		mainLayout.setSpacing(0)
 		self.setLayout(mainLayout)
 
-		headerLabel   = QtGui.QLabel("Boards")
-		headerLabel.setStyleSheet("background-color: black; color: white; font-size: 20pt;")
+		#headerLabel   = gui,widgets.HeaderLabel(self, self.main, title="Boards
+		#headerLabel.setStyleSheet("background-color: black; color: white; font-size: 20pt;")
 
-		mainLayout.addWidget(headerLabel)
+		#mainLayout.addWidget(headerLabel)
 
 		#######################################
 		## Tree
@@ -45,6 +46,8 @@ class BoardsDialog(QtGui.QDialog):
 		print "foo"
 		boards = app.hardware.Boards(self.main)
 		print boards.index()
+		for i in boards.tree():
+			print foo;
 
 
 	def on_tree_clicked(self, item, col):

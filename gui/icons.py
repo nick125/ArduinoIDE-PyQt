@@ -22,7 +22,7 @@ class Ico:
 	Boards = 'bricks.png'
 
 	## sketch Related
-	Sketches = 'page_copying.png'
+	Sketches = 'page_copy.png'
 	Sketch = 'page.png'
 	Compile = 'arrow_in.png'
 	Upload = 'arrow_join.png'
@@ -36,5 +36,15 @@ class Ico:
 	Folder = 'folder.png'
 
 
-	
-	
+	## widgets
+	Add = 'add.png'
+	Delete ='delete.png'
+	Remove = 'delete.png'
+	Cancel = 'bullet_black.png'
+	Save = 'accept.png'
+	Up = 'arrow_up.png'
+	Down = 'arrow_down.png'
+
+	Function = 'ruby.png'
+	FunctionAdd = 'ruby_add.png'
+	FunctionRemove = 'ruby_delete.png'

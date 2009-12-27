@@ -100,7 +100,7 @@ class MainWindow(QtGui.QMainWindow):
 		## Left Dock
 		##########################################################
 		userSketchesWidget = SketchListWidget(self, SketchListWidget.MODE_USER)
-		self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, userSketchesWidget)	
+		#self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, userSketchesWidget)	
 		self.connect(userSketchesWidget, QtCore.SIGNAL("open_sketch"), self.on_open_sketch)
 		#exampleSketchesWidget = SketchListWidget(self, SketchListWidget.MODE_EXAMPES)
 		#self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, exampleSketchesWidget)	
@@ -114,6 +114,13 @@ class MainWindow(QtGui.QMainWindow):
 		self.mainTabWidget.setTabsClosable(True)
 		self.setCentralWidget(self.mainTabWidget)
 
+		#import gui.DefEditor
+		#defEditor = gui.DefEditor.DefEditor(self, self)
+		#self.mainTabWidget.addTab(defEditor, Icon(Ico.Arduino), "Def Editor")
+		import gui.APIBrowser
+		apiBrowser = gui.APIBrowser.APIBrowser(self, self)
+		self.mainTabWidget.addTab(apiBrowser, Icon(Ico.Arduino), "API Browser")
+
 		## Welcome page
 		welcomePage = Browser(self, self, "welcome.html")
 		self.mainTabWidget.addTab(welcomePage, Icon(Ico.Arduino), "Welcome")
@@ -123,7 +130,7 @@ class MainWindow(QtGui.QMainWindow):
 		## Right Dock
 		##########################################################
 		helpDockWidget = HelpDockWidget(self, self)
-		self.addDockWidget(QtCore.Qt.RightDockWidgetArea, helpDockWidget)
+		#self.addDockWidget(QtCore.Qt.RightDockWidgetArea, helpDockWidget)
 
 		##########################################################
 		## Status Bar

@@ -40,7 +40,7 @@ class SketchListWidget(QtGui.QDockWidget):
 		mainLayout.setSpacing(0)
 		containerWidget.setLayout(mainLayout)
 
-		headLabel = gui.widgets.HeaderLabel(self, self.main, icon=Ico.Help, title=self.title, color="purple", wash_to="green")
+		headLabel = gui.widgets.HeaderLabel(self, self.main, icon=Ico.Sketches, title=self.title, color="blue", wash_to="blue")
 		mainLayout.addWidget(headLabel)
 
 		#######################################

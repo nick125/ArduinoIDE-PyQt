@@ -21,8 +21,16 @@ class TerminalWidget(QtGui.QWidget):
 		layout.setSpacing(0)
 		self.setLayout(layout)
 
+		#self.headerWidget = QtGui.QWidget()
+		headLAy = QtGui.QHBoxLayout()
+		layout.addLayout(headLAy)
+
 		self.headerLabel = QtGui.QLabel("Terminal Output")
-		layout.addWidget(self.headerLabel)
+		headLAy.addWidget(self.headerLabel, 10)
+
+		self.progress = QtGui.QProgressBar()
+		self.progress.setRange(0,0)
+		headLAy.addWidget(self.progress, 1)
 
 		"""
 		toolbar = QtGui.QToolBar()
