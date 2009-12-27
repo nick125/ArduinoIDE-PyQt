@@ -34,6 +34,9 @@ class Ico:
 	
 	## Directories
 	Folder = 'folder.png'
+	FolderAdd = 'folder_add.png'
+	FolderEdit = 'folder_edit.png'
+	FolderDelete = 'folder_delete.png'
 
 
 	## widgets
@@ -47,4 +50,10 @@ class Ico:
 
 	Function = 'ruby.png'
 	FunctionAdd = 'ruby_add.png'
-	FunctionRemove = 'ruby_delete.png'
+	FunctionEdit = 'ruby.png'
+	FunctionDelete = 'ruby_delete.png'
+
+	Green = 'bullet_green.png'
+	Blue = 'bullet_blue.png'
+	Black = 'bullet_black.png'
+	Refresh = 'refresh.gif'
