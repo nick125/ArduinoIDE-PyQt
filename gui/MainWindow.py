@@ -65,13 +65,13 @@ class MainWindow(QtGui.QMainWindow):
 		self.actionGroupBoards = QtGui.QActionGroup(self)
 		self.actionGroupBoards.setExclusive(True)
 		self.connect(self.actionGroupBoards, QtCore.SIGNAL("triggered(QAction *)"), self.on_action_board_select)
-		self.menuBoards = menuTools.addMenu(Icon(Ico.Board), "Select Board")
+		self.menuBoards = menuTools.addMenu(Icon(Ico.Board), "Set Current Board")
 		boards = app.Boards.Boards(self)
 		for b in boards.index():
-			act = self.menuBoards.addAction( b )
+			act = self.menuBoards.addAction( b['name'] )
 			act.setCheckable(True)
 			self.actionGroupBoards.addAction(act)
-		act = menuTools.addAction(Icon(Ico.Boards), "Boards Overview", self.on_action_boards)
+		act = menuTools.addAction(Icon(Ico.Boards), "Boards", self.on_action_boards)
 		self.topToolBar.addAction(act)
 		menuTools.addSeparator()
 
@@ -85,7 +85,7 @@ class MainWindow(QtGui.QMainWindow):
 			act = self.menuBootLoaders.addAction( p )
 			act.setCheckable(True)
 			self.actionGroupBootLoaders.addAction(act)
-		act = menuTools.addAction(Icon(Ico.Bootloaders), "Bootloaders Overview", self.on_action_bootloaders)
+		act = menuTools.addAction(Icon(Ico.Bootloaders), "Bootloaders", self.on_action_bootloaders)
 		self.topToolBar.addAction(act)
 		menuTools.addSeparator()
 

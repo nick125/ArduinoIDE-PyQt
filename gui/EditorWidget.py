@@ -43,7 +43,6 @@ class EditorWidget(QtGui.QWidget):
 		self.editor = QsciScintilla(self)
 		self.editor.setUtf8(True)
 		self.editor.setFolding(QsciScintilla.BoxedTreeFoldStyle)
-		#self.setCentralWidget(self.editor)
 		self.editor.setMarginLineNumbers(1, True)
 		self.editor.setAutoIndent(True)
 		mainLayout.addWidget(self.editor, 3)

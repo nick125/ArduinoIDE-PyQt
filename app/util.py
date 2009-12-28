@@ -31,3 +31,39 @@ class Util:
 		return yaml.load(str(string))
 
 		
+	def load_arduino_config_file(self, file_path):
+		#prog_file = self.main.settings.hardware_path().append("boards.txt")
+		fileOb = QtCore.QFile(file_path)
+		if not fileOb.open(QtCore.QIODevice.ReadOnly | QtCore.QIODevice.Text):
+			print "oops" # TODO error
+			return False
+		dic = {}
+		## Parse foo.name = "xyx" and board.section.property = "xyx"
+
+		## TODO - sort list
+		while not fileOb.atEnd():
+			line = fileOb.readLine();
+			string =  QtCore.QString(line)
+			string = string.trimmed()
+			if string.length() > 0:
+				if not string.startsWith("#"):
+					if string.contains("."):
+						pystr = str(string)
+						kis_val = pystr.split("=")
+						keys = kis_val[0].split(".")
+						board_ki = keys[0]
+						if not board_ki in dic:
+							dic[board_ki] = {}
+
+						 # 2 keys
+						if len(keys) == 2:
+							#self.boards_index.append({'board': kis_val[0], 'name': kis_val[1]})
+							dic[board_ki][keys[1]]  = kis_val[1]
+
+						# we got third value so section
+						else: 
+							if not keys[1] in dic[board_ki]:
+								dic[board_ki][keys[1]] = {}
+							dic[board_ki][keys[1]][keys[2]] = kis_val[1]
+
+		return dic

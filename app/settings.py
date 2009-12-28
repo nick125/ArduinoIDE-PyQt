@@ -31,10 +31,15 @@ class Settings(QtCore.QObject):
 
 
 	def arduino_path(self):
+		## TODO - use prefs
 		return QtCore.QString(config.ARDUINO_PATH)
 
+	def arduino_svn_path(self):
+		## TODO - use prefs
+		return QtCore.QString(config.ARDUINO_SVN_TRUNK)
+
 	def app_path(self):
-		## TODO - user QT settings
+		## TODO - user QT Object
 		return  QtCore.QString(os.path.abspath( os.path.dirname(__file__)	+  '/../' ))
 
 	def icons_path(self):
@@ -52,8 +57,20 @@ class Settings(QtCore.QObject):
 	def hardware_path(self):
 		return self.arduino_path().append("/hardware/")
 
-	def keywords_path(self):
-		return self.app_path().append("/keywords")
+	#def keywords_path(self):
+		#return self.app_path().append("/keywords")
 
-	def def_path(self):
-		return self.app_path().append("/etc/def")
+	def api_def_path(self):
+		return self.app_path().append("/etc/api")
+
+	def all_paths(self):
+		ret = []
+		ret.append(['Arduino', self.arduino_path()])
+		ret.append(['arduino-pyqt', self.app_path()])
+		ret.append(['Arduino svn/trunk', self.arduino_svn_path()])
+		ret.append(['Help', self.help_path()])
+		ret.append(['Examples', self.examples_path()])
+		ret.append(['Sketchbooks', self.sketchbooks_path()])
+		ret.append(['Hardware', self.hardware_path()])
+		ret.append(['API', self.api_def_path()])
+		return ret
