@@ -198,7 +198,7 @@ class FunctionEditDialog(QtGui.QDialog):
 	def load_file(self):
 
 		#file_name = self.main.settings.def_path().append("/digitalWrite.yaml")
-		file_path = self.main.settings.api_path().append(self.path).append(self.function_file)
+		file_path = self.main.settings.api_define_path().append(self.path).append(self.function_file)
 		#print file_path
 		string = self.main.ut.get_file_contents(file_path)
 		#print string

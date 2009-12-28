@@ -5,8 +5,6 @@ from PyQt4 import QtCore, QtGui
 import app.settings
 import app.util
 import app.Boards
-#import app.Bootloaders
-import app.Parsers
 
 import gui.FileSystemBrowser
 
@@ -42,7 +40,6 @@ class MainWindow(QtGui.QMainWindow):
 		## Sets up the settings and other global classes
 		self.settings = app.settings.Settings() 
 		self.ut = app.util.Util()
-		#self.parsers = app.Parsers.Parsers()
 
 		
 		self.setWindowTitle("Arduino - pyqt - alpha version")

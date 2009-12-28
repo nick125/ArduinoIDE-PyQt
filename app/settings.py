@@ -109,8 +109,8 @@ class Settings(QtCore.QObject):
 	#def keywords_path(self):
 		#return self.app_path().append("/keywords")
 
-	def api_def_path(self):
-		return self.app_path().append("/etc/api")
+	def api_define_path(self):
+		return self.app_path().append("/etc/api_define")
 
 	def all_paths(self):
 		ret = []
