@@ -249,7 +249,7 @@ class APIBrowser(QtGui.QWidget):
 
 		self.tree.model().removeRows(0, self.tree.model().rowCount())
 		rootNode = self.tree.invisibleRootItem()
-		root_path = self.main.settings.def_path()
+		root_path = self.main.settings.api_def_path()
 		rootDir = QtCore.QDir(root_path)
 		self.paths = []
 		self.walk_dir(rootDir, '/', rootNode)
