@@ -2,7 +2,7 @@
 
 from PyQt4 import QtCore, QtGui
 
-import app.hardware 
+import app.Boards 
 
 import gui.widgets
 from gui.icons import Ico 
@@ -44,10 +44,11 @@ class BoardsDialog(QtGui.QDialog):
 
 	def load_file(self):
 		print "foo"
-		boards = app.hardware.Boards(self.main)
-		print boards.index()
-		for i in boards.tree():
-			print foo;
+		boardsObj = app.Boards.Boards(self.main)
+		for board in boardsObj.index():
+			print board
+		#for i in boards.tree():
+		#	print foo;
 
 
 	def on_tree_clicked(self, item, col):

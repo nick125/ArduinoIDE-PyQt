@@ -54,3 +54,6 @@ class Settings(QtCore.QObject):
 
 	def keywords_path(self):
 		return self.app_path().append("/keywords")
+
+	def def_path(self):
+		return self.app_path().append("/etc/def")

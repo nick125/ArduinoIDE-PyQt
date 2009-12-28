@@ -52,6 +52,9 @@ class Ico:
 	FunctionAdd = 'ruby_add.png'
 	FunctionEdit = 'ruby.png'
 	FunctionDelete = 'ruby_delete.png'
+	FunctionReturn = 'bullet_go.png'
+	FunctionParam = 'bullet_green.png'
+	FunctionSub = 'bullet_red.png'
 
 	Green = 'bullet_green.png'
 	Blue = 'bullet_blue.png'

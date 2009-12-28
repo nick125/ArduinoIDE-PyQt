@@ -4,10 +4,9 @@ import yaml
 from PyQt4 import QtCore, QtGui
 
 from gui.FunctionEditDialog import FunctionEditDialog
-from gui.FileDialogs import FolderEditDialog
+#from gui.FileDialogs import FolderEditDialog
 from gui.icons import Ico 
 from gui.icons import Icon 
-
 
 
 class SSHelpDockWidget(QtGui.QDockWidget):
@@ -63,6 +62,7 @@ class APIBrowser(QtGui.QWidget):
 
 		act = toolbar.addAction(Icon(Ico.Refresh), "Refresh", self.on_refresh)
 		self.chkExtendedNodes = QtGui.QCheckBox("Show vars")
+		self.chkExtendedNodes.setChecked(True)
 		toolbar.addWidget(self.chkExtendedNodes)
 		self.connect(self.chkExtendedNodes, QtCore.SIGNAL("clicked()"), self.on_refresh)
 		toolbar.addSeparator()
@@ -115,7 +115,14 @@ class APIBrowser(QtGui.QWidget):
 		self.tree.headerItem().setText(self.COLS.function, "Function")
 		self.tree.headerItem().setText(self.COLS.folder, "Folder")
 		self.tree.header().setStretchLastSection(True)
-		self.tree.setColumnWidth(0, 300)
+		self.tree.setColumnWidth(self.COLS.icon, 300)
+		self.tree.setColumnWidth(self.COLS.description, 300)
+		if 1 == 0:
+			#self.tree.setColumnHidden(self.COLS.folder, True)
+			self.tree.setColumnHidden(self.COLS.function, True)
+			self.tree.setColumnHidden(self.COLS.folder, True)
+
+		
 
 		self.api_lines = None
 		self.load()
@@ -287,33 +294,107 @@ class APIBrowser(QtGui.QWidget):
 		#	print items
 
 		#print api
-		funkFileItem = QtGui.QTreeWidgetItem(parentNode)
-		funkFileItem.setIcon(self.COLS.icon, Icon(Ico.Function))
-		funkFileItem.setText(self.COLS.icon, sub_entry.fileName())
-		if 'syntax' in api:
-			funkFileItem.setText(self.COLS.icon, api['syntax'])
-		funkFileItem.setText(self.COLS.description, api['summary'])
-		funkFileItem.setText(self.COLS.function, api['function'])
-		funkFileItem.setText(self.COLS.folder, folder)
-		funkFileItem.setText(self.COLS.section, section)
-		funkFileItem.setData(self.COLS.icon, QtCore.Qt.UserRole, QtCore.QVariant(sub_entry.filePath()))
-		#self.tree.setItemExpanded(funkFileItem, True)
-		if self.chkExtendedNodes.isChecked():
-			if len(api['parameters']) > 0: ##TODO Qt'ify python code
-				if 'paramaters_type' in api and 'parameters_type' =='fixed':
-					for ap in api['parameters']:
-						kidd = QtGui.QTreeWidgetItem(funkFileItem)
-						kidd.setIcon(self.COLS.icon, Icon(Ico.Green))
-						kidd.setText(self.COLS.icon, ap.keys()[0])
-						kidd.setText(self.COLS.description, ap.values()[0])
-						kidd.setData(self.COLS.icon, QtCore.Qt.UserRole, QtCore.QVariant(sub_entry.filePath()))
-	
-			if 'return' in api:
-				kidd = QtGui.QTreeWidgetItem(funkFileItem)
-				kidd.setIcon(self.COLS.icon, Icon(Ico.Blue)) 
-				lbl = QtCore.QString("Return: ").append(api['return'])
-				kidd.setText(self.COLS.icon, lbl)
-				kidd.setData(self.COLS.icon, QtCore.Qt.UserRole, QtCore.QVariant(sub_entry.filePath()))
+		is_fixed = 'parameters_type' in api and api['parameters_type'] == 'fixed'
+		if not is_fixed:
+			#print "foo"
+			s = api['function'] + "(*)"
+			funkFileItem = QtGui.QTreeWidgetItem(parentNode)
+			funkFileItem.setIcon(self.COLS.icon, Icon(Ico.Function))
+			funkFileItem.setData(self.COLS.icon, QtCore.Qt.UserRole, sub_entry.fileName())
+			funkFileItem.setText(self.COLS.folder, folder)
+			font = funkFileItem.font(self.COLS.icon)
+			font.setBold(True)
+			funkFileItem.setFont(self.COLS.icon, font)
+			funkFileItem.setText(self.COLS.icon, s)
+			funkFileItem.setText(self.COLS.function, api['function'])
+			
+			if len(api['parameters']) > 0:
+				#p_list = []
+				for ap in api['parameters']:
+					paraSyntax = QtGui.QTreeWidgetItem(funkFileItem)
+					paraSyntax.setIcon(self.COLS.icon, Icon(Ico.FunctionSub))
+					paraSyntax.setData(self.COLS.icon, QtCore.Qt.UserRole, sub_entry.fileName())
+					font = funkFileItem.font(self.COLS.icon)
+					font.setBold(True)
+					paraSyntax.setFont(self.COLS.icon, font)
+
+					#sss  = "<font color=blue><b>%s</b></font>" % ap.keys()[0]
+					#sss = ap.keys()[0]
+					#p_list.append(sss)
+				#s += "( " + ", ".join(p_list)+ " )"
+				#kidd = QtGui.QTreeWidgetItem(funkFileItem)
+				#kidd.setIcon(self.COLS.icon, Icon(Ico.Green))
+			#else:
+				#s += "()"
+			#s += " - <small>%s</small>" % api['summary']
+					func_name = api['function']
+					#if api['function'].find(".") > 1:
+						#self.api_lines.append(api['function'] + "()")
+						#func_name = "." + api['function'].split(".")[1]
+					if ap.keys()[0] == '':
+						s = func_name + "()"
+					else:
+						s = func_name + "( " + ap.keys()[0] + " )"
+					paraSyntax.setText(self.COLS.icon, s)
+					paraSyntax.setText(self.COLS.description, ap.values()[0])
+					paraSyntax.setText(self.COLS.function, api['function'])
+					paraSyntax.setText(self.COLS.folder, folder)
+
+		else:
+			funkFileItem = QtGui.QTreeWidgetItem(parentNode)
+			funkFileItem.setIcon(self.COLS.icon, Icon(Ico.Function))
+			#funkFileItem.setText(self.COLS.icon, sub_entry.fileName())
+			font = funkFileItem.font(self.COLS.icon)
+			font.setBold(True)
+			funkFileItem.setFont(self.COLS.icon, font)
+			#if 'syntax' in api:
+			#	funkFileItem.setText(self.COLS.icon, api['syntax'])
+			ss = "<b><font color=#176087 >%s</font></b>" % api['function']
+			s = api['function']
+			if len(api['parameters']) > 0:
+				p_list = []
+				for ap in api['parameters']:
+					#sss  = "<font color=blue><b>%s</b></font>" % ap.keys()[0]
+					sss = ap.keys()[0]
+					p_list.append(sss)
+				s += "( " + ", ".join(p_list)+ " )"
+				#kidd = QtGui.QTreeWidgetItem(funkFileItem)
+				#kidd.setIcon(self.COLS.icon, Icon(Ico.Green))
+			else:
+				s += "()"
+			#s += " - <small>%s</small>" % api['summary']
+			funkFileItem.setText(self.COLS.icon, s)
+			#lbl = QtGui.QLabel(s, self.tree)
+			#lbl.setAutoFillBackground(True)
+			#self.tree.setItemWidget(funkFileItem, self.COLS.icon, lbl)
+			#kidd.setText(self.COLS.description, ap.values()[0])
+			#kidd.setData(self.COLS.icon, QtCore.Qt.UserRole, QtCore.QVariant(sub_entry.filePath()))
+
+			funkFileItem.setText(self.COLS.description, api['summary'])
+			funkFileItem.setText(self.COLS.function, api['function'])
+			funkFileItem.setText(self.COLS.folder, folder)
+			#funkFileItem.setText(self.COLS.section, section)
+			funkFileItem.setData(self.COLS.icon, QtCore.Qt.UserRole, QtCore.QVariant(sub_entry.filePath()))
+			#self.tree.setItemExpanded(funkFileItem, True)
+			#print  api['parameters']
+			if  self.chkExtendedNodes.isChecked():
+				if len(api['parameters']) > 0: ##TODO Qt'ify python code
+					if 'parameters_type' in api and api['parameters_type'] =='fixed':
+						
+						for ap in api['parameters']:
+							kidd = QtGui.QTreeWidgetItem(funkFileItem)
+							kidd.setIcon(self.COLS.icon, Icon(Ico.FunctionParam))
+							kidd.setText(self.COLS.icon, ap.keys()[0])
+							kidd.setText(self.COLS.description, ap.values()[0])
+							kidd.setData(self.COLS.icon, QtCore.Qt.UserRole, QtCore.QVariant(sub_entry.filePath()))
+		
+				if 'return' in api and api['return'] != '':
+					kidd = QtGui.QTreeWidgetItem(funkFileItem)
+					kidd.setIcon(self.COLS.icon, Icon(Ico.FunctionReturn)) 
+					lbl = QtCore.QString("Return: ").append(api['return'])
+					kidd.setText(self.COLS.icon, lbl)
+					kidd.setData(self.COLS.icon, QtCore.Qt.UserRole, QtCore.QVariant(sub_entry.filePath()))
+					kidd.setFirstColumnSpanned(True)
 
 	def on_tree_item_clicked(self, item, column):
 		is_funk = item.text(self.COLS.function).length() > 0

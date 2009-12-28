@@ -56,9 +56,9 @@ class MainWindow(QtGui.QMainWindow):
 		
 		menuHelp 	= self.menuBar().addMenu( "Help" )
 
-		##############################
+		##############################################################
 		## Tools Menu
-		##############################
+		##############################################################
 		menuTools 	= self.menuBar().addMenu( "Tools" )
 
 		## Boards
@@ -66,9 +66,9 @@ class MainWindow(QtGui.QMainWindow):
 		self.actionGroupBoards.setExclusive(True)
 		self.connect(self.actionGroupBoards, QtCore.SIGNAL("triggered(QAction *)"), self.on_action_board_select)
 		self.menuBoards = menuTools.addMenu(Icon(Ico.Board), "Select Board")
-		boards = app.hardware.Boards(self)
+		boards = app.Boards.Boards(self)
 		for b in boards.index():
-			act = self.menuBoards.addAction( b ) #, self.on_board_selected)
+			act = self.menuBoards.addAction( b )
 			act.setCheckable(True)
 			self.actionGroupBoards.addAction(act)
 		act = menuTools.addAction(Icon(Ico.Boards), "Boards Overview", self.on_action_boards)
@@ -80,9 +80,9 @@ class MainWindow(QtGui.QMainWindow):
 		self.actionGroupBootLoaders.setExclusive(True)
 		self.connect(self.actionGroupBootLoaders, QtCore.SIGNAL("triggered(QAction *)"), self.on_action_bootloader_burn)
 		self.menuBootLoaders = menuTools.addMenu(Icon(Ico.BootloaderBurn), "Burn Bootloader")
-		programmers = app.hardware.Programmers(self)
+		programmers = app.Boards.Programmers(self)
 		for p in programmers.index():
-			act = self.menuBootLoaders.addAction( p ) #, self.on_programmer_selected)
+			act = self.menuBootLoaders.addAction( p )
 			act.setCheckable(True)
 			self.actionGroupBootLoaders.addAction(act)
 		act = menuTools.addAction(Icon(Ico.Bootloaders), "Bootloaders Overview", self.on_action_bootloaders)
@@ -119,7 +119,12 @@ class MainWindow(QtGui.QMainWindow):
 		#self.mainTabWidget.addTab(defEditor, Icon(Ico.Arduino), "Def Editor")
 		import gui.APIBrowser
 		apiBrowser = gui.APIBrowser.APIBrowser(self, self)
-		self.mainTabWidget.addTab(apiBrowser, Icon(Ico.Arduino), "API Browser")
+		#self.mainTabWidget.addTab(apiBrowser, Icon(Ico.Arduino), "API Browser")
+
+		import gui.FileSystemBrowser
+		fileSystemBrowser = gui.FileSystemBrowser.FileSystemBrowser(self, self)
+		self.mainTabWidget.addTab(fileSystemBrowser, Icon(Ico.Folder), "Files Browser")
+
 
 		## Welcome page
 		welcomePage = Browser(self, self, "welcome.html")

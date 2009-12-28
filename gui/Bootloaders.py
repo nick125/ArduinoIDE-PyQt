@@ -2,7 +2,7 @@
 
 from PyQt4 import QtCore, QtGui
 
-import app.hardware 
+import app.Boards 
 
 from gui.icons import Ico 
 from gui.icons import Icon 

@@ -12,7 +12,7 @@ class Boards:
 		prog_file = self.main.settings.hardware_path().append("boards.txt")
 		progFile = QtCore.QFile(prog_file)
 		if not progFile.open(QtCore.QIODevice.ReadOnly | QtCore.QIODevice.Text):
-			print "oops"
+			print "oops" # TODO error
 			return
 		
 		while not progFile.atEnd():
@@ -20,10 +20,11 @@ class Boards:
 			string =  QtCore.QString(line)
 			string = string.trimmed()
 			if string.length() > 0:
-				if string.contains(".name="):
-					parts = string.split("=")
-					board_name = parts[1].trimmed()
-					self.boards.append( board_name )
+				if not string.startsWith("#"):
+					if string.contains("."):
+						parts = string.split("=")
+						board_name = parts[1].trimmed()
+						self.boards.append( board_name )
 		self.boards.sort()
 
 	def index(self):

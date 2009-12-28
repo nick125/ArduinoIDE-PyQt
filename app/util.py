@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import yaml
 from PyQt4 import QtCore
 
 class Util:
@@ -14,3 +15,19 @@ class Util:
 			print "oops"
 			return None
 		return QtCore.QString(xFile.readAll())
+
+	def write_file(self, file_path, contents):
+		file2Write = QtCore.QFile(file_path)
+		if not file2Write.open(QtCore.QIODevice.WriteOnly | QtCore.QIODevice.Text):
+			print "TODO: error writing file"
+			return
+		stream_out = QtCore.QTextStream(file2Write)
+		stream_out << contents
+		file2Write.close()
+
+
+	def load_yaml(self, file_path):
+		string = self.get_file_contents(file_path)
+		return yaml.load(str(string))
+
+		
