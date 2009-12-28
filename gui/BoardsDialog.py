@@ -2,9 +2,7 @@
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.Qsci import QsciScintilla
-#import app.Boards 
 
-import gui.widgets
 from gui.icons import Ico 
 from gui.icons import Icon 
 
@@ -47,14 +45,9 @@ class BoardsDialog(QtGui.QDialog):
 		self.tree.setColumnWidth(1, 150)
 
 
-		self.editor = QsciScintilla(self)
-		self.editor.setUtf8(True)
-		self.editor.setFolding(QsciScintilla.BoxedTreeFoldStyle)
-		self.editor.setMarginLineNumbers(1, True)
-		self.editor.setAutoIndent(True)
+		self.editor = EditorWidget(self, self.main, arduino_mode=False)
 		tabWidget.addTab(self.editor, "boards.txt")
-		file_path = self.main.settings.hardware_path().append("boards.txt")
-		self.editor.setText(self.main.ut.get_file_contents(file_path))
+		
 
 		self.statusBar = QtGui.QStatusBar()
 		mainLayout.addWidget(self.statusBar)
@@ -62,11 +55,11 @@ class BoardsDialog(QtGui.QDialog):
 		self.load_file()
 
 	def load_file(self):
-		#print "foo"
-		#boardsObj = app.Boards.Boards(self.main)
-		board_file = self.main.settings.hardware_path().append("boards.txt")
-		boards = self.main.ut.load_arduino_config_file(board_file)
-		#print boards
+		file_path = self.main.settings.hardware_path().append("boards.txt")
+		self.editor.load_file(file_path)
+		#board_file = self.main.settings.hardware_path().append("boards.txt")
+		boards = self.main.ut.load_arduino_config_file(file_path)
+
 		## Loop the boards
 		c = 0
 		for board in boards:
@@ -80,15 +73,11 @@ class BoardsDialog(QtGui.QDialog):
 			font.setBold(True)
 			boardItem.setFont(0, font)
 			boardItem.setFirstColumnSpanned(True)
-			#boardItem.setBackgroundColor(0, QtGui.QColor.fromRgb(139, 171, 203))
-			## load properties section
 			del boards[board]['name'] # nuke "name" node used above
 			for section in boards[board]:
 				sectionItem = QtGui.QTreeWidgetItem(boardItem)
 				sectionItem.setText(0, section)
 				sectionItem.setFirstColumnSpanned(True)
-				#sectionItem.setText(1, section)
-				#self.tree.setItemExpanded(sectionItem, True)
 
 				## loops dic properties
 				if isinstance(boards[board][section], dict):

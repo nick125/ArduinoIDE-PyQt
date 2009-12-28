@@ -15,8 +15,9 @@ class Icon(QtGui.QIcon):
 class Ico:
 	Arduino = 'arduino.png'
 
-	BootloaderBurn = 'transmit_go.png'
-	Bootloaders = 'transmit_blue.png'
+	BootLoaderBurn = 'transmit_go.png'
+	BootLoaders = 'transmit_blue.png'
+	BootLoader = 'transmit.png'
 
 	Board = 'brick.png'
 	Boards = 'bricks.png'

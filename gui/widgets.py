@@ -60,6 +60,38 @@ class SaveButton(QtGui.QPushButton):
 
 
 
+class ToolBarSpacer( QtGui.QWidget ):
+
+	def __init__(self, parent=None):
+		QtGui.QWidget.__init__(self, parent)
+		sp = QtGui.QSizePolicy()
+		sp.setHorizontalPolicy( QtGui.QSizePolicy.Expanding )
+		self.setSizePolicy( sp )
+
+
+class StatusLabel(QtGui.QWidget):
+
+	def __init__(self, parent, label=None):
+		QtGui.QWidget.__init__(self, parent)
+
+		
+		mainLayout = QtGui.QHBoxLayout()
+		mainLayout.setContentsMargins(0,0,0,0)
+		mainLayout.setSpacing(0)
+		self.setLayout(mainLayout)
+
+		if label:
+			self.lblC = QtGui.QLabel(label + ":")
+			self.lblC.setAlignment(QtCore.Qt.AlignRight)
+			self.lblC.setStyleSheet("border: 1px outset transparent;")
+			mainLayout.addWidget(self.lblC)
+
+		self.labelVal = QtGui.QLabel("Foo")
+		self.labelVal.setStyleSheet("border: 1px outset #eeeeee;")
+		mainLayout.addWidget(self.labelVal)
+
+	def setText(self, txt):
+		self.labelVal.setText(txt)
 
 #####################################################################################################################
 ## Header Label
@@ -156,11 +188,4 @@ class HeaderLabel( QtGui.QWidget ):
 		self.iconWidget.setPixmap( self.get_pixmap(icon, wid_hei if wid_hei else self.width_height) )
 
 
-class ToolBarSpacer( QtGui.QWidget ):
-
-	def __init__(self, parent=None):
-		QtGui.QWidget.__init__(self, parent)
-		sp = QtGui.QSizePolicy()
-		sp.setHorizontalPolicy( QtGui.QSizePolicy.Expanding )
-		self.setSizePolicy( sp )
 

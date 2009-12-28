@@ -4,6 +4,9 @@
 from PyQt4 import QtCore, QtGui
 from PyQt4.Qsci import QsciScintilla, QsciAPIs
 from PyQt4.Qsci import QsciLexerCPP, QsciLexerMakefile, QsciLexerJava, QsciLexerHTML, QsciLexerPerl, QsciLexerPython, QsciLexerYAML
+
+from gui.EditorWidget import EditorWidget
+
 from gui.icons import Ico 
 from gui.icons import Icon 
 
@@ -36,13 +39,13 @@ class FileSystemBrowser(QtGui.QWidget):
 
 		###################################################
 		#### Editor
-		self.editor = QsciScintilla(self)
+		self.editor = EditorWidget(self, self.main, arduino_mode=False)
 		splitter.addWidget(self.editor)
-		self.editor.setUtf8(True)
-		self.editor.setFolding(QsciScintilla.BoxedTreeFoldStyle)
+		#self.editor.setUtf8(True)
+		#self.editor.setFolding(QsciScintilla.BoxedTreeFoldStyle)
 		#self.setCentralWidget(self.editor)
-		self.editor.setMarginLineNumbers(1, True)
-		self.editor.setAutoIndent(True)
+		#self.editor.setMarginLineNumbers(1, True)
+		#self.editor.setAutoIndent(True)
 
 		splitter.setStretchFactor(0, 1)
 		splitter.setStretchFactor(1, 2)
@@ -51,6 +54,9 @@ class FileSystemBrowser(QtGui.QWidget):
 	def on_open_file(self, file_path):
 		print "file_path", file_path
 		#file_path = self.model.filePath(modelIndex)
+
+		self.editor.load_file(file_path)
+		return
 		fileInfo = QtCore.QFileInfo(file_path)
 		
 		## check for directory
@@ -59,13 +65,13 @@ class FileSystemBrowser(QtGui.QWidget):
 			self.editor.setText("")
 			return
 
+		source = self.main.ut.get_file_contents(fileInfo.filePath())
 		## Allowed Extension
 		if fileInfo.fileName() == 'Makefile':
-			txt = self.main.ut.get_file_contents(fileInfo.filePath())
 			self.emit(QtCore.SIGNAL("open_file"), fileInfo.filePath())
-			self.editor.setText(txt)
-			self.lexer = QsciLexerMakefile()
-			self.editor.setLexer(self.lexer)
+			self.editor.set_source(source, 'Makefile' )
+			#self.lexer = QsciLexerMakefile()
+			#self.editor.setLexer(self.lexer)
 			return
 
 		extensions = ['java', 'html', 'py', 'pde', 'txt', 'yaml', 'sh', 'c','h','cpp','cxx', 'pl']
@@ -78,38 +84,13 @@ class FileSystemBrowser(QtGui.QWidget):
 		## load file
 		txt = self.main.ut.get_file_contents(fileInfo.filePath())
 		self.emit(QtCore.SIGNAL("open_file"), fileInfo.filePath())
-		self.editor.setText(txt)
+		#self.editor.set_source(txt)
 			## QsciLexerCPP, QsciLexerMakefile, QsciLexerJava, QsciLexerHTML, QsciLexerPerl, QsciLexerPython, QsciLexerYAML
 		## TODO MAkefile and show images
 		print "YES>>", fileInfo.suffix(), fileInfo.fileName(), fileInfo.filePath()
-		if fileInfo.suffix() in ['cpp', 'c', 'h','cxx', 'pde']:
-			self.lexer = QsciLexerCPP()
 
-
-
-		elif fileInfo.suffix() == 'java':
-			self.lexer = QsciLexerJava()
-
-		elif fileInfo.suffix() == 'html':
-			self.lexer = QsciLexerHTML()
-
-		elif fileInfo.suffix() == 'pl':
-			self.lexer = QsciLexerPerl()
-
-		elif fileInfo.suffix() == 'py':
-			self.lexer = QsciLexerPython()
-
-		elif fileInfo.suffix() == 'sh':
-			self.lexer = QsciLexerBash()
-
-		elif fileInfo.suffix() == 'yaml':
-			self.lexer = QsciLexerYAML()
-		else:
-			#TODO unsupported Highlighter
-			print "NOT", fileInfo.suffix()
-			return
-
-		self.editor.setLexer(self.lexer)
+		self.editor.set_source( txt, fileInfo.suffix())
+		
 
 
 #####################################################

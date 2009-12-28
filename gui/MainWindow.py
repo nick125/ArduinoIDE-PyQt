@@ -6,12 +6,13 @@ import app.settings
 import app.util
 import app.Boards
 import app.Bootloaders
+import app.Parsers
 
 from gui.HelpWidgets import HelpDockWidget
 from gui.Browser import Browser
 
-from gui.Boards import BoardsDialog
-from gui.Bootloaders import BootloadersDialog
+from gui.BoardsDialog import BoardsDialog
+from gui.BootLoadersDialog import BootLoadersDialog
 
 
 from gui.SketchListWidget import SketchListWidget
@@ -33,6 +34,7 @@ class MainWindow(QtGui.QMainWindow):
 		## Sets up the settings and other global classes
 		self.settings = app.settings.Settings() 
 		self.ut = app.util.Util()
+		self.parsers = app.Parsers.Parsers()
 		
 		self.setWindowTitle("Arduino - pyqt - alpha version")
 		self.setWindowIcon(Icon(Ico.Arduino))
@@ -57,37 +59,37 @@ class MainWindow(QtGui.QMainWindow):
 		menuHelp 	= self.menuBar().addMenu( "Help" )
 
 		##############################################################
-		## Tools Menu
+		## Hardware Menu
 		##############################################################
-		menuTools 	= self.menuBar().addMenu( "Tools" )
+		menuHardware 	= self.menuBar().addMenu( "Hardware" )
 
 		## Boards
 		self.actionGroupBoards = QtGui.QActionGroup(self)
 		self.actionGroupBoards.setExclusive(True)
 		self.connect(self.actionGroupBoards, QtCore.SIGNAL("triggered(QAction *)"), self.on_action_board_select)
-		self.menuBoards = menuTools.addMenu(Icon(Ico.Board), "Set Current Board")
+		self.menuBoards = menuHardware.addMenu(Icon(Ico.Board), "-- No Board Selected --")
 		boards = app.Boards.Boards(self)
 		for b in boards.index():
 			act = self.menuBoards.addAction( b['name'] )
 			act.setCheckable(True)
 			self.actionGroupBoards.addAction(act)
-		act = menuTools.addAction(Icon(Ico.Boards), "Boards", self.on_action_boards)
+		act = menuHardware.addAction(Icon(Ico.Boards), "Boards", self.on_action_boards)
 		self.topToolBar.addAction(act)
-		menuTools.addSeparator()
+		menuHardware.addSeparator()
 
 		## Bootloaders
 		self.actionGroupBootLoaders = QtGui.QActionGroup(self)
 		self.actionGroupBootLoaders.setExclusive(True)
 		self.connect(self.actionGroupBootLoaders, QtCore.SIGNAL("triggered(QAction *)"), self.on_action_bootloader_burn)
-		self.menuBootLoaders = menuTools.addMenu(Icon(Ico.BootloaderBurn), "Burn Bootloader")
+		self.menuBootLoaders = menuHardware.addMenu(Icon(Ico.BootLoaderBurn), "Burn Bootloader")
 		programmers = app.Boards.Programmers(self)
 		for p in programmers.index():
 			act = self.menuBootLoaders.addAction( p )
 			act.setCheckable(True)
 			self.actionGroupBootLoaders.addAction(act)
-		act = menuTools.addAction(Icon(Ico.Bootloaders), "Bootloaders", self.on_action_bootloaders)
+		act = menuHardware.addAction(Icon(Ico.BootLoaders), "Bootloaders", self.on_action_bootloaders)
 		self.topToolBar.addAction(act)
-		menuTools.addSeparator()
+		menuHardware.addSeparator()
 
 		##########################################################
 		## Header Label 
@@ -99,9 +101,9 @@ class MainWindow(QtGui.QMainWindow):
 		##########################################################
 		## Left Dock
 		##########################################################
-		#userSketchesWidget = SketchListWidget(self, SketchListWidget.MODE_USER)
-		#self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, userSketchesWidget)	
-		#self.connect(userSketchesWidget, QtCore.SIGNAL("open_sketch"), self.on_open_sketch)
+		userSketchesWidget = SketchListWidget(self, SketchListWidget.MODE_USER)
+		self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, userSketchesWidget)	
+		self.connect(userSketchesWidget, QtCore.SIGNAL("open_sketch"), self.on_open_sketch)
 		#exampleSketchesWidget = SketchListWidget(self, SketchListWidget.MODE_EXAMPES)
 		#self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, exampleSketchesWidget)	
 
@@ -151,7 +153,7 @@ class MainWindow(QtGui.QMainWindow):
 		
 
 	#########################################
-	## Board Stuff
+	## Board Events
 	def on_action_boards(self):
 		print "boards"
 		d = BoardsDialog(self, self)
@@ -160,6 +162,7 @@ class MainWindow(QtGui.QMainWindow):
 	def on_action_board_select(self, act):
 		print "on_action_board", act
 		self.lblBoard.setText(act.text())
+		self.menuBoards.setTitle(act.text())
 
 	#########################################
 	## Bootloader Stuff
@@ -175,8 +178,8 @@ class MainWindow(QtGui.QMainWindow):
 
 	def on_open_sketch(self, file_path):
 		fileInfo = QtCore.QFileInfo(file_path)
-		newEditor = EditorWidget(self)
-		newEditor.open_file(fileInfo.filePath())
+		newEditor = EditorWidget(self, self, arduino_mode=True)
+		newEditor.load_file(fileInfo.filePath())
 		newTab = self.mainTabWidget.addTab(newEditor, Icon(Ico.Sketch), fileInfo.fileName())
 		self.mainTabWidget.setCurrentIndex(newTab)
 
