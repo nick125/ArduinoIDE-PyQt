@@ -27,11 +27,13 @@ from gui.EditorWidget import EditorWidget
 from gui.icons import Ico 
 from gui.icons import Icon 
 
-class MainWindow(QtGui.QMainWindow):
 
+
+class MainWindow(QtGui.QMainWindow):
 
 	def __init__(self, parent=None):
 		QtGui.QMainWindow.__init__(self)
+
 		self.DEV = True
 
 		# TODO - User customisable style
@@ -190,9 +192,14 @@ class MainWindow(QtGui.QMainWindow):
 		self.lblBootloader = QtGui.QLabel("-- none --")
 		self.statusBar().addPermanentWidget(self.lblBootloader)
 
+		##########################################################
+		## Globally Shared Widgets
+		##########################################################
 		self.boards = app.Boards.Boards(self)
 		self.connect(self.boards, QtCore.SIGNAL("board_selected"), self.on_board_selected)
-		self.boards.load_current()
+		self.boards.load_current() ## THIS actually sets current as event above is not fired in constructor
+
+		#self.api = app.API.API(self)
 		self.on_refresh_settings()
 
 

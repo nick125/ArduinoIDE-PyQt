@@ -14,15 +14,12 @@ class HelpDockWidget(QtGui.QDockWidget):
 	
 	def __init__(self, title, parent, main):
 		QtGui.QDockWidget.__init__(self, title, parent)
-
 		self.main = main
 
 		self.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea | QtCore.Qt.RightDockWidgetArea)
 
 		containerWidget = QtGui.QWidget()
 		self.setWidget(containerWidget)
-
-
 
 		layout = QtGui.QVBoxLayout()
 		layout.setContentsMargins(0,0,0,0)
@@ -31,7 +28,6 @@ class HelpDockWidget(QtGui.QDockWidget):
 
 		helpWidget = HelpWidget(self, self.main)
 		layout.addWidget(helpWidget)
-
 
 
 class HelpWidget(QtGui.QWidget):
@@ -47,35 +43,62 @@ class HelpWidget(QtGui.QWidget):
 		layout.setSpacing(0)
 		self.setLayout(layout)
 
-		#headLabel = gui.widgets.HeaderLabel(self, self.main, icon=Ico.Help, title="Help", color="#7F96B0", wash_to="#7F96B0")
-		#layout.addWidget(headLabel)
 
+		##################################################################
+		##  Filter Bar
+		##################################################################
+		hBox = QtGui.QHBoxLayout()
+		layout.addLayout(hBox)
 
-		###########################
-		### Toolbar
-		toolbar = QtGui.QToolBar()
-		toolbar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
-		layout.addWidget( toolbar )
+		buttClearFilter = QtGui.QPushButton(self)
+		buttClearFilter.setIcon( Icon(Ico.Black) )
+		buttClearFilter.setFlat(True)
+		buttClearFilter.setText("All")
+		self.connect( buttClearFilter, QtCore.SIGNAL("clicked()"), self.on_filter_clear)
+		hBox.addWidget( buttClearFilter, 1 )
+
+		self.txtFilter = QtGui.QLineEdit("")
+		self.connect(self.txtFilter, QtCore.SIGNAL('textChanged(const QString &)'), self.on_filter_changed)
+		hBox.addWidget( self.txtFilter, 10 )
+
 		
-	
-		#headerLayout.addWidget(lblTitle)
-		toolbar.addWidget(QtGui.QLabel("Filter:"))
-		self.txtFilter = QtGui.QLineEdit()
-		toolbar.addWidget(self.txtFilter)
+		##################################################################
+		### Models
+		##################################################################
+		self.model = QtGui.QStandardItemModel(0, 1, self)
+		self.model.setHeaderData(0, QtCore.Qt.Horizontal, QtCore.QVariant("Topic"))
+		self.proxyModel = QtGui.QSortFilterProxyModel(self)
+		self.proxyModel.setSourceModel( self.model )
 
-		
-
-		self.tree = QtGui.QTreeWidget()
+		#################################################################
+		### Tree
+		##################################################################
+		self.tree = QtGui.QTreeView()
 		self.tree.setRootIsDecorated(False)
 		self.tree.setAlternatingRowColors(True)
+		self.tree.setSortingEnabled(True)
+		self.tree.setModel(self.proxyModel)
 		layout.addWidget(self.tree)
-		self.connect(self.tree, QtCore.SIGNAL("itemDoubleClicked (QTreeWidgetItem *,int)"), self.on_tree_double_clicked)
+		self.connect(self.tree, QtCore.SIGNAL("clicked(const QModelIndex&)"), self.on_tree_double_clicked)
 
-		self.tree.headerItem().setText(0, "Topic")
+		self.load()
 
-		self.load_files()
+	####################################################
+	## Filter related
+	####################################################
+	def on_filter_clear(self):
+		self.txtFilter.setText("")
+		self.txtFilter.setFocus()
 
-	def load_files(self):
+	def on_filter_changed(self, filterString):
+		self.proxyModel.setFilterKeyColumn(0)
+		regExp = QtCore.QRegExp(self.txtFilter.text(), QtCore.Qt.CaseInsensitive)
+		self.proxyModel.setFilterRegExp(regExp)
+
+	####################################################
+	## Load Files
+	####################################################
+	def load(self):
 		pathStr = self.main.settings.help_path()
 		dirr = QtCore.QDir(pathStr)
 		if not dirr.exists():
@@ -85,15 +108,32 @@ class HelpWidget(QtGui.QWidget):
 		infoList = dirr.entryInfoList(QtCore.QDir.Files | QtCore.QDir.NoDotAndDotDot)
 		for fileInfo in infoList:
 			if fileInfo.suffix() == 'html':
+				row_idx = self.model.rowCount()
+				item = QtGui.QStandardItem( fileInfo.baseName() )
+				item.setEditable(False)
+				#item.setData( QtCore.QVariant(rec) )
+				#item.setIcon( dIcon( dIco.Red ) if str(rec['online']) == '1' else dIcon( dIco.Black ) )
+				self.model.setItem(row_idx, 0, item)
+				#self.tree.sortByColumn(self.COLS.company, QtCore.Qt.AscendingOrder)
+				#self.tree.header().setResizeMode( self.COLS.company, QtGui.QHeaderView.ResizeToContents )
+
+				"""
 				treeItem = QtGui.QTreeWidgetItem()
 				treeItem.setText(0, fileInfo.baseName() ) ## hack to remove .html
 				treeItem.setData(0, QtCore.Qt.UserRole, QtCore.QVariant( fileInfo.filePath() ))
 				treeItem.setIcon(0, Icon(Ico.HelpDoc))
 				self.tree.addTopLevelItem(treeItem)
+				"""
 
-	def on_tree_double_clicked(self, item, column):
-		#print item, column
+	def on_tree_double_clicked(self, modelIndex):
+		#print modelIndex
+		item = self.model.itemFromIndex( self.proxyModel.mapToSource( modelIndex ) )
+		#self.currDic =  self.main.ut.clean_dic(item.data().toPyObject())
+		#self.account_id = int( self.currDic['account_id'] )
+		#self.actionEdit.trigger()
 		#print item.text(0), item.data(0, QtCore.Qt.UserRole).toString()
+		page = item.data(QtCore.Qt.UserRole).toString()
+		print page
 		dialog = HelpBrowserDialog(self, self.main)
-		dialog.load_help_page( item.data(0, QtCore.Qt.UserRole).toString() )
+		dialog.load_help_page( page )
 		dialog.show()
