@@ -6,10 +6,10 @@ from PyQt4 import QtCore
 
 class Boards(QtCore.QObject):
 
-	def __init__(self, parent):
-		QtCore.QObject.__init__(self, parent)
+	def __init__(self, main):
+		QtCore.QObject.__init__(self, main)
 
-		self.main = parent
+		self.main = main
 
 		self.current_board = None
 		self.boards_index = None
@@ -56,6 +56,11 @@ class Boards(QtCore.QObject):
 							if not keys[1] in self.boards_tree[board_ki]:
 								self.boards_tree[board_ki][keys[1]] = {}
 							self.boards_tree[board_ki][keys[1]][keys[2]] = kis_val[1]
+
+	def load_current(self):
+		curr  = self.main.settings.value("current_board")
+		
+		self.set_current(curr)
 
 	def index(self):
 		items = self.boards_index.items()

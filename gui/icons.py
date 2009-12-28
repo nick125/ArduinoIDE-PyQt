@@ -23,11 +23,15 @@ class Ico:
 	Boards = 'bricks.png'
 
 	## sketch Related
-	Sketches = 'page_copy.png'
+	Sketches = 'book_open.png'
 	Sketch = 'page.png'
-	Compile = 'arrow_in.png'
+
+
 	Upload = 'arrow_join.png'
 
+	Compile = 'arrow_in.png'
+	CompileError = 'exclamation.png'
+	CompileOk = 'accept.png'
 
 	## Help
 	Help = 'help.png'

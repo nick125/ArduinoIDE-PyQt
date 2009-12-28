@@ -22,29 +22,49 @@ class TerminalWidget(QtGui.QWidget):
 		self.setLayout(layout)
 
 		#self.headerWidget = QtGui.QWidget()
-		headLAy = QtGui.QHBoxLayout()
-		layout.addLayout(headLAy)
+		hbox = QtGui.QHBoxLayout()
+		hbox.setContentsMargins(0,0,0,0)
+		hbox.setSpacing(0)
+		layout.addLayout(hbox)
 
-		self.headerLabel = QtGui.QLabel("Terminal Output")
-		headLAy.addWidget(self.headerLabel, 10)
 
-		self.progress = QtGui.QProgressBar()
-		self.progress.setRange(0,0)
-		self.progress.hide()
-		headLAy.addWidget(self.progress, 1)
 
-		"""
-		toolbar = QtGui.QToolBar()
-		toolbar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
-		layout.addWidget(toolbar)
+	
 
-		toolbar.addAction(Icon(Ico.Compile), "Compile")
-		"""
+		
+		#layout.add
+		#toolbar = QtGui.QToolBar()
+		#toolbar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
+		#layout.addWidget(toolbar)
+
+
 
 		self.textWidget = QtGui.QPlainTextEdit()
 		layout.addWidget(self.textWidget)
 		self.textWidget.setDocumentTitle("Foo")
 		self.textWidget.setStyleSheet("color: white; background-color: black;")
+
+
+		hbox = QtGui.QHBoxLayout()
+		layout.addLayout(hbox)
+
+		self.actionIcon = QtGui.QPushButton()
+		self.actionIcon.setFlat(True)
+		self.actionIcon.setIcon(Icon(Ico.Black))
+		hbox.addWidget(self.actionIcon, 1)
+
+		#elf.statusBar.showMessage("ssssssssssssssss-")
+		self.statusLabel = QtGui.QLabel("Terminal Output")
+		hbox.addWidget(self.statusLabel, 20)
+
+		
+		self.progress = QtGui.QProgressBar()
+		self.progress.setRange(0,3)
+		self.progress.setFixedHeight(15)
+		#self.progress.hide()
+		hbox.addWidget(self.progress)
+
+	
 
 	def set_text(self, txt, is_error):
 		if is_error:
@@ -57,21 +77,19 @@ class TerminalWidget(QtGui.QWidget):
 	def compile(self, file_path):
 
 		self.current_file_path = file_path
-		## Write out enviroment variables to ~/.ardmake.conf
-		#ard_make = QtCore.QString()
+		self.progress.show()
+		## Set Envoironment
 		env = QtCore.QStringList()
 		env << QtCore.QString("ARDUINO_DIR=").append(self.main.settings.arduino_path())
 		env << QtCore.QString("ARDUINO_BOARD=").append("atmega328")
 		env << QtCore.QString("ARDUINO_sPORT=").append("s/ssdev/ttyUSB0")
 		self.process.setEnvironment(env)
-		#ard_make.append("ARDUINO_DIR=").append(self.main.settings.arduino_path()).append("\n")
-		#ardmake_file_path = QtCore.QDir.homePath().append("/.ardmake.conf")
-		# ardmake_file_path
-		#self.main.ut.write_file(ardmake_file_path, ard_make)
+
 		print "----------------------------------------"
 
+		## Set working dir
 		sketch_dir = QtCore.QFileInfo(self.current_file_path).absolutePath()
-		print "ketch_dir=", sketch_dir, self.current_file_path
+		
 		self.process.setWorkingDirectory(sketch_dir)
 
 		command = QtCore.QString("sh ")
@@ -89,10 +107,19 @@ class TerminalWidget(QtGui.QWidget):
 			error = self.process.readAllStandardError()
 			#print type(error), error
 			if error:
-				print error
+				print "is error"
+				self.actionIcon.setIcon(Icon(Ico.CompileError))
+				self.statusLabel.setText("Error")
 				self.textWidget.setPlainText(QtCore.QString(error))
 			else:
+				print "is ok"
+				self.statusLabel.setText("OK")
+				self.actionIcon.setIcon(Icon(Ico.CompileOk))
 				self.textWidget.setPlainText(QtCore.QString(result))
+
+
+
+		self.progress.hide()
 		return
 		command = QtCore.QString()
 		## Create command sh arduinp_make.sh 

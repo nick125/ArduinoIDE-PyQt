@@ -41,8 +41,7 @@ class MainWindow(QtGui.QMainWindow):
 		self.settings = app.settings.Settings() 
 		self.ut = app.util.Util()
 		#self.parsers = app.Parsers.Parsers()
-		self.boards = app.Boards.Boards(self)
-		self.connect(self.boards, QtCore.SIGNAL("board_selected"), self.on_board_selected)
+
 		
 		self.setWindowTitle("Arduino - pyqt - alpha version")
 		self.setWindowIcon(Icon(Ico.Arduino))
@@ -191,6 +190,9 @@ class MainWindow(QtGui.QMainWindow):
 		self.lblBootloader = QtGui.QLabel("-- none --")
 		self.statusBar().addPermanentWidget(self.lblBootloader)
 
+		self.boards = app.Boards.Boards(self)
+		self.connect(self.boards, QtCore.SIGNAL("board_selected"), self.on_board_selected)
+		self.boards.load_current()
 		self.on_refresh_settings()
 
 
@@ -231,7 +233,6 @@ class MainWindow(QtGui.QMainWindow):
 		d.show()
 
 	def on_action_select_board(self, act):
-		print "board", act.property("board").toString()
 		self.boards.set_current(act.property("board").toString())
 
 	def on_board_selected(self, board):
@@ -282,10 +283,15 @@ class MainWindow(QtGui.QMainWindow):
 		## Load Boards Menu
 		for act in self.actionGroupBoards.actions():
 			self.actionGroupBoards.removeAction(act)
+		current = self.boards.current()
+		if current:
+			current = current['name']
 		for board, caption in self.boards.index():
 			act = self.menuBoards.addAction( caption )
 			act.setProperty("board", board )
 			act.setCheckable(True)
+			if board == current:
+				act.setChecked(True)
 			self.actionGroupBoards.addAction(act)
 
 		## Laod bootloaders
