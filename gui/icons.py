@@ -62,4 +62,6 @@ class Ico:
 	Black = 'bullet_black.png'
 	Refresh = 'refresh.gif'
 
-	WriteFile = 'book_next'
+	WriteFile = 'book_next.png'
+
+	Settings = 'cog.png'

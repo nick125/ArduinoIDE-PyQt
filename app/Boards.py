@@ -9,8 +9,12 @@ class Boards:
 
 		self.boards_index = []
 		self.boards_tree = {}
+		return
 
 		prog_file = self.main.settings.hardware_path().append("boards.txt")
+		if not prog_file:
+			return
+
 		progFile = QtCore.QFile(prog_file)
 		if not progFile.open(QtCore.QIODevice.ReadOnly | QtCore.QIODevice.Text):
 			print "oops" # TODO error

@@ -3,6 +3,7 @@
 from PyQt4 import QtCore, QtGui
 from PyQt4.Qsci import QsciScintilla
 
+from gui.EditorWidget import EditorWidget
 from gui.icons import Ico 
 from gui.icons import Icon 
 
@@ -57,7 +58,6 @@ class BoardsDialog(QtGui.QDialog):
 	def load_file(self):
 		file_path = self.main.settings.hardware_path().append("boards.txt")
 		self.editor.load_file(file_path)
-		#board_file = self.main.settings.hardware_path().append("boards.txt")
 		boards = self.main.ut.load_arduino_config_file(file_path)
 
 		## Loop the boards

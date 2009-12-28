@@ -190,9 +190,10 @@ class EditorWidget(QtGui.QWidget):
 		if fileInfo.isDir():
 			#self.emit(QtCore.SIGNAL("open_file"), None)
 			self.editor.setText("")
-			print "Directory"
 			self.lblFileName.setText("")
-			self.lblFileName.setText("")
+			self.lblFileSize.setText("")
+			self.lblFileModified.setText("")
+			self.current_file_path = None
 			return
 
 		file_name_string = QtCore.QString("<b>").append(fileInfo.fileName()).append("</b>")
@@ -204,21 +205,20 @@ class EditorWidget(QtGui.QWidget):
 
 		## unique Files
 		if fileInfo.fileName() == 'Makefile':
-			print "MAKEFILE"
 			self.set_source(source, 'Makefile' )
 			return
 
 		## Ignored extension
 		if fileInfo.suffix() in self.ignored():
-			print "Ignored: ", fileInfo.suffix()
 			file_name_string.append("  <small> *** ignored ***</small>")
 			self.lblFileName.setText(file_name_string)
+			self.editor.setText("")
 			return
 		
 		if not fileInfo.suffix() in self.supported():
-			self.emit(QtCore.SIGNAL("open_file"), None)
+			file_name_string.append("  <small> *** not supported ***</small>")		
+			self.lblFileName.setText(file_name_string)
 			self.editor.setText("")
-			print "NOT SUPPORTED"
 			return
 
 		## load file

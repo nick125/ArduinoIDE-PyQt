@@ -8,6 +8,9 @@ import app.Boards
 import app.Bootloaders
 import app.Parsers
 
+from gui.SettingsDialog import SettingsDialog
+from gui.WebSitesDialog import WebSitesDialog
+
 from gui.HelpWidgets import HelpDockWidget
 from gui.Browser import Browser
 
@@ -49,14 +52,22 @@ class MainWindow(QtGui.QMainWindow):
 		if self.DEV:
 			self.topToolBar.addAction("Load Keywords", self.on_dev_load_keywords)
 
-		##########################################################
-		## Main Menus
-		##########################################################
+		##############################################################
+		## Files Menu
+		##############################################################
 		menuFiles 	= self.menuBar().addMenu( "Files" )
-		menuEdit 	= self.menuBar().addMenu( "Edit" )
-		menuSketch  = self.menuBar().addMenu( "Sketch" )
+		menuSettings = menuFiles.addAction(Icon(Ico.Settings), "Settings", self.on_settings_dialog)
+		self.topToolBar.addAction(menuSettings)
+
+		#menuEdit 	= self.menuBar().addMenu( "Edit" )
+
+		##############################################################
+		## Sketch Menu
+		##############################################################
+
+		menuSketch  = self.menuBar().addMenu( "Sketch Books" )
 		
-		menuHelp 	= self.menuBar().addMenu( "Help" )
+		
 
 		##############################################################
 		## Hardware Menu
@@ -67,12 +78,7 @@ class MainWindow(QtGui.QMainWindow):
 		self.actionGroupBoards = QtGui.QActionGroup(self)
 		self.actionGroupBoards.setExclusive(True)
 		self.connect(self.actionGroupBoards, QtCore.SIGNAL("triggered(QAction *)"), self.on_action_board_select)
-		self.menuBoards = menuHardware.addMenu(Icon(Ico.Board), "-- No Board Selected --")
-		boards = app.Boards.Boards(self)
-		for b in boards.index():
-			act = self.menuBoards.addAction( b['name'] )
-			act.setCheckable(True)
-			self.actionGroupBoards.addAction(act)
+		self.menuBoards = menuHardware.addMenu(Icon(Ico.Board), "-- No Board Selected --") # populates later
 		act = menuHardware.addAction(Icon(Ico.Boards), "Boards", self.on_action_boards)
 		self.topToolBar.addAction(act)
 		menuHardware.addSeparator()
@@ -81,15 +87,23 @@ class MainWindow(QtGui.QMainWindow):
 		self.actionGroupBootLoaders = QtGui.QActionGroup(self)
 		self.actionGroupBootLoaders.setExclusive(True)
 		self.connect(self.actionGroupBootLoaders, QtCore.SIGNAL("triggered(QAction *)"), self.on_action_bootloader_burn)
-		self.menuBootLoaders = menuHardware.addMenu(Icon(Ico.BootLoaderBurn), "Burn Bootloader")
-		programmers = app.Boards.Programmers(self)
-		for p in programmers.index():
-			act = self.menuBootLoaders.addAction( p )
-			act.setCheckable(True)
-			self.actionGroupBootLoaders.addAction(act)
+		self.menuBootLoaders = menuHardware.addMenu(Icon(Ico.BootLoaderBurn), "Burn Bootloader") # populates later
 		act = menuHardware.addAction(Icon(Ico.BootLoaders), "Bootloaders", self.on_action_bootloaders)
 		self.topToolBar.addAction(act)
 		menuHardware.addSeparator()
+
+		##############################################################
+		## Websites Menu
+		##############################################################
+		self.menuWebSites 	= self.menuBar().addMenu("Websites" )
+	
+		self.menuWebSites.addSeparator()
+		self.actionEditWebsites = self.menuWebSites.addAction( "Edit Sites", self.on_websites_dialog )
+
+		##############################################################
+		## Help Menu
+		##############################################################
+		menuHelp 	= self.menuBar().addMenu( "Help" )
 
 		##########################################################
 		## Header Label 
@@ -101,9 +115,13 @@ class MainWindow(QtGui.QMainWindow):
 		##########################################################
 		## Left Dock
 		##########################################################
-		userSketchesWidget = SketchListWidget(self, SketchListWidget.MODE_USER)
+		userSketchesWidget = SketchListWidget(self, self)
 		self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, userSketchesWidget)	
 		self.connect(userSketchesWidget, QtCore.SIGNAL("open_sketch"), self.on_open_sketch)
+
+		#userSketchesWidget2 = SketchListWidget(self, self)
+		#self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, userSketchesWidget2)	
+		#self.connect(userSketchesWidget2, QtCore.SIGNAL("open_sketch"), self.on_open_sketch)
 		#exampleSketchesWidget = SketchListWidget(self, SketchListWidget.MODE_EXAMPES)
 		#self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, exampleSketchesWidget)	
 
@@ -150,7 +168,7 @@ class MainWindow(QtGui.QMainWindow):
 		self.lblBootloader = QtGui.QLabel("-- none --")
 		self.statusBar().addPermanentWidget(self.lblBootloader)
 
-		
+		self.on_refresh_settings()
 
 	#########################################
 	## Board Events
@@ -189,10 +207,41 @@ class MainWindow(QtGui.QMainWindow):
 		
 		keyw = app.keywords.Keywords(self)
 		print keyw.index()
-"""
-class StatusWidget(QtCore.QWidget):
 
-		def __init__(self, parent, label="label", value="value",):
-			QtCore.QWidget.__init__(self, parent)
-"""
+
+	def on_settings_dialog(self):
+		d = SettingsDialog(self, self)
+		self.connect(d, QtCore.SIGNAL("refresh_settings"), self.on_refresh_settings)
+		if d.exec_():
+			self.on_refresh_settings()
+
+	def on_refresh_settings(self):
 		
+		## Load Boards Menu
+		for act in self.actionGroupBoards.actions():
+			self.actionGroupBoards.removeAction(act)
+		file_path = self.settings.hardware_path("boards.txt")
+		if file_path:
+			dic = self.ut.load_arduino_config_file(file_path)
+			for ki in dic:
+				act = self.menuBoards.addAction( dic[ki]['name'] )
+				act.setCheckable(True)
+				self.actionGroupBoards.addAction(act)
+
+		## Laod bootloaders
+		for act in self.actionGroupBootLoaders.actions():
+			self.actionGroupBootLoaders.removeAction(act)
+		file_path = self.settings.hardware_path("programmer.txt")
+		if file_path:
+			dic = self.ut.load_arduino_config_file(file_path)
+			for ki in dic:
+				print ki
+				act = self.menuBootLoaders.addAction( ki )
+				act.setCheckable(True)
+				self.actionGroupBootLoaders.addAction(act)
+
+			
+
+	def on_websites_dialog(self):
+		d = WebSitesDialog(self, self)
+		d.show()

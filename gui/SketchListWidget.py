@@ -18,20 +18,11 @@ class SketchListWidget(QtGui.QDockWidget):
 	MODE_USER = 0
 	MODE_EXAMPES = 1
 	
-	def __init__(self, main, display_mode):
-		QtGui.QDockWidget.__init__(self)
+	def __init__(self, parent, main):
+		QtGui.QDockWidget.__init__(self, parent)
 
 		self.main = main
 		
-		if display_mode == self.MODE_USER:
-			self.dir_to_browse = self.main.settings.sketchbooks_path()
-			self.title = "Sketches"
-			self.ico = Ico.Sketches
-		else:
-			self.dir_to_browse = self.main.settings.examples_path()
-			self.title = "Examples"
-			self.ico = Ico.Examples
-
 		containerWidget = QtGui.QWidget()
 		self.setWidget(containerWidget)
 
@@ -40,14 +31,43 @@ class SketchListWidget(QtGui.QDockWidget):
 		mainLayout.setSpacing(0)
 		containerWidget.setLayout(mainLayout)
 
-		headLabel = gui.widgets.HeaderLabel(self, self.main, icon=Ico.Sketches, title=self.title, color="blue", wash_to="blue")
+		headLabel = gui.widgets.HeaderLabel(self, self.main, icon=Ico.Sketches, title="Sketch Books", color="blue", wash_to="blue")
 		mainLayout.addWidget(headLabel)
 
+		self.treePlaces = QtGui.QTreeWidget()
+		mainLayout.addWidget(self.treePlaces, 1)
+		self.treePlaces.headerItem().setText(0, "Location")
+		self.treePlaces.headerItem().setText(1, "Path")
+		self.treePlaces.setRootIsDecorated(True)
+		self.treePlaces.setAlternatingRowColors(False)
+		#self.connect(self.treePlaces, QtCore.SIGNAL("itemDoubleClicked (QTreeWidgetItem *,int)"), #self.on_tree__placedouble_clicked)
+		self.connect(self.treePlaces, QtCore.SIGNAL("itemClicked (QTreeWidgetItem *,int)"), self.on_tree_place_clicked)
+		for foo in [["Examples", self.main.settings.examples_path()],["Sketches", self.main.settings.sketchbooks_path()]]:
+			item = QtGui.QTreeWidgetItem()
+			self.treePlaces.addTopLevelItem(item)
+			item.setText(0, foo[0])
+			item.setIcon(0, Icon(Ico.Folder))
+			if foo[1]:
+				item.setText(1, foo[1])
+		#self.comboSelectPath.addItem("Sketches", self.main.settings.sketchbooks_path())
+		"""if 99 == self.MODE_USER:
+			self.dir_to_browse = self.main.settings.sketchbooks_path()
+			self.title = "Sketches"
+			self.ico = Ico.Sketches
+		else:
+			self.dir_to_browse = self.main.settings.examples_path()
+			self.title = "Examples"
+			self.ico = Ico.Examples
+		"""
+		print self.main.settings.examples_path()
+		print self.main.settings.sketchbooks_path()
+		self.dir_to_browse = self.main.settings.sketchbooks_path()
+		#print "browse", self.dir_to_browse
 		#######################################
 		## Tree
 		#######################################
 		self.tree = QtGui.QTreeWidget()
-		mainLayout.addWidget(self.tree)
+		mainLayout.addWidget(self.tree, 10)
 		
 		self.tree.setRootIsDecorated(True)
 		self.tree.setAlternatingRowColors(False)
@@ -57,6 +77,8 @@ class SketchListWidget(QtGui.QDockWidget):
 
 		self.load_files()
 
+	def on_tree_place_clicked(self, item, col):
+		print item, col
 	#################################################################
 	## Tree Events
 	#################################################################
@@ -98,6 +120,9 @@ class SketchListWidget(QtGui.QDockWidget):
 	## Load Files
 	#################################################################
 	def load_files(self):
+		print "dir = ", self.dir_to_browse
+		if not self.dir_to_browse:
+			return
 		dirr = QtCore.QDir(self.dir_to_browse)
 		#print self.dir_to_browse
 		if not dirr.exists():

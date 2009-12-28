@@ -183,6 +183,7 @@ class FileSystemTree(QtGui.QWidget):
 			self.tree.resizeColumnToContents(col)
 
 	def load_bookmarks(self):
+		return
 		paths = self.main.settings.all_paths()
 		for pathinfo in paths:
 			item = QtGui.QTreeWidgetItem()
