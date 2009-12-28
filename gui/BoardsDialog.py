@@ -56,43 +56,41 @@ class BoardsDialog(QtGui.QDialog):
 		self.load_file()
 
 	def load_file(self):
-		file_path = self.main.settings.hardware_path().append("boards.txt")
-		self.editor.load_file(file_path)
-		boards = self.main.ut.load_arduino_config_file(file_path)
-
+		self.editor.load_file(self.main.settings.hardware_path("boards.txt"))
+		
 		## Loop the boards
-		c = 0
+		boards = self.main.boards.all()
 		for board in boards:
-			c += 1
 			boardItem = QtGui.QTreeWidgetItem()
 			self.tree.addTopLevelItem(boardItem)
-			#self.tree.setItemExpanded(boardItem, True)
 			boardItem.setIcon(0, Icon(Ico.Board))
 			boardItem.setText(0, boards[board]['name'])
 			font = boardItem.font(0)
 			font.setBold(True)
 			boardItem.setFont(0, font)
 			boardItem.setFirstColumnSpanned(True)
-			del boards[board]['name'] # nuke "name" node used above
-			for section in boards[board]:
-				sectionItem = QtGui.QTreeWidgetItem(boardItem)
-				sectionItem.setText(0, section)
-				sectionItem.setFirstColumnSpanned(True)
 
-				## loops dic properties
-				if isinstance(boards[board][section], dict):
-					for prop in boards[board][section]:
-						print "prop=", prop, boards[board][section][prop]
-						
-						propItem = QtGui.QTreeWidgetItem(sectionItem)
-						propItem.setText(1, prop)					
-						propItem.setText(2, boards[board][section][prop])	
-						
+			## loop each section andn ignore 'name'
+			for section in boards[board]:
+				if section == 'name':
+					pass
+				else:
+					sectionItem = QtGui.QTreeWidgetItem(boardItem)
+					sectionItem.setText(0, section)
+					sectionItem.setFirstColumnSpanned(True)
+
+					## loops dic properties
+					if isinstance(boards[board][section], dict):
+						for prop in boards[board][section]:
+							propItem = QtGui.QTreeWidgetItem(sectionItem)
+							propItem.setText(1, prop)					
+							propItem.setText(2, boards[board][section][prop])	
+							
 					
 		for i in range(1, 3):
 			self.tree.resizeColumnToContents(i)
 		self.tree.sortByColumn(0, QtCore.Qt.AscendingOrder)
-		self.statusBar.showMessage("%s boards" % c)
+		self.statusBar.showMessage("%s boards" % self.tree.invisibleRootItem().childCount() )
 
 	def on_tree_clicked(self, item, col):
 		pass

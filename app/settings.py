@@ -99,9 +99,9 @@ class Settings(QtCore.QObject):
 			return None
 		return self.arduino_path().append("/examples/")
 
-	def sketchbooks_path(self):
+	def sketches_path(self):
 		## TODO - use prefs
-		print "path/sketchbooks_path", self.value("path/sketchbooks_path")
+		#print "path/sketchbooks_path", self.value("path/sketchbooks_path")
 		return self.value("path/sketchbooks_path")
 		#return QtCore.QString(config.SKETCHBOOKS_PATH)
 

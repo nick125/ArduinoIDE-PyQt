@@ -34,6 +34,7 @@ class Ico:
 	HelpDoc = 'page_white.png'
 	
 	## Directories
+	FileSystemBrowser = 'chart_organisation.png'
 	Folder = 'folder.png'
 	FolderAdd = 'folder_add.png'
 	FolderEdit = 'folder_edit.png'
@@ -46,6 +47,8 @@ class Ico:
 	Remove = 'delete.png'
 	Cancel = 'bullet_black.png'
 	Save = 'accept.png'
+	Refresh = 'refresh.gif'
+
 	Up = 'arrow_up.png'
 	Down = 'arrow_down.png'
 
@@ -60,7 +63,10 @@ class Ico:
 	Green = 'bullet_green.png'
 	Blue = 'bullet_blue.png'
 	Black = 'bullet_black.png'
-	Refresh = 'refresh.gif'
+	Yellow = 'bullet_yellow.png'
+	#Black = 'bullet_black.png'
+	
+	
 
 	WriteFile = 'book_next.png'
 

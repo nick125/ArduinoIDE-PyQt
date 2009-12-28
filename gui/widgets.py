@@ -98,12 +98,13 @@ class StatusLabel(QtGui.QWidget):
 #####################################################################################################################
 class HeaderLabel( QtGui.QWidget ):
 
-	def __init__(self, parent, main, icon=None, title="Foo", wash_to="black", color="blue", background="yellow"):
+	def __init__(self, parent, main, icon=None, title="Foo", wash_to="black", color="black", background="white"):
 	#def __init__(self, configVars, parent):
 		QtGui.QWidget.__init__(self, parent)
 
 		#self.config = configVars
 		self.main = main
+		self.background = background
 		#self.img_dir = main.settin
 		
 		#########################################################
@@ -120,7 +121,7 @@ class HeaderLabel( QtGui.QWidget ):
 		## mainWidget Container widget
 		mainWidget = QtGui.QWidget()
 		mainLayout.addWidget( mainWidget )
-		mainWidget.setStyleSheet( "background-color: #efefef;" )
+		mainWidget.setStyleSheet( "background-color: %s; padding: 0px; margin: 0px;" % (self.background) )
 
 
 		### Main Box accross
@@ -134,7 +135,7 @@ class HeaderLabel( QtGui.QWidget ):
 
 		### Icon Widget
 		self.iconWidget = QtGui.QLabel()
-		self.iconWidget.setStyleSheet("background: transparent;")
+		self.iconWidget.setStyleSheet("background: transparent; padding: 0px; margin: 0px; ")
 		self.iconWidget.setPixmap( self.get_pixmap(icon , 16) )
 		self.iconWidget.setContentsMargins( 10, 0, 0, 0 )
 		mainHBox.addWidget(  self.iconWidget, 0 )
@@ -147,7 +148,7 @@ class HeaderLabel( QtGui.QWidget ):
 		
 		### Main Label
 		self.mainLabel = QtGui.QLabel(title)
-		self.mainLabel.setStyleSheet("padding: 0px; font-weight: bold; color: %s; font-size: 12pt" % (color)  )
+		self.mainLabel.setStyleSheet("padding: 0px; margin: 0px;  font-weight: bold; color: %s; font-size: 10pt" % (color)  )
 		vLabelBox.addWidget( self.mainLabel )
 
 		### Sub Label
@@ -165,7 +166,7 @@ class HeaderLabel( QtGui.QWidget ):
 		self.set_gradient(wash_to)
 
 	def set_gradient(self, wash_color):
-		style_grad = "background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #efefef, stop: 1 %s);" % wash_color
+		style_grad = "background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 %s, stop: 1 %s);" % (self.background, wash_color)
 		self.gradientLabel.setStyleSheet(style_grad)
 
 	def get_pixmap(self, ico, wh):

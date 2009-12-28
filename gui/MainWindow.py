@@ -5,20 +5,23 @@ from PyQt4 import QtCore, QtGui
 import app.settings
 import app.util
 import app.Boards
-import app.Bootloaders
+#import app.Bootloaders
 import app.Parsers
+
+import gui.FileSystemBrowser
 
 from gui.SettingsDialog import SettingsDialog
 from gui.WebSitesDialog import WebSitesDialog
 
 from gui.HelpWidgets import HelpDockWidget
+from gui.APIBrowser import APIBrowser
 from gui.Browser import Browser
 
 from gui.BoardsDialog import BoardsDialog
 from gui.BootLoadersDialog import BootLoadersDialog
 
 
-from gui.SketchListWidget import SketchListWidget
+from gui.SketchListWidgets import SketchesBrowser
 from gui.EditorWidget import EditorWidget
 
 from gui.icons import Ico 
@@ -37,35 +40,60 @@ class MainWindow(QtGui.QMainWindow):
 		## Sets up the settings and other global classes
 		self.settings = app.settings.Settings() 
 		self.ut = app.util.Util()
-		self.parsers = app.Parsers.Parsers()
+		#self.parsers = app.Parsers.Parsers()
+		self.boards = app.Boards.Boards(self)
+		self.connect(self.boards, QtCore.SIGNAL("board_selected"), self.on_board_selected)
 		
 		self.setWindowTitle("Arduino - pyqt - alpha version")
 		self.setWindowIcon(Icon(Ico.Arduino))
 		self.setMinimumWidth(1200)
 		self.setMinimumHeight(900)
+
 		self.setDockNestingEnabled(True)
-		self.setDockOptions(QtGui.QMainWindow.ForceTabbedDocks)
+		self.setDockOptions(QtGui.QMainWindow.ForceTabbedDocks | QtGui.QMainWindow.VerticalTabs)
 
 		self.topToolBar = QtGui.QToolBar()
 		self.topToolBar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
 		self.addToolBar( self.topToolBar )
-		if self.DEV:
-			self.topToolBar.addAction("Load Keywords", self.on_dev_load_keywords)
+		#if self.DEV:
+			#self.topToolBar.addAction("Load Keywords", self.on_dev_load_keywords)
 
 		##############################################################
 		## Files Menu
 		##############################################################
 		menuFiles 	= self.menuBar().addMenu( "Files" )
 		menuSettings = menuFiles.addAction(Icon(Ico.Settings), "Settings", self.on_settings_dialog)
-		self.topToolBar.addAction(menuSettings)
+		#self.topToolBar.addAction(menuSettings)
 
-		#menuEdit 	= self.menuBar().addMenu( "Edit" )
+
+		##############################################################
+		## View Menu
+		##############################################################
+		menuView = self.menuBar().addMenu( "View")
+		self.groupViewActions = QtGui.QActionGroup(self)
+		self.connect(self.groupViewActions, QtCore.SIGNAL("triggered (QAction *)"), self.on_action_view)
+
+		views = []
+		views.append(['sketches', Ico.Sketches, "Sketches"])
+		views.append(['api_browser', Ico.Function, "API Browser"])
+		views.append(['help', Ico.Help, "Help"])
+		views.append(['file_system_borwser', Ico.FileSystemBrowser, "Files Browser"])
+
+		for ki, ico, caption in views:
+			act = menuView.addAction(Icon(ico), caption)
+			act.setProperty("ki", ki)
+			self.topToolBar.addAction(act)
+			self.groupViewActions.addAction(act)
+		self.topToolBar.addSeparator()
 
 		##############################################################
 		## Sketch Menu
 		##############################################################
 
-		menuSketch  = self.menuBar().addMenu( "Sketch Books" )
+		menuSketch  = self.menuBar().addMenu( "Sketches" )
+
+
+		
 		
 		
 
@@ -77,7 +105,7 @@ class MainWindow(QtGui.QMainWindow):
 		## Boards
 		self.actionGroupBoards = QtGui.QActionGroup(self)
 		self.actionGroupBoards.setExclusive(True)
-		self.connect(self.actionGroupBoards, QtCore.SIGNAL("triggered(QAction *)"), self.on_action_board_select)
+		self.connect(self.actionGroupBoards, QtCore.SIGNAL("triggered(QAction *)"), self.on_action_select_board)
 		self.menuBoards = menuHardware.addMenu(Icon(Ico.Board), "-- No Board Selected --") # populates later
 		act = menuHardware.addAction(Icon(Ico.Boards), "Boards", self.on_action_boards)
 		self.topToolBar.addAction(act)
@@ -90,7 +118,7 @@ class MainWindow(QtGui.QMainWindow):
 		self.menuBootLoaders = menuHardware.addMenu(Icon(Ico.BootLoaderBurn), "Burn Bootloader") # populates later
 		act = menuHardware.addAction(Icon(Ico.BootLoaders), "Bootloaders", self.on_action_bootloaders)
 		self.topToolBar.addAction(act)
-		menuHardware.addSeparator()
+		self.topToolBar.addSeparator()
 
 		##############################################################
 		## Websites Menu
@@ -115,47 +143,42 @@ class MainWindow(QtGui.QMainWindow):
 		##########################################################
 		## Left Dock
 		##########################################################
-		userSketchesWidget = SketchListWidget(self, self)
-		self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, userSketchesWidget)	
-		self.connect(userSketchesWidget, QtCore.SIGNAL("open_sketch"), self.on_open_sketch)
+		
 
-		#userSketchesWidget2 = SketchListWidget(self, self)
-		#self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, userSketchesWidget2)	
-		#self.connect(userSketchesWidget2, QtCore.SIGNAL("open_sketch"), self.on_open_sketch)
-		#exampleSketchesWidget = SketchListWidget(self, SketchListWidget.MODE_EXAMPES)
-		#self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, exampleSketchesWidget)	
-
-
-
+		#self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, userSketchesWidget)	
+		#self.connect(userSketchesWidget, QtCore.SIGNAL("open_sketch"), self.on_open_sketch)
+		"""
+		exampleSketchesWidget = SketchListWidget("Examples", self, self)
+		self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, exampleSketchesWidget)	
+		self.connect(exampleSketchesWidget, QtCore.SIGNAL("open_sketch"), self.on_open_sketch)
+		self.tabifyDockWidget(userSketchesWidget, exampleSketchesWidget)
+		"""
+		helpDockWidget = HelpDockWidget("Help", self, self)
+		self.addDockWidget(QtCore.Qt.RightDockWidgetArea, helpDockWidget)
+		
 		##########################################################
 		## Central Widget
 		##########################################################
+
 		self.mainTabWidget = QtGui.QTabWidget(self)
 		self.mainTabWidget.setTabsClosable(True)
+		self.mainTabWidget.setMovable(True)
 		self.setCentralWidget(self.mainTabWidget)
-
-		#import gui.DefEditor
-		#defEditor = gui.DefEditor.DefEditor(self, self)
-		#self.mainTabWidget.addTab(defEditor, Icon(Ico.Arduino), "Def Editor")
-		import gui.APIBrowser
-		#apiBrowser = gui.APIBrowser.APIBrowser(self, self)
-		#self.mainTabWidget.addTab(apiBrowser, Icon(Ico.Arduino), "API Browser")
-
-		import gui.FileSystemBrowser
-		fileSystemBrowser = gui.FileSystemBrowser.FileSystemBrowser(self, self)
-		self.mainTabWidget.addTab(fileSystemBrowser, Icon(Ico.Folder), "Files Browser")
+		self.connect(self.mainTabWidget, QtCore.SIGNAL("tabCloseRequested (int)"), self.on_close_tab_requested)
 
 
-		## Welcome page
-		#welcomePage = Browser(self, self, "welcome.html")
-		#self.mainTabWidget.addTab(welcomePage, Icon(Ico.Arduino), "Welcome")
+		self.on_action_view(QtCore.QString("sketches"))
+		self.on_action_view(QtCore.QString("welcome"))
 
+		
+		edit = EditorWidget(self, self, arduino_mode=True)
+		idx = self.mainTabWidget.addTab(edit, Icon(Ico.Sketch), "Foo Bar")
+		self.mainTabWidget.setCurrentIndex(idx)
+		edit.load_file("/home/arduino/sketchbook/chicken_shit/chicken_shit.pde", idx)
 
-		##########################################################
-		## Right Dock
-		##########################################################
-		#helpDockWidget = HelpDockWidget(self, self)
-		#self.addDockWidget(QtCore.Qt.RightDockWidgetArea, helpDockWidget)
+		
+
+		#self.addDockWidget(QtCore.Qt.RightDockWidgetArea, apiBrowser)
 
 		##########################################################
 		## Status Bar
@@ -170,17 +193,50 @@ class MainWindow(QtGui.QMainWindow):
 
 		self.on_refresh_settings()
 
+
 	#########################################
-	## Board Events
+	## View  Actions
+	def on_action_view(self, strOrObject):
+		if isinstance(strOrObject, QtCore.QString):
+			ki = strOrObject
+		else:
+			ki = strOrObject.property("ki").toString()
+		idx = None
+
+		if ki == 'api_browser':
+			apiBrowser = APIBrowser(self, self)
+			idx = self.mainTabWidget.addTab(apiBrowser, Icon(Ico.Function), "API Browser")
+
+
+		elif ki == "file_system_borwser":
+			fileSystemBrowser = gui.FileSystemBrowser.FileSystemBrowser(self, self)
+			idx = self.mainTabWidget.addTab(fileSystemBrowser, Icon(Ico.FileSystemBrowser), "Files Browser")
+
+		elif ki == 'sketches':
+			sketchesWidget = SketchesBrowser( self, self )
+			idx = self.mainTabWidget.addTab(sketchesWidget, Icon(Ico.Sketches), "Sketches")
+			self.connect(sketchesWidget, QtCore.SIGNAL("open_sketch"), self.on_open_sketch)
+
+		elif ki == 'welcome':
+			welcomePage = Browser(self, self, "welcome.html")
+			self.mainTabWidget.addTab(welcomePage, Icon(Ico.Arduino), "Welcome")
+
+		if idx:
+			self.mainTabWidget.setCurrentIndex(idx)
+
+	#########################################
+	## Board Stuff
 	def on_action_boards(self):
-		print "boards"
 		d = BoardsDialog(self, self)
 		d.show()
 
-	def on_action_board_select(self, act):
-		print "on_action_board", act
-		self.lblBoard.setText(act.text())
-		self.menuBoards.setTitle(act.text())
+	def on_action_select_board(self, act):
+		print "board", act.property("board").toString()
+		self.boards.set_current(act.property("board").toString())
+
+	def on_board_selected(self, board):
+		self.lblBoard.setText(board['name'])
+		self.menuBoards.setTitle(board['name'])
 
 	#########################################
 	## Bootloader Stuff
@@ -189,12 +245,18 @@ class MainWindow(QtGui.QMainWindow):
 		d.show()
 
 	def on_action_bootloader_burn(self, act):
-		print "on_action_bootloader_burn", act
 		self.lblBootloader.setText(act.text())
 
 
+	#########################################
+	## Tab Events
+	def on_close_tab_requested(self, tabIndex):
+		self.mainTabWidget.removeTab(tabIndex)
 
+	#########################################
+	## Open Sketchboox
 	def on_open_sketch(self, file_path):
+		print "OPEN", file_path
 		fileInfo = QtCore.QFileInfo(file_path)
 		newEditor = EditorWidget(self, self, arduino_mode=True)
 		newEditor.load_file(fileInfo.filePath())
@@ -220,13 +282,11 @@ class MainWindow(QtGui.QMainWindow):
 		## Load Boards Menu
 		for act in self.actionGroupBoards.actions():
 			self.actionGroupBoards.removeAction(act)
-		file_path = self.settings.hardware_path("boards.txt")
-		if file_path:
-			dic = self.ut.load_arduino_config_file(file_path)
-			for ki in dic:
-				act = self.menuBoards.addAction( dic[ki]['name'] )
-				act.setCheckable(True)
-				self.actionGroupBoards.addAction(act)
+		for board, caption in self.boards.index():
+			act = self.menuBoards.addAction( caption )
+			act.setProperty("board", board )
+			act.setCheckable(True)
+			self.actionGroupBoards.addAction(act)
 
 		## Laod bootloaders
 		for act in self.actionGroupBootLoaders.actions():

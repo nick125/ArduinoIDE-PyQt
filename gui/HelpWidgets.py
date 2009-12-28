@@ -12,13 +12,17 @@ import gui.widgets
 class HelpDockWidget(QtGui.QDockWidget):
 
 	
-	def __init__(self, parent, main):
-		QtGui.QDockWidget.__init__(self)
+	def __init__(self, title, parent, main):
+		QtGui.QDockWidget.__init__(self, title, parent)
 
 		self.main = main
 
+		self.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea | QtCore.Qt.RightDockWidgetArea)
+
 		containerWidget = QtGui.QWidget()
 		self.setWidget(containerWidget)
+
+
 
 		layout = QtGui.QVBoxLayout()
 		layout.setContentsMargins(0,0,0,0)
@@ -43,8 +47,8 @@ class HelpWidget(QtGui.QWidget):
 		layout.setSpacing(0)
 		self.setLayout(layout)
 
-		headLabel = gui.widgets.HeaderLabel(self, self.main, icon=Ico.Help, title="Help", color="blue", wash_to="yellow")
-		layout.addWidget(headLabel)
+		#headLabel = gui.widgets.HeaderLabel(self, self.main, icon=Ico.Help, title="Help", color="#7F96B0", wash_to="#7F96B0")
+		#layout.addWidget(headLabel)
 
 
 		###########################

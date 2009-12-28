@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 from PyQt4 import QtCore, QtGui
 
 from PyQt4.Qsci import QsciScintilla, QsciAPIs
@@ -104,6 +105,7 @@ class EditorWidget(QtGui.QWidget):
 		return extensions
 
 	def write_file(self):
+		#print "write", self.current_file_path
 		file2Write = QtCore.QFile(self.current_file_path)
 		if not file2Write.open(QtCore.QIODevice.WriteOnly | QtCore.QIODevice.Text):
 			print "TODO: error writing file"
@@ -114,15 +116,13 @@ class EditorWidget(QtGui.QWidget):
 
 
 	def on_compile(self):
-		print "compile"
+		#p#rint "compile"
 		self.write_file()
 		self.compile_file()
 
 
 	def compile_file(self):
-		command = "ls -all"
-		
-
+		self.terminalWidget.compile(self.current_file_path)
 
 
 	def on_upload(self):
@@ -182,9 +182,8 @@ class EditorWidget(QtGui.QWidget):
 		self.editor.setLexer(self.lexer)
 
 
-	def load_file(self, file_path):
+	def load_file(self, file_path, tabIndex=None):
 		
-
 		fileInfo = QtCore.QFileInfo(file_path)
 
 		if fileInfo.isDir():
@@ -196,11 +195,11 @@ class EditorWidget(QtGui.QWidget):
 			self.current_file_path = None
 			return
 
+		self.current_file_path = fileInfo.filePath()
 		file_name_string = QtCore.QString("<b>").append(fileInfo.fileName()).append("</b>")
 		self.lblFileName.setText(file_name_string)
 		self.lblFileSize.setText("%s" % fileInfo.size())
 		self.lblFileModified.setText("%s" % fileInfo.lastModified().toString(QtCore.Qt.SystemLocaleShortDate))
-
 		source = self.main.ut.get_file_contents(fileInfo.filePath())
 
 		## unique Files

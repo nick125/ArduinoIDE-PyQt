@@ -9,7 +9,7 @@ from gui.icons import Ico
 from gui.icons import Icon 
 
 
-class SSHelpDockWidget(QtGui.QDockWidget):
+class APIDockWidget(QtGui.QDockWidget):
 
 	
 	def __init__(self, parent, main):
@@ -25,8 +25,8 @@ class SSHelpDockWidget(QtGui.QDockWidget):
 		layout.setSpacing(0)
 		containerWidget.setLayout(layout)	
 
-		helpWidget = HelpWidget(self, self.main)
-		layout.addWidget(helpWidget)
+		apiWidget = APIBrowser(self, self.main)
+		layout.addWidget(apiWidget)
 
 
 
