@@ -72,7 +72,7 @@ class FileSystemBrowser(QtGui.QWidget):
 			#self.editor.setLexer(self.lexer)
 			return
 
-		extensions = ['java', 'html', 'py', 'pde', 'txt', 'yaml', 'sh', 'c','h','cpp','cxx', 'pl']
+		extensions = ['java', 'html', 'py', 'pde', 'txt', 'yaml', 'sh', 'c', 'h','cpp','cxx', 'pl']
 		if not fileInfo.suffix() in extensions:
 			self.emit(QtCore.SIGNAL("open_file"), None)
 			self.editor.setText("")
@@ -82,8 +82,6 @@ class FileSystemBrowser(QtGui.QWidget):
 		## load file
 		txt = self.main.ut.get_file_contents(fileInfo.filePath())
 		self.emit(QtCore.SIGNAL("open_file"), fileInfo.filePath())
-		#self.editor.set_source(txt)
-			## QsciLexerCPP, QsciLexerMakefile, QsciLexerJava, QsciLexerHTML, QsciLexerPerl, QsciLexerPython, QsciLexerYAML
 		## TODO MAkefile and show images
 		print "YES>>", fileInfo.suffix(), fileInfo.fileName(), fileInfo.filePath()
 

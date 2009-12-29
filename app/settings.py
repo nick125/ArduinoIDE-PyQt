@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-import sys
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtCore
 
 class Settings(QtCore.QObject):
 

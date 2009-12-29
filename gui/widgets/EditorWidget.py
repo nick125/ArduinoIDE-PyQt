@@ -203,7 +203,7 @@ class EditorWidget(QtGui.QWidget):
 		self.current_file_path = fileInfo.filePath()
 		file_name_string = QtCore.QString("<b>").append(fileInfo.fileName()).append("</b>")
 		self.lblFileName.setText(file_name_string)
-		self.lblFileSize.setText("%s" % fileInfo.size())
+		self.lblFileSize.setText("%sB" % fileInfo.size())
 		self.lblFileModified.setText("%s" % fileInfo.lastModified().toString(QtCore.Qt.SystemLocaleShortDate))
 		source = self.main.ut.get_file_contents(fileInfo.filePath())
 

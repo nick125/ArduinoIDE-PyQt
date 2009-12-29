@@ -7,8 +7,6 @@ import app.util
 import app.Boards
 import app.API
 
-import gui.FileSystemBrowser
-
 from gui.SettingsDialog import SettingsDialog
 from gui.WebSitesDialog import WebSitesDialog
 
@@ -16,6 +14,7 @@ from gui.dockwidgets.HelpDock import HelpDock
 from gui.dockwidgets.APIBrowserDock import APIBrowserDock
 
 from gui.panes.APIBrowserPane import APIBrowserPane
+from gui.panes.FileSystemBrowserPane import FileSystemBrowserPane
 
 from gui.browser.BrowserWidget import Browser
 
@@ -213,7 +212,7 @@ class MainWindow(QtGui.QMainWindow):
 
 
 		elif ki == "file_system_browser":
-			fileSystemBrowser = gui.FileSystemBrowser.FileSystemBrowser(self, self)
+			fileSystemBrowser = FileSystemBrowserPane(self, self)
 			idx = self.mainTabWidget.addTab(fileSystemBrowser, Icon(Ico.FileSystemBrowser), "Files Browser")
 
 		elif ki == 'sketches':

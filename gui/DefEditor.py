@@ -155,7 +155,7 @@ class DefEditor(QtGui.QWidget):
 		self.tree.invisibleRootItem().removeChild(item)
 
 	def on_move_up(self):
-			pass
+		pass
 
 	def on_move_down(self):
 		pass
