@@ -22,7 +22,7 @@ class HelpDockWidget(QtGui.QDockWidget):
 		self.setWidget(containerWidget)
 
 		layout = QtGui.QVBoxLayout()
-		layout.setContentsMargins(0,0,0,0)
+		layout.setContentsMargins(0, 0, 0, 0)
 		layout.setSpacing(0)
 		containerWidget.setLayout(layout)	
 
@@ -39,7 +39,7 @@ class HelpWidget(QtGui.QWidget):
 		self.main = main
 
 		layout = QtGui.QVBoxLayout()
-		layout.setContentsMargins(0,0,0,0)
+		layout.setContentsMargins(0, 0, 0, 0)
 		layout.setSpacing(0)
 		self.setLayout(layout)
 

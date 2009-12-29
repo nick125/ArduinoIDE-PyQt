@@ -18,7 +18,7 @@ class FileSystemBrowser(QtGui.QWidget):
 		self.main = main
 
 		mainLayout = QtGui.QVBoxLayout()
-		mainLayout.setContentsMargins(0,0,0,0)
+		mainLayout.setContentsMargins(0, 0, 0, 0)
 		mainLayout.setSpacing(0)
 		self.setLayout(mainLayout)
 		splitter = QtGui.QSplitter()
@@ -105,7 +105,7 @@ class FileSystemTree(QtGui.QWidget):
 		self.model = QtGui.QDirModel(self)
 
 		mainLayout = QtGui.QVBoxLayout()
-		mainLayout.setContentsMargins(0,0,0,0)
+		mainLayout.setContentsMargins(0, 0, 0, 0)
 		mainLayout.setSpacing(0)
 		self.setLayout(mainLayout)
 

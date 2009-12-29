@@ -28,12 +28,12 @@ class TerminalWidget(QtGui.QWidget):
 		self.current_file_path = None
 		
 		layout = QtGui.QVBoxLayout()
-		layout.setContentsMargins(0,0,0,0)
+		layout.setContentsMargins(0, 0, 0, 0)
 		layout.setSpacing(0)
 		self.setLayout(layout)
 
 		hbox = QtGui.QHBoxLayout()
-		hbox.setContentsMargins(0,0,0,0)
+		hbox.setContentsMargins(0, 0, 0, 0)
 		hbox.setSpacing(0)
 		layout.addLayout(hbox)
 
@@ -57,7 +57,7 @@ class TerminalWidget(QtGui.QWidget):
 
 		
 		self.progress = QtGui.QProgressBar()
-		self.progress.setRange(0,3)
+		self.progress.setRange(0, 3)
 		self.progress.setFixedHeight(15)
 		#self.progress.hide()
 		hbox.addWidget(self.progress)
@@ -108,7 +108,7 @@ class TerminalWidget(QtGui.QWidget):
 		print "command=", command
 		self.process.start(command)
 		if self.process.waitForStarted(): 
-			self.process.waitForFinished();
+			self.process.waitForFinished()
 			result =  self.process.readAllStandardOutput()
 			#print type(result), result
 			error = self.process.readAllStandardError()

@@ -25,7 +25,7 @@ class HelpBrowserDialog(QtGui.QDialog):
 		self.statusLabel = gui.widgets.StatusLabel(self)
 
 		layout = QtGui.QVBoxLayout()
-		layout.setContentsMargins(0,0,0,0)
+		layout.setContentsMargins(0, 0, 0, 0)
 		layout.setSpacing(0)
 		self.setLayout( layout )
 

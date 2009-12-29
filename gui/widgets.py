@@ -1,31 +1,12 @@
 # -*- coding: utf-8 -*-
+"""
+	A group of miscellaneous widgets
+"""
 
 from PyQt4 import QtCore, QtGui
 
 from gui.icons import Ico 
 from gui.icons import Icon 
-
-
-
-#####################################################################################################################
-## StatusLabel
-#####################################################################################################################
-class StatusLabel( QtGui.QLabel):
-	def __init__(self, parent):
-		QtGui.QWidget.__init__(self, parent)
-		self.setStyleSheet("background-color: white; color: #555555;")
-		self.setVisible(False)
-		self.setText("No items in this view")
-
-	def set_status(self, parentWidget, label):
-		self.setText( label )
-		widget = parentWidget.viewport()
-		self.move( widget.x() + 5, widget.y() + 50 )
-		self.setFixedWidth( widget.width() -100)
-		self.setVisible(True)
-		self.raise_()
-
-
 
 ###########################################################################################
 ## Buttons
@@ -106,13 +87,19 @@ class StatusWidget( QtGui.QLabel):
 		self.raise_()
 
 class StatusLabel(QtGui.QWidget):
+	"""
+		A label to display the status of something
+	"""
 
 	def __init__(self, parent, label=None):
+		"""
+			Creates a status label instance
+		"""
 		QtGui.QWidget.__init__(self, parent)
 
 		
 		mainLayout = QtGui.QHBoxLayout()
-		mainLayout.setContentsMargins(0,0,0,0)
+		mainLayout.setContentsMargins(0, 0, 0, 0)
 		mainLayout.setSpacing(0)
 		self.setLayout(mainLayout)
 
@@ -127,6 +114,9 @@ class StatusLabel(QtGui.QWidget):
 		mainLayout.addWidget(self.labelVal)
 
 	def setText(self, txt):
+		"""
+			Sets the text of the status label
+		"""
 		self.labelVal.setText(txt)
 
 
@@ -149,7 +139,7 @@ class HeaderLabel( QtGui.QWidget ):
 		mainLayout = QtGui.QHBoxLayout()
 		#mainLayout = QtGui.QGridLayout()
 		mainLayout.setSpacing(0)
-		mainLayout.setContentsMargins(0,0,0,0)
+		mainLayout.setContentsMargins(0, 0, 0, 0)
 		self.setLayout( mainLayout )
 
 		#self.width_height = 22 if self.lines == 2 else 16
@@ -164,8 +154,8 @@ class HeaderLabel( QtGui.QWidget ):
 		### Main Box accross
 		mainHBox  = QtGui.QHBoxLayout()
 		mainHBox.setSpacing(0)
-		m = 0
-		mainHBox.setContentsMargins(m,m,m,m)
+		margin = 0
+		mainHBox.setContentsMargins(margin, margin, margin, margin)
 		mainHBox.setSpacing(0)
 		mainWidget.setLayout( mainHBox )
 

@@ -12,7 +12,8 @@ class Icon(QtGui.QIcon):
 
 
 
-class Ico:
+# TODO: Banish this!
+class Icons:
 	Arduino = 'arduino.png'
 
 	BootLoaderBurn = 'transmit_go.png'
@@ -49,7 +50,7 @@ class Ico:
 
 	## widgets
 	Add = 'add.png'
-	Delete ='delete.png'
+	Delete = 'delete.png'
 	Remove = 'delete.png'
 	Cancel = 'bullet_black.png'
 	Save = 'accept.png'
@@ -77,3 +78,6 @@ class Ico:
 	WriteFile = 'book_next.png'
 
 	Settings = 'cog.png'
+
+# XX: Remove this hack once Ico is out of use
+Ico = Icons

@@ -66,7 +66,7 @@ class SketchListWidget(QtGui.QWidget):
 			self.dir_to_browse = self.main.settings.sketches_path()
 
 		mainLayout = QtGui.QVBoxLayout()
-		mainLayout.setContentsMargins(0,0,0,0)
+		mainLayout.setContentsMargins(0, 0, 0, 0)
 		mainLayout.setSpacing(0)
 		self.setLayout(mainLayout)
 
@@ -86,16 +86,16 @@ class SketchListWidget(QtGui.QWidget):
 			self.treePlaces.setRootIsDecorated(False)
 			self.treePlaces.setAlternatingRowColors(True)
 			self.connect(self.treePlaces, QtCore.SIGNAL("itemClicked (QTreeWidgetItem *,int)"), self.on_tree_place_clicked)
-			for foo in [["Examples", self.main.settings.examples_path()],["Sketches", self.main.settings.sketchbooks_path()]]:
+			for panel in [["Examples", self.main.settings.examples_path()], ["Sketches", self.main.settings.sketchbooks_path()]]:
 				item = QtGui.QTreeWidgetItem()
 				self.treePlaces.addTopLevelItem(item)
-				item.setText(0, foo[0])
+				item.setText(0, panel[0])
 				font = item.font(0)
 				font.setBold(True)
 				item.setFont(0, font)
 				item.setIcon(0, Icon(Ico.Folder))
-				if foo[1]:
-					item.setText(1, foo[1])
+				if panel[1]:
+					item.setText(1, panel[1])
 
 			self.dir_to_browse = None
 

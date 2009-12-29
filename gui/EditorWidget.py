@@ -30,7 +30,7 @@ class EditorWidget(QtGui.QWidget):
 		self.current_file_path = None
 
 		mainLayout = QtGui.QVBoxLayout()
-		mainLayout.setContentsMargins(0,0,0,0)
+		mainLayout.setContentsMargins(0, 0, 0, 0)
 		mainLayout.setSpacing(0)
 		self.setLayout(mainLayout)
 
