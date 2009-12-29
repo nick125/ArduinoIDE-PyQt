@@ -101,43 +101,17 @@ class HelpWidget(QtGui.QWidget):
 	## Load Files
 	####################################################
 	def load(self):
-		pathStr = self.main.settings.help_path()
-		print "LOAD HELP########ddd", pathStr
-		if not pathStr:
-			self.statusWidget.set_status(self.tree, "Path not found")
-			return
-		dirr = QtCore.QDir(pathStr)
-		if not dirr.exists():
-			QtGui.QMessageBox.information(self, "OOps", " the reference dir %s was not found" % pathStr)
-			return
-		## TODO - make this return *.html
-		infoList = dirr.entryInfoList(QtCore.QDir.Files | QtCore.QDir.NoDotAndDotDot)
-		for fileInfo in infoList:
-			if fileInfo.suffix() == 'html':
-				row_idx = self.model.rowCount()
-				item = QtGui.QStandardItem( fileInfo.baseName() )
-				item.setEditable(False)
-				#item.setData( QtCore.QVariant(rec) )
-				#item.setIcon( dIcon( dIco.Red ) if str(rec['online']) == '1' else dIcon( dIco.Black ) )
-				self.model.setItem(row_idx, 0, item)
-				#self.tree.sortByColumn(self.COLS.company, QtCore.Qt.AscendingOrder)
-				#self.tree.header().setResizeMode( self.COLS.company, QtGui.QHeaderView.ResizeToContents )
+		html_files = self.main.api.html_index()
+		for file_path in html_files:
+			row_idx = self.model.rowCount()
 
-				"""
-				treeItem = QtGui.QTreeWidgetItem()
-				treeItem.setText(0, fileInfo.baseName() ) ## hack to remove .html
-				treeItem.setData(0, QtCore.Qt.UserRole, QtCore.QVariant( fileInfo.filePath() ))
-				treeItem.setIcon(0, Icon(Ico.HelpDoc))
-				self.tree.addTopLevelItem(treeItem)
-				"""
+			item = QtGui.QStandardItem( html_files[file_path] )
+			item.setEditable(False)
+			self.model.setItem(row_idx, 0, item)
+		self.tree.sortByColumn(0, QtCore.Qt.AscendingOrder)	
 
 	def on_tree_double_clicked(self, modelIndex):
-		#print modelIndex
 		item = self.model.itemFromIndex( self.proxyModel.mapToSource( modelIndex ) )
-		#self.currDic =  self.main.ut.clean_dic(item.data().toPyObject())
-		#self.account_id = int( self.currDic['account_id'] )
-		#self.actionEdit.trigger()
-		#print item.text(0), item.data(0, QtCore.Qt.UserRole).toString()
 		page = item.data(QtCore.Qt.UserRole).toString()
 		print page
 		dialog = HelpBrowserDialog(self, self.main)

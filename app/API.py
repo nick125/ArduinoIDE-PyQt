@@ -10,13 +10,22 @@ class API(QtCore.QObject):
 
 		self.main = main
 
+		self.html_files = None
+
 	def html_index(self):
+		self.html_files = {}
 		pathStr = self.main.settings.help_path()
-		dirr = QtCore.QDir(pathStr)
-		if not dirr.exists():
+		htmlDir = QtCore.QDir(pathStr)
+		if not htmlDir.exists():
 			#QtGui.QMessageBox.information(self, "OOps", " the reference dir %s was not found" % pathStr)
-			print "error"
+			print "error", # TODO
 			return
+		## TODO sort
+		for file_entry in htmlDir.entryInfoList(QtCore.QDir.Files | QtCore.QDir.NoDotAndDotDot):
+			if file_entry.suffix() == 'html':
+				self.html_files[str(file_entry.filePath())] = str(file_entry.baseName())
+
+		return self.html_files
 
 	def tree(self):
 		api_path = self.main.settings.api_define_path()

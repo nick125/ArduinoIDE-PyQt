@@ -42,7 +42,7 @@ class MainWindow(QtGui.QMainWindow):
 		## Sets up the settings and other global classes
 		self.settings = app.settings.Settings(self) 
 		self.ut = app.util.Util()
-
+		self.api = app.API.API(self)
 		## Set Window Properties		
 		self.setWindowTitle(self.title_text % "")
 		self.setWindowIcon(Icon(Ico.Arduino))
@@ -177,9 +177,9 @@ class MainWindow(QtGui.QMainWindow):
 
 
 		## API
-		self.api = app.API.API(self)
+		
 		#self.connect(self.api, QtCore.SIGNAL("some_signal_here"), self.p)
-		print self.api.html_index()
+		#print self.api.html_index()
 		#print self.api.tree()
 		
 		if not self.settings.value("virginity"):
