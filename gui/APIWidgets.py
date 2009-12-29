@@ -9,7 +9,7 @@ from gui.icons import Ico
 from gui.icons import Icon 
 
 
-class APIDockWidget(QtGui.QDockWidget):
+class DEADAPIDockWidget(QtGui.QDockWidget):
 
 	
 	def __init__(self, parent, main):
@@ -30,7 +30,7 @@ class APIDockWidget(QtGui.QDockWidget):
 
 
 
-class APIBrowser(QtGui.QWidget):
+class APIWidget(QtGui.QWidget):
 
 	class COLS:
 		icon = 0
@@ -50,10 +50,6 @@ class APIBrowser(QtGui.QWidget):
 		layout.setSpacing(0)
 		self.setLayout(layout)
 
-		#headLabel = gui.widgets.HeaderLabel(self, self.main, icon=Ico.Help, title="Help", color="blue", wash_to="yellow")
-		#layout.addWidget(headLabel)
-
-
 		###########################
 		### Toolbar
 		toolbar = QtGui.QToolBar()
@@ -67,38 +63,23 @@ class APIBrowser(QtGui.QWidget):
 		self.connect(self.chkExtendedNodes, QtCore.SIGNAL("clicked()"), self.on_refresh)
 		toolbar.addSeparator()
 		
-		self.actionAddFunction = toolbar.addAction(Icon(Ico.FunctionAdd), "Add Function", self.on_add_function)
-		#self.actionAddFunction.setDisabled(True)
 
-		self.actionEditFunction = toolbar.addAction(Icon(Ico.FunctionEdit), "Edit Function", self.on_edit_function)
-		self.actionEditFunction.setDisabled(True)
+		##################################################################
+		##  Filter Bar
+		##################################################################
+		hBox = QtGui.QHBoxLayout()
+		layout.addLayout(hBox)
 
-		self.actionDeleteFunction = toolbar.addAction(Icon(Ico.FunctionDelete), "Delete Function", self.on_delete_function)
-		self.actionDeleteFunction.setDisabled(True)
-		toolbar.addSeparator()
+		buttClearFilter = QtGui.QPushButton(self)
+		buttClearFilter.setIcon( Icon(Ico.Black) )
+		buttClearFilter.setFlat(True)
+		buttClearFilter.setText("All")
+		self.connect( buttClearFilter, QtCore.SIGNAL("clicked()"), self.on_filter_clear)
+		hBox.addWidget( buttClearFilter, 1 )
 
-		self.folderactionGroup = QtGui.QActionGroup(self)
-		self.folderactionGroup.setDisabled(True)
-
-		self.actionAddFolder = toolbar.addAction(Icon(Ico.FolderAdd), "Create", self.on_add_folder)
-		self.folderactionGroup.addAction(self.actionAddFolder)
-
-		self.actionEditFolder = toolbar.addAction(Icon(Ico.FolderEdit), "Rename", self.on_edit_folder)
-		self.folderactionGroup.addAction(self.actionEditFolder)
-
-		self.actionDeleteFolder = toolbar.addAction(Icon(Ico.FolderDelete), "Delete", self.on_delete_folder)
-		self.folderactionGroup.addAction(self.actionDeleteFolder)
-		toolbar.addSeparator()
-
-		self.actionWriteApiFile = toolbar.addAction(Icon(Ico.WriteFile), "Write API file", self.on_write_api_file)
-
-		
-		#toolbar.addWidget(self.chkExtendedNodes)
-		#headerLayout.addWidget(lblTitle)
-		#toolbar.addWidget(QtGui.QLabel("Filter:"))
-		#self.txtFilter = QtGui.QLineEdit()
-		#toolbar.addWidget(self.txtFilter)
-
+		self.txtFilter = QtGui.QLineEdit("")
+		self.connect(self.txtFilter, QtCore.SIGNAL('textChanged(const QString &)'), self.on_filter_changed)
+		hBox.addWidget( self.txtFilter, 222 )
 		
 
 		self.tree = QtGui.QTreeWidget()

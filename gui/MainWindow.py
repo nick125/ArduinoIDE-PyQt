@@ -14,6 +14,8 @@ from gui.WebSitesDialog import WebSitesDialog
 
 from gui.HelpWidgets import HelpDockWidget
 from gui.APIBrowser import APIBrowser
+from gui.APIWidget import APIDocWidget
+
 from gui.Browser import Browser
 
 from gui.BoardsDialog import BoardsDialog
@@ -139,6 +141,10 @@ class MainWindow(QtGui.QMainWindow):
 		####################################
 		helpDockWidget = HelpDockWidget("Help", self, self)
 		self.addDockWidget(QtCore.Qt.RightDockWidgetArea, helpDockWidget)
+
+		apiDockWidget = APIDockWidget("Help", self, self)
+		self.addDockWidget(QtCore.Qt.RightDockWidgetArea, apiDockWidget)
+		self.tabifyDocWidget(helpDockWidget, apiDockWidget)
 		
 		##########################################################
 		## Central Widget
