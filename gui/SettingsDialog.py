@@ -155,6 +155,7 @@ class SettingsDialog(QtGui.QDialog):
 		for x in self.path_keys:
 			#print x[0], self.txt[x[0]].text()
 			self.main.settings.setValue(x[0], self.txt[x[0]].text())
+		self.main.settings.setValue("virginity", "NO")
 		self.main.settings.qSettings.sync()
 		self.emit(QtCore.SIGNAL("refresh_settings"))
 		self.accept()
