@@ -15,7 +15,7 @@ if __name__ == '__main__':
 	app = QtGui.QApplication(sys.argv)
 
 	window = gui.MainWindow.MainWindow()
-	window.move(1300, 20)
+	#window.move(1300, 20)
 	window.show()
 
 	sys.exit(app.exec_())
