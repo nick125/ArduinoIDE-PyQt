@@ -1,0 +1,16 @@
+TO DO
+Think ok a cool name for the project, call it something like a cat.. eg dabbles 
+Maybe a competition ;-)
+
+=========
+Browser Widget
+
+The browser widget needs to be fully function with url, back forward, search to google, arduino etc
+
+It will manifest itself in the application in three ways
+ * static local pages wuch as Welcome pages, and other "Application" info- maybe even some qt/webkit objecct sharing
+ * Browsing the static html and the links to arduin - u dont know where your at, as local html help is "lift" of online
+ * Links to browse/search the newsgroup, forums, playgound
+
+
+

@@ -14,16 +14,19 @@ class API(QtCore.QObject):
 		self.html_files = None 
 		self.yaml_files = None
 
-		self.api = None
+		self.tree = None
+		self.functions = None
 
 		self.load_api()
 
 	def load_api(self):
-		self.api = {}
+		self.tree = {}
+		self.functions = []
 		root_path = self.main.settings.api_define_path()
 		rootDir = QtCore.QDir(root_path)
 		self.tree = {}
 		self.walk_dir(rootDir, '/')
+		#print self.functions
 
 	def walk_dir(self, sub_dir, folder):
 	
@@ -32,7 +35,8 @@ class API(QtCore.QObject):
 		for file_entry in sub_dir.entryInfoList(QtCore.QDir.Files | QtCore.QDir.NoDotAndDotDot):
 			if file_entry.suffix() == 'yaml':
 				#self.add_yaml_function_node(file_entry, folder)
-				print "YAML", file_entry.completeBaseName()
+				#print "YAML", file_entry.completeBaseName()
+				self.functions.append([str(file_entry.completeBaseName()), str(file_entry.filePath())])
 				#api = self.main.ut.load_yaml(sub_entry.filePath())
 	
 		for folder_entry in sub_dir.entryInfoList(QtCore.QDir.Dirs | QtCore.QDir.NoDotAndDotDot):
