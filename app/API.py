@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from operator import itemgetter
-from PyQt4 import QtCore
+from PyQt4 import QtCore, QtGui
+from gui.icons import Icon, Ico
 
 class API(QtCore.QObject):
 
