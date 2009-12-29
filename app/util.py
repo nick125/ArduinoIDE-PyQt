@@ -3,7 +3,7 @@
 import yaml
 from PyQt4 import QtCore
 
-class FileWriteError(Exception): pass
+class FileOpenError(Exception): pass
 
 class Util:
 
@@ -14,14 +14,13 @@ class Util:
 	def get_file_contents(self, file_path):
 		xFile = QtCore.QFile(file_path)
 		if not xFile.open(QtCore.QIODevice.ReadOnly | QtCore.QIODevice.Text):
-			print "oops"
-			return None
+			raise FileOpenError
 		return QtCore.QString(xFile.readAll())
 
 	def write_file(self, file_path, contents):
 		file2Write = QtCore.QFile(file_path)
 		if not file2Write.open(QtCore.QIODevice.WriteOnly | QtCore.QIODevice.Text):
-			raise FileWriteError
+			raise FileOpenError
 		stream_out = QtCore.QTextStream(file2Write)
 		stream_out << contents
 		file2Write.close()
