@@ -196,6 +196,10 @@ class MainWindow(QtGui.QMainWindow):
 		self.connect(self.boards, QtCore.SIGNAL("board_selected"), self.on_board_selected)
 		self.boards.load_current() ## THIS actually sets current as event above is not fired in constructor
 
+		if not self.main.settings.value("virginity"):
+			self.on_settings_dialog()
+
+
 		#self.api = app.API.API(self)
 		self.on_refresh_settings()
 
