@@ -208,7 +208,7 @@ class MainWindow(QtGui.QMainWindow):
 		idx = None
 
 		if ki == 'api_browser':
-			apiBrowser = APIBrowser(self, self)
+			apiBrowser = APIBrowserPane(self, self)
 			idx = self.mainTabWidget.addTab(apiBrowser, Icon(Ico.Function), "API Browser")
 
 

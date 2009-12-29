@@ -17,7 +17,7 @@ class Bootloaders:
 			return
 		
 		while not progFile.atEnd():
-			line = progFile.readLine();
+			line = progFile.readLine()
 			string =  QtCore.QString(line)
 			string = string.trimmed()
 			if string.length() > 0:

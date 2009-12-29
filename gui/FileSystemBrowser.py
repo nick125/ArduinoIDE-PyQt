@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
 from PyQt4 import QtCore, QtGui
 from PyQt4.Qsci import QsciScintilla, QsciAPIs
 

@@ -37,7 +37,7 @@ class Util:
 
 		## TODO - sort list
 		while not fileOb.atEnd():
-			line = fileOb.readLine();
+			line = fileOb.readLine()
 			string =  QtCore.QString(line)
 			string = string.trimmed()
 			if string.length() > 0:

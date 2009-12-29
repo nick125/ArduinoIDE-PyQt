@@ -34,7 +34,7 @@ class Boards(QtCore.QObject):
 
 		## TODO - sort list and qtify
 		while not fileObj.atEnd():
-			line = fileObj.readLine();
+			line = fileObj.readLine()
 			string =  QtCore.QString(line)
 			string = string.trimmed()
 			if string.length() > 0:
