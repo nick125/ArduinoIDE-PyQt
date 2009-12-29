@@ -11,8 +11,12 @@ from gui.icons import Icon
 Displays the directories for sketches
 Currently two modes, broswse USER sketches, or Examples
 
-TODO - maybe these need to be split up
+TODO - maybe these need to be split up and have more than one directory sets
 """
+
+########################################################################
+## Sketches Browser - sketches and examples in 2 cols in central widget
+########################################################################
 class SketchesBrowser(QtGui.QSplitter):
 	def __init__(self,  parent, main):
 		QtGui.QDockWidget.__init__(self, parent)
@@ -31,8 +35,8 @@ class SketchesBrowser(QtGui.QSplitter):
 		print "BROWSER", file_path
 		self.emit(QtCore.SIGNAL("open_sketch"), file_path)
 
-
-##UNUSED
+#################################################################
+## UNUSED DockWidget
 class UNUSED_SketchListDockWidget(QtGui.QDockWidget):
 
 	MODE_USER = 0
@@ -48,14 +52,16 @@ class UNUSED_SketchListDockWidget(QtGui.QDockWidget):
 
 		self.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea | QtCore.Qt.RightDockWidgetArea)
 
-
+#################################################################
+## Sketches Tree/widgets - browses a directory - "ki" is set on title = "Examples" == dodgy
+#################################################################
 class SketchListWidget(QtGui.QWidget):
 	
 	def __init__(self, title, parent, main):
 		QtGui.QWidget.__init__(self, parent)
 
 		self.main = main
-		if title == "Examples":
+		if title == "Examples": ## TODO sody path to view
 			self.dir_to_browse = self.main.settings.examples_path()
 		else:
 			self.dir_to_browse = self.main.settings.sketches_path()
@@ -68,9 +74,9 @@ class SketchListWidget(QtGui.QWidget):
 		headLabel = gui.widgets.HeaderLabel(self, self.main, icon=Ico.Sketches, title=title, color="black", wash_to="#456D91")
 		mainLayout.addWidget(headLabel)
 
+		self.statusWidget = gui.widgets.StatusWidget(self)
 
-
-		## redundant listings
+		## redundant listings tree of bookmaarks.. maybe later
 		if 1 == 0:
 			self.treePlaces = QtGui.QTreeWidget()
 			mainLayout.addWidget(self.treePlaces, 1)
@@ -150,6 +156,7 @@ class SketchListWidget(QtGui.QWidget):
 			else:
 				bitt.setIcon(Icon(Ico.Black))
 		self.load_list()
+
 	#################################################################
 	## Tree Events
 	#################################################################
@@ -191,9 +198,10 @@ class SketchListWidget(QtGui.QWidget):
 	## Load Files
 	#################################################################
 	def load_list(self):
-		#print "ROOO = ", self.dir_to_browse
+		print "ROOO = ", self.dir_to_browse
 		self.tree.model().removeRows(0, self.tree.model().rowCount())
 		if not self.dir_to_browse:
+			self.statusWidget.set_status(self.tree, "No directory")
 			return
 		fileInfo = QtCore.QFileInfo(self.dir_to_browse)
 		#print self.dir_to_browse

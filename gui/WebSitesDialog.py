@@ -23,13 +23,13 @@ class WebSitesDialog(QtGui.QDialog):
 		toolbar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
 		mainLayout.addWidget( toolbar )
 	
-		self.actionAdd = toolbar.addAction(Icon(Ico.SiteAdd), "Add Site", self.on_add_site)
+		self.actionAdd = toolbar.addAction(Icon(Ico.Help), "Add Site", self.on_add_site)
 		#self.actionAddFunction.setDisabled(True)
 
 		#self.actionEdit = toolbar.addAction(Icon(Ico.SiteEdit), "Edit Site", self.on_edit_site)
 		#self.actionEdite.setDisabled(True)
 
-		self.actionDelete = toolbar.addAction(Icon(Ico.SiteDelete), "Delete Site", self.on_delete_site)
+		self.actionDelete = toolbar.addAction(Icon(Ico.Help), "Delete Site", self.on_delete_site)
 		self.actionDelete.setDisabled(True)
 		toolbar.addSeparator()
 

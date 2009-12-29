@@ -3,7 +3,7 @@
 from PyQt4 import QtCore, QtGui, QtWebKit
 
 import gui.HelpWidgets
-
+import gui.widgets
 from gui.icons import Icon
 from gui.icons import Ico
 	
@@ -21,6 +21,8 @@ class HelpBrowserDialog(QtGui.QDialog):
 		self.setWindowTitle("Help")
 		self.setMinimumWidth(800)
 		self.setMinimumHeight(500)
+
+		self.statusLabel = gui.widgets.StatusLabel(self)
 
 		layout = QtGui.QVBoxLayout()
 		layout.setContentsMargins(0,0,0,0)

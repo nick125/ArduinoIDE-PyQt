@@ -5,6 +5,28 @@ from PyQt4 import QtCore, QtGui
 from gui.icons import Ico 
 from gui.icons import Icon 
 
+
+
+#####################################################################################################################
+## StatusLabel
+#####################################################################################################################
+class StatusLabel( QtGui.QLabel):
+	def __init__(self, parent):
+		QtGui.QWidget.__init__(self, parent)
+		self.setStyleSheet("background-color: white; color: #555555;")
+		self.setVisible(False)
+		self.setText("No items in this view")
+
+	def set_status(self, parentWidget, label):
+		self.setText( label )
+		widget = parentWidget.viewport()
+		self.move( widget.x() + 5, widget.y() + 50 )
+		self.setFixedWidth( widget.width() -100)
+		self.setVisible(True)
+		self.raise_()
+
+
+
 ###########################################################################################
 ## Buttons
 ###########################################################################################
@@ -61,13 +83,27 @@ class SaveButton(QtGui.QPushButton):
 
 
 class ToolBarSpacer( QtGui.QWidget ):
-
+	"""Simple add passing to force widgets right on a toolaber"""
 	def __init__(self, parent=None):
 		QtGui.QWidget.__init__(self, parent)
 		sp = QtGui.QSizePolicy()
 		sp.setHorizontalPolicy( QtGui.QSizePolicy.Expanding )
 		self.setSizePolicy( sp )
 
+class StatusWidget( QtGui.QLabel):
+	def __init__(self, parent):
+		QtGui.QWidget.__init__(self, parent)
+		self.setStyleSheet("background-color: white; color: #555555;")
+		self.setVisible(False)
+		self.setText("No items in this view")
+
+	def set_status(self, parentWidget, label):
+		self.setText( label )
+		widget = parentWidget.viewport()
+		self.move( widget.x() + 50, widget.y() + 100 )
+		self.setFixedWidth( 150)
+		self.setVisible(True)
+		self.raise_()
 
 class StatusLabel(QtGui.QWidget):
 
@@ -92,6 +128,7 @@ class StatusLabel(QtGui.QWidget):
 
 	def setText(self, txt):
 		self.labelVal.setText(txt)
+
 
 #####################################################################################################################
 ## Header Label

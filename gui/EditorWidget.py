@@ -25,8 +25,9 @@ class EditorWidget(QtGui.QWidget):
 		mainLayout.setSpacing(0)
 		self.setLayout(mainLayout)
 
-
+		##############################################################
 		### File Info Bar
+		##############################################################
 		hbox = QtGui.QHBoxLayout()
 		mainLayout.addLayout(hbox)
 
@@ -43,23 +44,34 @@ class EditorWidget(QtGui.QWidget):
 		self.lblFileModified = gui.widgets.StatusLabel(self, "Modified")
 		hbox.addWidget(self.lblFileModified, 2)
 
-
+		##############################################################
+		### Aarduino Compiler
+		##############################################################
 		if arduino_mode:
 			toolbar = QtGui.QToolBar()
 			toolbar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
 			mainLayout.addWidget(toolbar)
 
+			## spacer for right
+			toolbar.addWidget(gui.widgets.ToolBarSpacer(self))
+
 			### Action Buttons
-			self.actionCompile = toolbar.addAction(Icon(Ico.Compile), "Save and Compile", self.on_compile)
-			self.chkAutoUpload = QtGui.QCheckBox("Upload after compile")
-			self.chkAutoUpload.setCheckState(QtCore.Qt.Checked)
-			toolbar.addWidget(self.chkAutoUpload)
-			self.actionUpload = toolbar.addAction(Icon(Ico.Upload), "Upload", self.on_upload)
-			#self.actionCompile.setIcon(Icon(Ico.Compile))
-			#self.actionCompile.setText("Compile")
-			#toolbar.addWidget(
-			#, self.on_compile)
+			buttz = []
+			buttz.append(['Compile', Ico.Compile])
+			buttz.append(['Upload', Ico.Upload])
+			buttz.append(['Compile Upload', Ico.CompileUpload])
+			self.buttCompileGroup = QtGui.QButtonGroup()
+			self.connect(self.buttCompileGroup, QtCore.SIGNAL("buttonClicked (QAbstractButton *)"), self.on_compile_group_button)
+			## TODO connect
+			for caption, ico in buttz:
+				butt = QtGui.QPushButton()
+				butt.setText(caption)
+				butt.setIcon(Icon(ico))
+				toolbar.addWidget(butt)
+				self.buttCompileGroup.addButton(butt)
+			toolbar.addSeparator()
 		
+	
 		####################################################
 		## Source Editor
 		####################################################
@@ -92,7 +104,11 @@ class EditorWidget(QtGui.QWidget):
 			mainLayout.addWidget(self.terminalWidget, 1)
 
 
+	##########################################
+	## Extensions
+	##########################################
 	def supported(self):
+		"""returns a list of supportes extensions"""
 		extensions = [	'pde', 'c','h','cpp','cxx', 
 						'java', 'py',  'pl', 'sh', 
 						'html', 'yaml', 
@@ -101,28 +117,26 @@ class EditorWidget(QtGui.QWidget):
 		return extensions
 
 	def ignored(self):
+		"""returns a list of ignored extensions""" ## TODO - image viewer
 		extensions = [	'pyc', 'png','gif','jpeg' ]
 		return extensions
 
-	def write_file(self):
-		#print "write", self.current_file_path
-		file2Write = QtCore.QFile(self.current_file_path)
-		if not file2Write.open(QtCore.QIODevice.WriteOnly | QtCore.QIODevice.Text):
-			print "TODO: error writing file"
-			return
-		stream_out = QtCore.QTextStream(file2Write)
-		stream_out << self.editor.text()
-		file2Write.close()
-
-
-	def on_compile(self):
-		#p#rint "compile"
-		self.write_file()
-		self.compile_file()
-
+	##########################################
+	## Compile Upload Buttons
+	##########################################	
+	def on_compile_group_button(self, butt):
+		print "COMP", butt.text()
+		if butt.text() == "Compile":
+			self.write_file()
+			self.compile_file()
+		else:
+			self.main.status.showMessage("Not recognised", 4000)
 
 	def compile_file(self):
 		self.terminalWidget.compile(self.current_file_path)
+
+
+
 
 
 	def on_upload(self):
@@ -229,3 +243,16 @@ class EditorWidget(QtGui.QWidget):
 		print "YES>>", fileInfo.suffix(), fileInfo.fileName(), fileInfo.filePath()
 
 		self.set_source( txt, fileInfo.suffix())
+
+	######################################################################
+	## Write File
+	######################################################################
+	def write_file(self):
+		file2Write = QtCore.QFile(self.current_file_path)
+		if not file2Write.open(QtCore.QIODevice.WriteOnly | QtCore.QIODevice.Text):
+			print "TODO: error writing file"
+			return
+		stream_out = QtCore.QTextStream(file2Write)
+		stream_out << self.editor.text()
+		file2Write.close()
+

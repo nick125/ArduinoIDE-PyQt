@@ -71,14 +71,23 @@ class TerminalWidget(QtGui.QWidget):
 			self.headerLabel.setText("result")
 		self.textWidget.setPlainText(txt)
 
+	def set_error(self, title, shell):
+		self.actionIcon.setIcon(Icon(Ico.CompileError))
+		self.statusLabel.setText(title)
+		self.textWidget.setPlainText(QtCore.QString(shell))
 
 	def compile(self, file_path):
 
 		self.current_file_path = file_path
 		self.progress.show()
+
+		arduino_path = self.main.settings.arduino_path()
+		if not arduino_path:
+			self.set_error("Arduino root path not found", "..nothing to do ..")
+			return
 		## Set Envoironment
 		env = QtCore.QStringList()
-		env << QtCore.QString("ARDUINO_DIR=").append(self.main.settings.arduino_path())
+		env << QtCore.QString("ARDUINO_DIR=").append()
 		env << QtCore.QString("ARDUINO_BOARD=").append("atmega328")
 		env << QtCore.QString("ARDUINO_sPORT=").append("s/ssdev/ttyUSB0")
 		self.process.setEnvironment(env)

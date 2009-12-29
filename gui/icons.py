@@ -27,9 +27,11 @@ class Ico:
 	Sketch = 'page.png'
 
 
-	Upload = 'arrow_join.png'
-
-	Compile = 'arrow_in.png'
+	## Compile related
+	Upload = 'arrow_up.png'
+	Compile = 'arrow_right.png'
+	CompileUpload = 'arrow_merge.png'
+	
 	CompileError = 'exclamation.png'
 	CompileOk = 'accept.png'
 
