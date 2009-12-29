@@ -59,7 +59,7 @@ class HelpWidget(QtGui.QWidget):
 
 		self.txtFilter = QtGui.QLineEdit("")
 		self.connect(self.txtFilter, QtCore.SIGNAL('textChanged(const QString &)'), self.on_filter_changed)
-		hBox.addWidget( self.txtFilter, 10 )
+		hBox.addWidget( self.txtFilter, 222 )
 
 		
 		##################################################################
@@ -81,9 +81,8 @@ class HelpWidget(QtGui.QWidget):
 		layout.addWidget(self.tree)
 		self.connect(self.tree, QtCore.SIGNAL("clicked(const QModelIndex&)"), self.on_tree_double_clicked)
 
-		self.statusWidget = gui.widgets.StatusWidget(self)
-		
 
+		self.statusWidget = gui.widgets.StatusWidget(self)
 		self.load()
 
 	####################################################
@@ -103,7 +102,7 @@ class HelpWidget(QtGui.QWidget):
 	####################################################
 	def load(self):
 		pathStr = self.main.settings.help_path()
-		print pathStr
+		print "LOAD HELP########ddd", pathStr
 		if not pathStr:
 			self.statusWidget.set_status(self.tree, "Path not found")
 			return

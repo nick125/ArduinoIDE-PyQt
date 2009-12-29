@@ -8,17 +8,10 @@ class Settings(QtCore.QObject):
 	date_format = "dd-MM-yyyy"
 	date_time_format = "dd-MM-yyyy HH:mm"
 
-	def __init__(self):
-		QtCore.QObject.__init__(self)
+	def __init__(self, main):
+		QtCore.QObject.__init__(self, main)
+		self.main = main
 		self.qSettings = QtCore.QSettings("arduino-pyqt", "arduino-pyqt")
-
-		#self._arduino_path = None
-		#self._arduino_svn_path = None
-		##self._sketches_path = None
-
-	def load_settings(self):
-		print "foo"
-	
 
 	def is_nix(self):
 		return  'linux' in sys.platform # TODO use QT
@@ -67,7 +60,6 @@ class Settings(QtCore.QObject):
 
 	## Arduino Path
 	def arduino_path(self):
-		print "arduino_path", self.value("path/arduino_path")
 		return self.value("path/arduino_path")
 
 	## Arduino SVN trunk
@@ -99,11 +91,13 @@ class Settings(QtCore.QObject):
 
 	## Help HTML files
 	def help_path(self):
+		print "help=", self.arduino_path()
 		if not self.arduino_path():
 			return None
 		return self.arduino_path().append("/reference/")
 
 	def examples_path(self):
+		print "examples=", self.arduino_path()
 		if not self.arduino_path():
 			return None
 		return self.arduino_path().append("/examples/")

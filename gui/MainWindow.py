@@ -38,7 +38,7 @@ class MainWindow(QtGui.QMainWindow):
 		QtGui.QApplication.setStyle(QtGui.QStyleFactory.create('Cleanlooks'))
 
 		## Sets up the settings and other global classes
-		self.settings = app.settings.Settings() 
+		self.settings = app.settings.Settings(self) 
 		self.ut = app.util.Util()
 
 		
@@ -169,10 +169,10 @@ class MainWindow(QtGui.QMainWindow):
 		self.on_action_view(QtCore.QString("welcome"))
 
 		
-		edit = EditorWidget(self, self, arduino_mode=True)
-		idx = self.mainTabWidget.addTab(edit, Icon(Ico.Sketch), "Foo Bar")
-		self.mainTabWidget.setCurrentIndex(idx)
-		edit.load_file("/home/arduino/sketchbook/chicken_shit/chicken_shit.pde", idx)
+		#edit = EditorWidget(self, self, arduino_mode=True)
+		#idx = self.mainTabWidget.addTab(edit, Icon(Ico.Sketch), "Foo Bar")
+		#self.mainTabWidget.setCurrentIndex(idx)
+		#edit.load_file("/home/arduino/sketchbook/chicken_shit/chicken_shit.pde", idx)
 
 		
 

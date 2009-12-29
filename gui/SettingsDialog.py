@@ -21,9 +21,9 @@ class SettingsDialog(QtGui.QDialog):
 		self.setLayout(mainLayout)
 
 		self.path_keys = []
-		self.path_keys.append( ['path/arduino_root','Arduino Path', 'Directory of arduino installation'] )
+		self.path_keys.append( ['path/arduino_path','Arduino Path', 'Directory of arduino installation'] )
 		self.path_keys.append( ['path/sketchbooks_path', 'Sketchbooks',	'Directory to sketchbooks'] )
-		self.path_keys.append( ['path/arduino_svn', 'Arduino Svn', 'Path to svn trunk/'] )
+		self.path_keys.append( ['path/arduino_svn_path', 'Arduino Svn', 'Path to svn trunk/'] )
 
 		vBox = QtGui.QVBoxLayout()
 		vBox.setSpacing(20)
