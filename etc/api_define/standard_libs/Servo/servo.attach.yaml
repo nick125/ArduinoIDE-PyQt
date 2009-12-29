@@ -1,0 +1,17 @@
+description: 'Attach the Servo variable to a pin. Note that in Arduino 0016 and earlier,
+  the Servo library supports only servos on only two pins: 9 and 10.'
+example: "#include <Servo.h> \n\nServo myservo;\n\nvoid setup() \n{ \n  myservo.attach(9);\n\
+  } \n\nvoid loop() {}\n"
+folder: /standard_libs/Servo/
+function: servo.attach
+parameters:
+- pin: ' the number of the pin that the servo is attached to'
+- min*: '(optional): the pulse width, in microseconds, corresponding to the minimum
+    (0-degree) angle on the servo (defaults to 544)'
+- max*: '(optional): the pulse width, in microseconds, corresponding to the maximum
+    (180-degree) angle on the servo (defaults to 2400)'
+parameters_type: fixed
+return: ''
+section: ''
+summary: Attach the Servo variable to a pin
+syntax: servo.attach(pin, min*, max*)

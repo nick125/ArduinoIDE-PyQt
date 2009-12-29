@@ -1,0 +1,10 @@
+description: Check whether the Servo variable is attached to a pin.
+example: ''
+folder: /standard_libs/Servo/
+function: servo.attached
+parameters: []
+parameters_type: fixed
+return: true if the servo is attached to pin; false otherwise.
+section: ''
+summary: Check whether the Servo variable is attached to a pin
+syntax: servo.attached()
