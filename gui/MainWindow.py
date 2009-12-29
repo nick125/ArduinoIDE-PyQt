@@ -26,8 +26,6 @@ from gui.EditorWidget import EditorWidget
 from gui.icons import Ico 
 from gui.icons import Icon 
 
-
-
 class MainWindow(QtGui.QMainWindow):
 
 	def __init__(self, parent=None):
@@ -38,12 +36,15 @@ class MainWindow(QtGui.QMainWindow):
 		# TODO - User customisable style
 		QtGui.QApplication.setStyle(QtGui.QStyleFactory.create('Cleanlooks'))
 
+		## Set the title text format
+		self.title_text = "Arduino IDE - %s"
+
 		## Sets up the settings and other global classes
 		self.settings = app.settings.Settings(self) 
 		self.ut = app.util.Util()
 
-		
-		self.setWindowTitle("Arduino-pyqt - alpha lily daffodil version | no flashing lights as yet")
+		## Set Window Properties		
+		self.setWindowTitle(self.title_text % "")
 		self.setWindowIcon(Icon(Ico.Arduino))
 		self.setMinimumWidth(800)
 		self.setMinimumHeight(600)
@@ -148,13 +149,12 @@ class MainWindow(QtGui.QMainWindow):
 		self.mainTabWidget.setMovable(True)
 		self.setCentralWidget(self.mainTabWidget)
 		self.connect(self.mainTabWidget, QtCore.SIGNAL("tabCloseRequested (int)"), self.on_close_tab_requested)
+		self.connect(self.mainTabWidget, QtCore.SIGNAL("currentChanged (int)"), self.on_tab_change)
 
-
-		## Load sketches and Welcone
-		self.on_action_view(QtCore.QString("sketches"))
+		## Load sketches and Welcome
 		self.on_action_view(QtCore.QString("welcome"))
-	
-
+		self.on_action_view(QtCore.QString("sketches"))
+		self.mainTabWidget.setCurrentIndex(0)	
 		##########################################################
 		## Status Bar
 		##########################################################
@@ -246,6 +246,9 @@ class MainWindow(QtGui.QMainWindow):
 	## Tab Events
 	def on_close_tab_requested(self, tabIndex):
 		self.mainTabWidget.removeTab(tabIndex)
+
+	def on_tab_change(self, index):
+		self.setWindowTitle(self.title_text % self.mainTabWidget.tabText(index))
 
 	#########################################
 	## Open Sketchboox
