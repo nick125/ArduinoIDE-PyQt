@@ -12,15 +12,15 @@ import gui.FileSystemBrowser
 from gui.SettingsDialog import SettingsDialog
 from gui.WebSitesDialog import WebSitesDialog
 
-from gui.widgets.HelpWidgets import HelpDockWidget
-from gui.panes.APIBrowser import APIBrowser
-from gui.dockwidgets.APIDock import APIDockWidget
+from gui.dockwidgets.HelpDock import HelpDock
+from gui.dockwidgets.APIBrowserDock import APIBrowserDock
+
+from gui.panes.APIBrowserPane import APIBrowserPane
 
 from gui.browser.BrowserWidget import Browser
 
 from gui.BoardsDialog import BoardsDialog
 from gui.BootLoadersDialog import BootLoadersDialog
-
 
 from gui.widgets.SketchListWidgets import SketchesBrowser
 from gui.widgets.EditorWidget import EditorWidget
@@ -142,10 +142,10 @@ class MainWindow(QtGui.QMainWindow):
 		####################################
 		## Dock Widgets
 		####################################
-		helpDockWidget = HelpDockWidget("Help", self, self)
+		helpDockWidget = HelpDock("Help", self, self)
 		self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, helpDockWidget)
 
-		apiDockWidget = APIDockWidget("API", self, self)
+		apiDockWidget = APIBrowserDock("API", self, self)
 		self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, apiDockWidget)
 		#self.tabifyDockWidget(helpDockWidget, apiDockWidget)
 		

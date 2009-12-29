@@ -9,27 +9,6 @@ from gui.icons import Icon
 
 from gui.widgets import GenericWidgets
 
-class HelpDockWidget(QtGui.QDockWidget):
-
-	
-	def __init__(self, title, parent, main):
-		QtGui.QDockWidget.__init__(self, title, parent)
-		self.main = main
-
-		self.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea | QtCore.Qt.RightDockWidgetArea)
-
-		containerWidget = QtGui.QWidget()
-		self.setWidget(containerWidget)
-
-		layout = QtGui.QVBoxLayout()
-		layout.setContentsMargins(0, 0, 0, 0)
-		layout.setSpacing(0)
-		containerWidget.setLayout(layout)	
-
-		helpTree = HelpTree(self, self.main)
-		layout.addWidget(helpTree)
-
-
 class HelpTree(QtGui.QWidget):
 
 	

@@ -9,7 +9,7 @@ from gui.FunctionEditDialog import FunctionEditDialog
 from gui.icons import Ico 
 from gui.icons import Icon 
 
-class APIBrowser(QtGui.QWidget):
+class APIBrowserPane(QtGui.QWidget):
 	"""
 		Create the API Browser pane
 	"""
