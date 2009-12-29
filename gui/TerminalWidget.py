@@ -7,15 +7,15 @@ from gui.icons import Ico
 from gui.icons import Icon 
 
 """
-The general idea is that this handles the shell commandss to Card
-* used QProcess
-* needs tewekaing BIG time for bi-directional hackeers
+The general idea is that this handles the shell commands and to Card
+* uses QProcess
+* set icon and label on return of errror or higlighing
+* TODO error higllighting
+* TODO needs tewekaing BIG time for bi-directional hackeers
 
-Currently reads and presents erro + stand and sets icons/message aaccordingly
+Currently reads and presents error + stand and sets icons/message aaccordingly
 * its called terminal cos it leads to frustration ;-)
 """
-
-
 
 class TerminalWidget(QtGui.QWidget):
 
@@ -32,23 +32,10 @@ class TerminalWidget(QtGui.QWidget):
 		layout.setSpacing(0)
 		self.setLayout(layout)
 
-		#self.headerWidget = QtGui.QWidget()
 		hbox = QtGui.QHBoxLayout()
 		hbox.setContentsMargins(0,0,0,0)
 		hbox.setSpacing(0)
 		layout.addLayout(hbox)
-
-
-
-	
-
-		
-		#layout.add
-		#toolbar = QtGui.QToolBar()
-		#toolbar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
-		#layout.addWidget(toolbar)
-
-
 
 		self.textWidget = QtGui.QPlainTextEdit()
 		layout.addWidget(self.textWidget)

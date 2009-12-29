@@ -27,6 +27,7 @@ class Settings(QtCore.QObject):
 	## Pass<>Thru for QSettings class
 	#################################################
 	def value(self, ki, as_string=True):
+		return None
 		v = self.qSettings.value( ki )
 		if v.isNull():
 			return None
@@ -80,7 +81,7 @@ class Settings(QtCore.QObject):
 		return  QtCore.QString(os.path.abspath( os.path.dirname(__file__)	+  '/../' ))
 
 	## API Info Path - directory to yaml
-	def api_info_path(self):
+	def api_define_path(self):
 		## TODO - user QT Object
 		return  self.app_path().append("etc/api_info/")
 
