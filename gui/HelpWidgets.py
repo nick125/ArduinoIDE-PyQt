@@ -26,11 +26,11 @@ class HelpDockWidget(QtGui.QDockWidget):
 		layout.setSpacing(0)
 		containerWidget.setLayout(layout)	
 
-		helpWidget = HelpWidget(self, self.main)
-		layout.addWidget(helpWidget)
+		helpTree = HelpTree(self, self.main)
+		layout.addWidget(helpTree)
 
 
-class HelpWidget(QtGui.QWidget):
+class HelpTree(QtGui.QWidget):
 
 	
 	def __init__(self, parent, main):

@@ -32,8 +32,8 @@ class HelpBrowserDialog(QtGui.QDialog):
 		splitter = QtGui.QSplitter(self)
 		layout.addWidget(splitter)
 
-		self.helpWidget = gui.HelpWidgets.HelpWidget(self, self.main)
-		splitter.addWidget(self.helpWidget)
+		self.helpTree = gui.HelpWidgets.HelpTree(self, self.main)
+		splitter.addWidget(self.helpTree)
 		#splitter.setStretchFactor(0, 1)
 
 		self.browser = QtWebKit.QWebView()

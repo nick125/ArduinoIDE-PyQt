@@ -10,14 +10,9 @@ from gui.icons import Ico
 from gui.icons import Icon 
 
 class APIDockWidget(QtGui.QDockWidget):
-	"""
-		The API Dock Widget
-	"""
+
 	
 	def __init__(self, parent, main):
-		"""
-			Initializes the dock widget
-		"""
 		QtGui.QDockWidget.__init__(self)
 
 		self.main = main
