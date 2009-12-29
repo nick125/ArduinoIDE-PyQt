@@ -3,6 +3,8 @@
 import yaml
 from PyQt4 import QtCore
 
+class FileWriteError(Exception): pass
+
 class Util:
 
 
@@ -19,8 +21,7 @@ class Util:
 	def write_file(self, file_path, contents):
 		file2Write = QtCore.QFile(file_path)
 		if not file2Write.open(QtCore.QIODevice.WriteOnly | QtCore.QIODevice.Text):
-			print "TODO: error writing file"
-			return
+			raise FileWriteError
 		stream_out = QtCore.QTextStream(file2Write)
 		stream_out << contents
 		file2Write.close()
