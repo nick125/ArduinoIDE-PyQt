@@ -1,16 +1,18 @@
 TO DO
-Think ok a cool name for the project, call it something like a cat.. eg dabbles 
-Maybe a competition ;-)
 
-=========
+* Think ok a cool name for the project, call it something like a cat.. eg dabbles 
+
 Browser Widget
+---------------
+* Add a "full" view browser and a "compact" view. 
+  - Add JS API to toggle mode
+* Add a "Quick Links" block to the welcome page
+  - Should we use the Websites listing? 
+  - Add JS API to grab quick links
 
-The browser widget needs to be fully function with url, back forward, search to google, arduino etc
-
-It will manifest itself in the application in three ways
- * static local pages wuch as Welcome pages, and other "Application" info- maybe even some qt/webkit objecct sharing
- * Browsing the static html and the links to arduin - u dont know where your at, as local html help is "lift" of online
- * Links to browse/search the newsgroup, forums, playgound
-
-
-
+Autosave
+--------
+We need to add an autosave function. Maybe use a QTimer to periodically save?
+* Add Autosave
+* Add crash handler
+* Add recovery wizard
