@@ -23,7 +23,7 @@ class BoardsDialog(QtGui.QDialog):
 
 		mainLayout = QtGui.QVBoxLayout()
 		m = 0
-		mainLayout.setContentsMargins(m,10,m,m)
+		mainLayout.setContentsMargins(m, 10, m, m)
 		mainLayout.setSpacing(0)
 		self.setLayout(mainLayout)
 

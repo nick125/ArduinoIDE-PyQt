@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+"""
+	The main window - the glue that holds everything together
+"""
 
 from PyQt4 import QtCore, QtGui
 
@@ -28,11 +31,11 @@ from gui.icons import Ico
 from gui.icons import Icon 
 
 class MainWindow(QtGui.QMainWindow):
-
+	"""
+		Implements the main window
+	"""
 	def __init__(self, parent=None):
 		QtGui.QMainWindow.__init__(self)
-
-		self.DEV = True
 
 		# TODO - User customisable style
 		QtGui.QApplication.setStyle(QtGui.QStyleFactory.create('Cleanlooks'))
@@ -56,8 +59,6 @@ class MainWindow(QtGui.QMainWindow):
 		self.topToolBar = QtGui.QToolBar()
 		self.topToolBar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
 		self.addToolBar( self.topToolBar )
-		#if self.DEV:
-			#self.topToolBar.addAction("Load Keywords", self.on_dev_load_keywords)
 
 		##############################################################
 		## File Menu
@@ -200,6 +201,10 @@ class MainWindow(QtGui.QMainWindow):
 	#########################################
 	## View  Actions
 	def on_action_view(self, strOrObject):
+		"""
+			Creates a new tab
+		"""
+		#TODO: Banish this! 
 		if isinstance(strOrObject, QtCore.QString):
 			ki = strOrObject
 		else:
