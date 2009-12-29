@@ -16,7 +16,7 @@ from gui.widgets.HelpWidgets import HelpDockWidget
 from gui.APIBrowser import APIBrowser
 from gui.widgets.APIWidgets import APIDockWidget
 
-from gui.Browser import Browser
+from gui.browser.BrowserWidget import Browser
 
 from gui.BoardsDialog import BoardsDialog
 from gui.BootLoadersDialog import BootLoadersDialog

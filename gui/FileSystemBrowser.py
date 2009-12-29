@@ -3,7 +3,6 @@
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.Qsci import QsciScintilla, QsciAPIs
-from PyQt4.Qsci import QsciLexerCPP, QsciLexerMakefile, QsciLexerJava, QsciLexerHTML, QsciLexerPerl, QsciLexerPython, QsciLexerYAML
 
 from gui.widgets.EditorWidget import EditorWidget
 
