@@ -79,7 +79,7 @@ class MainWindow(QtGui.QMainWindow):
 		views.append(['sketches', Ico.Sketches, "Sketches"])
 		views.append(['api_browser', Ico.Function, "API Browser"])
 		views.append(['help', Ico.Help, "Help"])
-		views.append(['file_system_borwser', Ico.FileSystemBrowser, "Files Browser"])
+		views.append(['file_system_browser', Ico.FileSystemBrowser, "Files Browser"])
 
 		for ki, ico, caption in views:
 			act = menuView.addAction(Icon(ico), caption)
@@ -209,7 +209,7 @@ class MainWindow(QtGui.QMainWindow):
 			idx = self.mainTabWidget.addTab(apiBrowser, Icon(Ico.Function), "API Browser")
 
 
-		elif ki == "file_system_borwser":
+		elif ki == "file_system_browser":
 			fileSystemBrowser = gui.FileSystemBrowser.FileSystemBrowser(self, self)
 			idx = self.mainTabWidget.addTab(fileSystemBrowser, Icon(Ico.FileSystemBrowser), "Files Browser")
 

@@ -8,6 +8,9 @@ from gui.icons import Ico
 from gui.icons import Icon 
 
 class BoardsDialog(QtGui.QDialog):
+	"""
+		A dialog to display the different Arduino boards
+	"""
 
 	def __init__(self, parent, main):
 		QtGui.QDialog.__init__(self, parent)
