@@ -74,7 +74,7 @@ class Settings(QtCore.QObject):
 	## API Info Path - directory to yaml
 	def api_define_path(self):
 		## TODO - user QT Object
-		return  self.app_path().append("etc/api_info/")
+		return  self.app_path().append("/etc/api_define/")
 
 	## Icons Dir
 	def icons_path(self):
