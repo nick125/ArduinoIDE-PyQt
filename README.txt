@@ -1,7 +1,15 @@
-Attempt at a pyqt interface for arduino
+Python Arduino IDE
+------------------
+This project is to develop the next-generation of Arduino IDE. 
 
-Work in progress on a new Arduino interface with the Qt toolkit. 
-This is fun and a proof of concept. 
+Dependencies
+------------
+* Python
+* Qt/PyQt 4
 
-Check the project page at 
+Getting Started
+---------------
+Coming Soon
+
+Check out the project page for more information:
 http://code.google.com/p/arduino-pyqt/
