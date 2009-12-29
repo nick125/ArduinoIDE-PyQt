@@ -5,7 +5,6 @@
 # License GPL
 
 import sys
-#import os
 from PyQt4 import QtCore, QtGui
 
 import gui.MainWindow
