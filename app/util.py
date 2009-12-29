@@ -3,7 +3,11 @@
 import yaml
 from PyQt4 import QtCore
 
-class FileOpenError(Exception): pass
+class FileOpenError(Exception): 
+	"""
+		Raised when there is an error opening a file
+	"""
+	pass
 
 class Util:
 	def get_file_contents(self, file_path):
