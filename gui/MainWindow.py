@@ -44,8 +44,8 @@ class MainWindow(QtGui.QMainWindow):
 		
 		self.setWindowTitle("Arduino-pyqt - alpha lily daffodil version | no flashing lights as yet")
 		self.setWindowIcon(Icon(Ico.Arduino))
-		self.setMinimumWidth(1200)
-		self.setMinimumHeight(900)
+		self.setMinimumWidth(800)
+		self.setMinimumHeight(600)
 
 		self.setDockNestingEnabled(True)
 		self.setDockOptions(QtGui.QMainWindow.ForceTabbedDocks | QtGui.QMainWindow.VerticalTabs)
