@@ -11,6 +11,15 @@ from gui.TerminalWidget import TerminalWidget
 from gui.icons import Ico 
 from gui.icons import Icon 
 
+extension_map = [
+	(['makefile'], QsciLexerMakefile),
+	(['pde', 'c', 'cpp', 'h'], QsciLexerCPP),
+	(['py', 'pyw'], QsciLexerPython),
+	(['htm', 'html'], QsciLexerHTML),
+	(['pl',], QsciLexerPerl),
+	(['java'], QsciLexerJava),
+	(['yaml'], QsciLexerYAML),
+]
 
 class EditorWidget(QtGui.QWidget):
 
@@ -45,7 +54,7 @@ class EditorWidget(QtGui.QWidget):
 		hbox.addWidget(self.lblFileModified, 2)
 
 		##############################################################
-		### Aarduino Compiler
+		### Arduino Compiler
 		##############################################################
 		if arduino_mode:
 			toolbar = QtGui.QToolBar()
@@ -163,38 +172,20 @@ class EditorWidget(QtGui.QWidget):
 					self.arduinoFunctionsAPI.add(keyword)
 
 
-	def set_source(self, source, suffix=None):
+	def find_lexer(self, extension):
+		extension = extension.toLower()
+		#TODO: This is horrible and evil. Fix it.
+		for extensions, lexer in extension_map:
+			if extension in extensions:
+				return lexer()
+		# Fallback
+		return QsciLexerCPP()
+
+	def set_source(self, source, extension=None):
 
 		self.editor.setText(source)
-
-		if suffix in ['cpp', 'c', 'h','cxx', 'pde']:
-			self.lexer = QsciLexerCPP()
-			
-		elif suffix == 'java':
-			self.lexer = QsciLexerJava()
-
-		elif suffix == 'html':
-			self.lexer = QsciLexerHTML()
-
-		elif suffix == 'pl':
-			self.lexer = QsciLexerPerl()
-
-		elif suffix == 'py':
-			self.lexer = QsciLexerPython()
-
-		elif suffix == 'sh':
-			self.lexer = QsciLexerBash()
-
-		elif suffix == 'yaml':
-			self.lexer = QsciLexerYAML()
-
-		else:
-			#TODO unsupported Highlighter and text file
-			self.lexer = QsciLexerCPP()
-
-
+		self.lexer = self.find_lexer(extension)
 		self.editor.setLexer(self.lexer)
-
 
 	def load_file(self, file_path, tabIndex=None):
 		print "file_path", file_path
