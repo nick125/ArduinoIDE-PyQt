@@ -7,25 +7,13 @@ from gui.browser.BrowserActions import BrowserActions
 
 
 class Browser(QtWebKit.QWebView):
-	def __init__(self, parent, main, page=None):
+	def __init__(self, parent, main, initial_page=None, compact=False, enable_api=True):
 		QtWebKit.QWebView.__init__(self, parent)
-
-
-		
 		self.main = main
-		self.actions = BrowserActions(main, self)
+		if enable_api:
+			self.actions = BrowserActions(main, self)
 
-		if page:
-			html_file_name = self.main.settings.html_pages_path("welcome.html")
-			print html_file_name
-
-
-			html_str = self.main.ut.get_file_contents(html_file_name)
-			to_do_file_name = self.main.settings.app_path().append("/README.txt")
-			readme = self.main.ut.get_file_contents(to_do_file_name)
-			#print readme
-			html_str.replace("###__README__###", readme)
-			self.setHtml(html_str)
-			self.show()
-
-			
+		if initial_page:
+			self.setUrl(QtCore.QUrl(QtCore.QString(initial_page)))
+	
+		

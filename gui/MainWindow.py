@@ -221,7 +221,7 @@ class MainWindow(QtGui.QMainWindow):
 			self.connect(sketchesWidget, QtCore.SIGNAL("open_sketch"), self.on_open_sketch)
 
 		elif ki == 'welcome':
-			welcomePage = Browser(self, self, "welcome.html")
+			welcomePage = Browser(self, self, initial_page="file://%s" % self.settings.html_pages_path("welcome.html"))
 			self.mainTabWidget.addTab(welcomePage, Icon(Ico.Arduino), "Welcome")
 
 		if idx:
