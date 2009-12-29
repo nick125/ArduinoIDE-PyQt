@@ -5,6 +5,7 @@ from PyQt4 import QtCore, QtGui
 import app.settings
 import app.util
 import app.Boards
+import app.API
 
 import gui.FileSystemBrowser
 
@@ -168,10 +169,19 @@ class MainWindow(QtGui.QMainWindow):
 		##########################################################
 		## Globally Shared Widgets
 		##########################################################
+
+		## Borads
 		self.boards = app.Boards.Boards(self)
 		self.connect(self.boards, QtCore.SIGNAL("board_selected"), self.on_board_selected)
 		self.boards.load_current() ## THIS actually sets current as event above is not fired in constructor
 
+
+		## API
+		self.api = app.API.API(self)
+		#self.connect(self.api, QtCore.SIGNAL("some_signal_here"), self.p)
+		print self.api.html_index()
+		#print self.api.tree()
+		
 		if not self.settings.value("virginity"):
 			self.on_settings_dialog()
 

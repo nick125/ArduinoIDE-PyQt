@@ -50,10 +50,6 @@ class APIBrowser(QtGui.QWidget):
 		layout.setSpacing(0)
 		self.setLayout(layout)
 
-		#headLabel = gui.widgets.HeaderLabel(self, self.main, icon=Ico.Help, title="Help", color="blue", wash_to="yellow")
-		#layout.addWidget(headLabel)
-
-
 		###########################
 		### Toolbar
 		toolbar = QtGui.QToolBar()
@@ -62,7 +58,7 @@ class APIBrowser(QtGui.QWidget):
 
 		act = toolbar.addAction(Icon(Ico.Refresh), "Refresh", self.on_refresh)
 		self.chkExtendedNodes = QtGui.QCheckBox("Show vars")
-		self.chkExtendedNodes.setChecked(True)
+		self.chkExtendedNodes.setChecked(False)
 		toolbar.addWidget(self.chkExtendedNodes)
 		self.connect(self.chkExtendedNodes, QtCore.SIGNAL("clicked()"), self.on_refresh)
 		toolbar.addSeparator()
@@ -120,6 +116,10 @@ class APIBrowser(QtGui.QWidget):
 		self.api_lines = None
 		self.load()
 
+	#####################
+
+	####### This crap walks the Qt Widget to write the file
+	#########################
 	def on_write_api_file(self):
 		rootItem = self.tree.invisibleRootItem()
 		self.api_lines = []
@@ -213,12 +213,6 @@ class APIBrowser(QtGui.QWidget):
 			else:
 				print "error" # TODO
 
-     #if (ok && !text.isEmpty())
-      #   textLabel->setText(text);
-
-		#dialog = FolderEditDialog(self, self.main, folder, parent=parent_folder)
-		#dialog.exec_()
-
 	def on_edit_folder(self):
 		folder = self.tree.currentItem().data(self.COLS.icon, QtCore.Qt.UserRole).toString()
 		#print folder
@@ -236,7 +230,6 @@ class APIBrowser(QtGui.QWidget):
 	## LOAD
 	##################################################
 	def load(self):
-
 
 		self.tree.model().removeRows(0, self.tree.model().rowCount())
 		rootNode = self.tree.invisibleRootItem()
