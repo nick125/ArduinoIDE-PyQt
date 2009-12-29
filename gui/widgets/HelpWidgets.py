@@ -7,7 +7,10 @@ from gui.HelpBrowser import HelpBrowserDialog
 from gui.icons import Ico 
 from gui.icons import Icon 
 
+
 from gui.widgets import GenericWidgets
+
+# TODO somehow the test box need to focus first
 
 class HelpTree(QtGui.QWidget):
 
@@ -58,7 +61,7 @@ class HelpTree(QtGui.QWidget):
 		self.tree.setSortingEnabled(True)
 		self.tree.setModel(self.proxyModel)
 		layout.addWidget(self.tree)
-		self.connect(self.tree, QtCore.SIGNAL("clicked(const QModelIndex&)"), self.on_tree_double_clicked)
+		self.connect(self.tree, QtCore.SIGNAL("doubleClicked(const QModelIndex&)"), self.on_tree_double_clicked)
 
 
 		self.statusWidget = GenericWidgets.StatusWidget(self)

@@ -96,6 +96,14 @@ class Settings(QtCore.QObject):
 		return self.check_path(path)
 
 	## Help HTML files
+	def html_pages_path(self, append_file=None):
+		if not self.app_path():
+			return None
+		if append_file:
+			return self.app_path().append("/etc/html_pages/").append(append_file)
+		return self.app_path().append("/etc/html_pages/")
+
+	## Arduino HTML files
 	def help_path(self):
 		if not self.arduino_path():
 			return None

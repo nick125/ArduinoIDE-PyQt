@@ -11,11 +11,15 @@ class API(QtCore.QObject):
 
 		self.main = main
 
-		self.html_files = None
+		self.html_files = None 
+		self.yaml_files = None
+
+		self.api = None
 
 		self.load_api()
 
 	def load_api(self):
+		self.api = {}
 		root_path = self.main.settings.api_define_path()
 		rootDir = QtCore.QDir(root_path)
 		self.tree = {}
@@ -28,7 +32,7 @@ class API(QtCore.QObject):
 		for file_entry in sub_dir.entryInfoList(QtCore.QDir.Files | QtCore.QDir.NoDotAndDotDot):
 			if file_entry.suffix() == 'yaml':
 				#self.add_yaml_function_node(file_entry, folder)
-				print "YAML", file_entry
+				print "YAML", file_entry.completeBaseName()
 				#api = self.main.ut.load_yaml(sub_entry.filePath())
 	
 		for folder_entry in sub_dir.entryInfoList(QtCore.QDir.Dirs | QtCore.QDir.NoDotAndDotDot):
@@ -158,20 +162,7 @@ class API(QtCore.QObject):
 
 
 
-	def html_index(self):
-		self.html_files = {}
-		pathStr = self.main.settings.help_path()
-		htmlDir = QtCore.QDir(pathStr)
-		if not htmlDir.exists():
-			#QtGui.QMessageBox.information(self, "OOps", " the reference dir %s was not found" % pathStr)
-			print "error", # TODO
-			return
-		## TODO sort
-		for file_entry in htmlDir.entryInfoList(QtCore.QDir.Files | QtCore.QDir.NoDotAndDotDot):
-			if file_entry.suffix() == 'html':
-				self.html_files[str(file_entry.filePath())] = str(file_entry.baseName())
 
-		return self.html_files
 
 	def tree(self):
 		api_path = self.main.settings.api_define_path()
@@ -190,4 +181,18 @@ class API(QtCore.QObject):
 			dirItem.setFirstColumnSpanned(False)
 			self.tree.setItemExpanded(dirItem, True)
 		
+	### Return a list of the html files which is a single dir listing and files ending with .html
+	def html_index(self):
+		self.html_files = {}
+		pathStr = self.main.settings.help_path()
+		htmlDir = QtCore.QDir(pathStr)
+		if not htmlDir.exists():
+			#QtGui.QMessageBox.information(self, "OOps", " the reference dir %s was not found" % pathStr)
+			print "error", # TODO
+			return
+		## TODO sort
+		for file_entry in htmlDir.entryInfoList(QtCore.QDir.Files | QtCore.QDir.NoDotAndDotDot):
+			if file_entry.suffix() == 'html':
+				self.html_files[str(file_entry.filePath())] = str(file_entry.baseName())
 
+		return self.html_files
