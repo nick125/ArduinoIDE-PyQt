@@ -13,8 +13,8 @@ from gui.SettingsDialog import SettingsDialog
 from gui.WebSitesDialog import WebSitesDialog
 
 from gui.widgets.HelpWidgets import HelpDockWidget
-from gui.APIBrowser import APIBrowser
-from gui.widgets.APIWidgets import APIDockWidget
+from gui.panes.APIBrowser import APIBrowser
+from gui.dockwidgets.APIDock import APIDockWidget
 
 from gui.browser.BrowserWidget import Browser
 

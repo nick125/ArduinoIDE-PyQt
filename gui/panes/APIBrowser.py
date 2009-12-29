@@ -9,29 +9,10 @@ from gui.FunctionEditDialog import FunctionEditDialog
 from gui.icons import Ico 
 from gui.icons import Icon 
 
-class APIDockWidget(QtGui.QDockWidget):
-	"""
-		The main class for the API browser dock widget
-	"""
-	def __init__(self, parent, main):
-		QtGui.QDockWidget.__init__(self)
-
-		self.main = main
-
-		containerWidget = QtGui.QWidget()
-		self.setWidget(containerWidget)
-
-		layout = QtGui.QVBoxLayout()
-		layout.setContentsMargins(0, 0, 0, 0)
-		layout.setSpacing(0)
-		containerWidget.setLayout(layout)	
-
-		apiWidget = APIBrowser(self, self.main)
-		layout.addWidget(apiWidget)
-
-
-
 class APIBrowser(QtGui.QWidget):
+	"""
+		Create the API Browser pane
+	"""
 
 	class COLS:
 		icon = 0
