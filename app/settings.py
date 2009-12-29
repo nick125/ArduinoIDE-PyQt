@@ -13,9 +13,6 @@ class Settings(QtCore.QObject):
 		self.main = main
 		self.qSettings = QtCore.QSettings("arduino-pyqt", "arduino-pyqt")
 
-	def is_nix(self):
-		return  'linux' in sys.platform # TODO use QT
-
 	#################################################
 	## Pass<>Thru for QSettings class
 	#################################################
