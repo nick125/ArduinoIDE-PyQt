@@ -1,0 +1,20 @@
+description: Reads the value from a specified digital pin, either HIGH or LOW.
+example: "int ledPin = 13; // LED connected to digital pin 13\nint inPin = 7;   //\
+  \ pushbutton connected to digital pin 7\nint val = 0;     // variable to store the\
+  \ read value\n\nvoid setup()\n{\n  pinMode(ledPin, OUTPUT);      // sets the digital\
+  \ pin 13 as output\n  pinMode(inPin, INPUT);      // sets the digital pin 7 as input\n\
+  }\n\nvoid loop()\n{\n  val = digitalRead(inPin);   // read the input pin\n  digitalWrite(ledPin,\
+  \ val);    // sets the LED to the button's value\n}\n\nSets pin 13 to the same value\
+  \ as the pin 7, which is an input.\n\nNote\n\nIf the pin isn't connected to anything,\
+  \ digitalRead() can return either HIGH or LOW (and this can change randomly).\n\n\
+  The analog input pins can be used as digital pins w/ numbers 14 (analog input 0)\
+  \ to 19 (analog input 5)."
+folder: /arduino/
+function: digitalRead
+parameters:
+- pin: Pin to read
+parameters_type: fixed
+return: HIGH or LOW
+section: Digital IO
+summary: Reads the value from a specified digital pin, either HIGH or LOW.
+syntax: digitalRead(pin)

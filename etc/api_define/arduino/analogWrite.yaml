@@ -1,0 +1,38 @@
+description: 'Writes an analog value (PWM wave) to a pin. Can be used to light a LED
+  at varying brightnesses or drive a motor at various speeds. After a call to analogWrite(),
+  the pin will generate a steady square wave of the specified duty cycle until the
+  next call to analogWrite() (or a call to digitalRead() or digitalWrite() on the
+  same pin). The frequency of the PWM signal is approximately 490 Hz.
+
+
+  On newer Arduino boards (including the Mini and BT) with the ATmega168 chip, this
+  function works on pins 3, 5, 6, 9, 10, and 11. Older USB and serial Arduino boards
+  with an ATmega8 only support analogWrite() on pins 9, 10, and 11.
+
+
+  '
+example: "Notes and Known Issues\n\nanalogWrite has nothing whatsoever to do with\
+  \ the analog pins or analogRead.\n\nYou do not need to call pinMode() to set the\
+  \ pin as an output before calling analogWrite().\n\nThe PWM outputs generated on\
+  \ pins 5 and 6 will have higher-than-expected duty cycles. This is because of interactions\
+  \ with the millis() and delay() functions, which share the same internal timer used\
+  \ to generate those PWM outputs. This will be noticed mostly on low duty-cycle settings\
+  \ (e.g 0 - 10) and may result in analogWrite(x, 0) not fully turning off the output\
+  \ on pins 5 & 6, as one would expect.\n\nExample\n\nSets the output to the LED proportional\
+  \ to the value read from the potentiometer.\n\n \nint ledPin = 9;      // LED connected\
+  \ to digital pin 9\nint analogPin = 3;   // potentiometer connected to analog pin\
+  \ 3\nint val = 0;         // variable to store the read value\n\nvoid setup()\n\
+  {\n  pinMode(ledPin, OUTPUT);   // sets the pin as output\n}\n\nvoid loop()\n{\n\
+  \  val = analogRead(analogPin);   // read the input pin\n  analogWrite(ledPin, val\
+  \ / 4);  // analogRead values go from 0 to 1023, analogWrite values from 0 to 255\n\
+  }"
+folder: /arduino/
+function: analogWrite
+parameters:
+- pin: the pin to write to
+- value: 'the duty cycle: between 0 (always off) and 255 (always on)'
+parameters_type: fixed
+return: ''
+section: ''
+summary: ''
+syntax: analogWrite(pin, value)

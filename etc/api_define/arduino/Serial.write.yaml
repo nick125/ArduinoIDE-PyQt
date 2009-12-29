@@ -1,0 +1,15 @@
+description: Writes binary data to the serial port. This data is sent as a byte or
+  series of bytes; to send the characters representing the digits of a number use
+  the print() function instead.
+example: ''
+folder: /arduino/
+function: Serial.write
+parameters:
+- val: a value to send as a single file
+- buf, len: 'buf, an array to send as a series of bytes; len: the length of teh buffer'
+- str: 'str: a string to send as a series of bytes'
+parameters_type: variable
+return: ''
+section: ''
+summary: Writes binary data to the serial port
+syntax: Serial.write(val, buf, len, str)

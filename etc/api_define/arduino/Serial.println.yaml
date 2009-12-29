@@ -1,0 +1,64 @@
+description: 'Prints a data to the serial port, followed by a carriage return character(ASCII
+  13, or ''\r'') and a newline character (ASCII 10, or ''\n''). This command takes
+  the same forms as Serial.print():
+
+
+  Serial.println(b) prints b as a decimal number in an ASCII string followed by a
+  carriage return and a linefeed.
+
+
+  Serial.println(b, DEC) prints b as a decimal number in an ASCII string followed
+  by a carriage return and a linefeed.
+
+
+  Serial.println(b, HEX) prints b as a hexadecimal number in an ASCII string followed
+  by a carriage return and a linefeed.
+
+
+  Serial.println(b, OCT) prints b as an octal number in an ASCII string followed by
+  a carriage return and a linefeed.
+
+
+  Serial.println(b, BIN) prints b as a binary number in an ASCII string followed by
+  a carriage return and a linefeed.
+
+
+  Serial.print(b, BYTE) prints b as a single byte followed by a carriage return and
+  a linefeed.
+
+
+  Serial.println(str) if str is a string or an array of chars, prints str an ASCII
+  string.
+
+
+  Serial.println() just prints a carriage return and a linefeed.'
+example: "/*\n  Analog input\n\n reads an analog input on analog in 0, prints the\
+  \ value out.\n\n created 24 March 2006\n by Tom Igoe\n */\n\nint analogValue = 0;\
+  \    // variable to hold the analog value\n\nvoid setup() {\n  // open the serial\
+  \ port at 9600 bps:\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  // read the analog\
+  \ input on pin 0:\n  analogValue = analogRead(0);\n\n  // print it out in many formats:\n\
+  \  Serial.println(analogValue);       // print as an ASCII-encoded decimal\n  Serial.println(analogValue,\
+  \ DEC);  // print as an ASCII-encoded decimal\n  Serial.println(analogValue, HEX);\
+  \  // print as an ASCII-encoded hexadecimal\n  Serial.println(analogValue, OCT);\
+  \  // print as an ASCII-encoded octal\n  Serial.println(analogValue, BIN);  // print\
+  \ as an ASCII-encoded binary\n  Serial.println(analogValue, BYTE); // print as a\
+  \ raw byte value\n\n  // delay 10 milliseconds before the next reading:\n  delay(10);\n\
+  }"
+folder: /arduino/
+function: Serial.println
+parameters:
+- ? ''
+  : just prints a carriage return and a linefeed.
+- b: prints b as a decimal number in an ASCII string followed by a carriage return
+    and a linefeed.
+- b, DEC: prints b as a decimal number in an ASCII string followed by a carriage return
+    and a linefeed.
+- b, HEX: prints b as a hexadecimal number in an ASCII string followed by a carriage
+    return and a linefeed.
+- b, OCT: prints b as an octal number in an ASCII string followed by a carriage return
+    and a linefeed.
+parameters_type: variable
+return: ''
+section: ''
+summary: Prints a data to the serial port with carriage return
+syntax: Serial.println(, b, b, DEC, b, HEX, b, OCT)

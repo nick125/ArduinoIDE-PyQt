@@ -1,0 +1,26 @@
+description: 'Write a HIGH or a LOW value to a digital pin. If the pin has been configured
+  as an OUPUT with pinMode(), its voltage will be set to the corresponding value:
+  5V (or 3.3V on 3.3V boards) for HIGH, 0V (ground) for LOW.
+
+
+  If the pin is configured as an INPUT, writing a HIGH value will enable an internal
+  20K pullup resistor (see the tutorial on digital pins). Writing LOW will disable
+  the pullup.
+
+  '
+example: "int ledPin = 13;                 // LED connected to digital pin 13\n\n\
+  void setup()\n{\n    pinMode(ledPin, OUTPUT);      // sets the digital pin as output\n\
+  }\n\nvoid loop()\n{\n    digitalWrite(ledPin, HIGH);   // sets the LED on\n    delay(1000);\
+  \                  // waits for a second\n    digitalWrite(ledPin, LOW);    // sets\
+  \ the LED off\n    delay(1000);                  // waits for a second\n}\n\nSets\
+  \ pin 13 to HIGH, makes a one-second-long delay, and sets the pin back to LOW.\n"
+folder: /arduino/
+function: digitalWrite
+parameters:
+- pin: the pin number
+- value: HIGH or LOW
+parameters_type: fixed
+return: none
+section: Digital IO
+summary: Write HIGH or LOW value to digital pin
+syntax: digitalWrite(pin, value)

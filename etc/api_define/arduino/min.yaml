@@ -1,0 +1,19 @@
+description: ''
+example: "sensVal = min(sensVal, 100); // assigns sensVal to the smaller of sensVal\
+  \ or 100\n                             // ensuring that it never gets above 100.\n\
+  \nNote\n\nPerhaps counter-intuitively, max() is often used to constrain the lower\
+  \ end of a variable's range, while min() is used to constrain the upper end of the\
+  \ range.\n\nWarning\n\nBecause of the way the min() function is implemented, avoid\
+  \ using other functions inside the brackets, it may lead to incorrect results\n\n\
+  min(a++, 100);   // avoid this - yields incorrect results\n\na++;\nmin(a, 100);\
+  \    // use this instead - keep other math outside the function\n"
+folder: /arduino/
+function: min
+parameters:
+- x: ' the first number, any data type'
+- y: ' the second number, any data type'
+parameters_type: fixed
+return: The smaller of the two numbers
+section: Math
+summary: Calculates the minimum of two numbers
+syntax: min(x, y)

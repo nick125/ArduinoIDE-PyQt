@@ -1,0 +1,24 @@
+description: 'Reads the value from the specified analog pin. The Arduino board contains
+  a 6 channel (8 channels on the Mini and Nano), 10-bit analog to digital converter.
+  This means that it will map input voltages between 0 and 5 volts into integer values
+  between 0 and 1023. This yields a resolution between readings of: 5 volts / 1024
+  units or, .0049 volts (4.9 mV) per unit.'
+example: "Note\n\nIf the analog input pin is not connected to anything, the value\
+  \ returned by analogRead() will fluctuate based on a number of factors (e.g. the\
+  \ values of the other analog inputs, how close your hand is to the board, etc.).\n\
+  \nExample\n\n \nint analogPin = 3;     // potentiometer wiper (middle terminal)\
+  \ connected to analog pin 3\n                       // outside leads to ground and\
+  \ +5V\nint val = 0;           // variable to store the value read\n\nvoid setup()\n\
+  {\n  Serial.begin(9600);          //  setup serial\n}\n\nvoid loop()\n{\n  val =\
+  \ analogRead(analogPin);    // read the input pin\n  Serial.println(val);      \
+  \       // debug value\n}\n"
+folder: /arduino/
+function: analogRead
+parameters:
+- pin: the number of the analog input pin to read from (0 to 5 on most boards, 0 to
+    7 on the Mini and Nano)
+parameters_type: fixed
+return: int (0 to 1023)
+section: Analog IO
+summary: Reads value of analog pin
+syntax: analogRead(pin)

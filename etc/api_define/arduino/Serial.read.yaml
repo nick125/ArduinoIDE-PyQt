@@ -1,0 +1,16 @@
+description: Reads incoming serial data.
+example: "int incomingByte = 0;\t// for incoming serial data\n\nvoid setup() {\n\t\
+  Serial.begin(9600);\t// opens serial port, sets data rate to 9600 bps\n}\n\nvoid\
+  \ loop() {\n\n\t// send data only when you receive data:\n\tif (Serial.available()\
+  \ > 0) {\n\t\t// read the incoming byte:\n\t\tincomingByte = Serial.read();\n\n\t\
+  \t// say what you got:\n\t\tSerial.print(\"I received: \");\n\t\tSerial.println(incomingByte,\
+  \ DEC);\n\t}\n}\n"
+folder: /arduino/
+function: Serial.read
+parameters: []
+parameters_type: fixed
+return: the first byte of incoming serial data available (or -1 if no data is available)
+  int
+section: ''
+summary: Reads incoming serial data
+syntax: Serial.read()

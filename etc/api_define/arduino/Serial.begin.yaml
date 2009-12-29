@@ -1,0 +1,22 @@
+description: 'Sets the data rate in bits per second (baud) for serial data transmission.
+  For communicating with the computer, use one of these rates: 300, 1200, 2400, 4800,
+  9600, 14400, 19200, 28800, 38400, 57600, or 115200. You can, however, specify other
+  rates - for example, to communicate over pins 0 and 1 with a component that requires
+  a particular baud rate.'
+example: "void setup() {\n\tSerial.begin(9600);\t// opens serial port, sets data rate\
+  \ to 9600 bps\n}\n\nvoid loop() {}\n\nArduino Mega example:\n\n// Arduino Mega using\
+  \ all four of its Serial ports \n// (Serial, Serial1, Serial2, Serial3), \n// with\
+  \ different baud rates:\n\nvoid setup(){\n  Serial.begin(9600);\n  Serial1.begin(38400);\n\
+  \  Serial2.begin(19200);\n  Serial3.begin(4800);\n\n  Serial.println(\"Hello Computer\"\
+  );\n  Serial1.println(\"Hello Serial 1\");\n  Serial2.println(\"Hello Serial 2\"\
+  );\n  Serial3.println(\"Hello Serial 3\");\n}\n\nvoid loop() {}\n\nThanks to Jeff\
+  \ Gray for the mega example"
+folder: /arduino/
+function: Serial.begin
+parameters:
+- speed: long datarate, in bits per second (baud)
+parameters_type: fixed
+return: ''
+section: Serial
+summary: Sets data rate in baud for serial data transmission
+syntax: Serial.begin(speed)

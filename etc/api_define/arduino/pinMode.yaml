@@ -1,0 +1,17 @@
+description: Configures the specified pin to behave either as an input or an output.
+  See the description of digital pins for details.
+example: "int ledPin = 13;                 // LED connected to digital pin 13\n\n\
+  void setup()\n{\n  pinMode(ledPin, OUTPUT);      // sets the digital pin as output\n\
+  }\n\nvoid loop()\n{\n  digitalWrite(ledPin, HIGH);   // sets the LED on\n  delay(1000);\
+  \                  // waits for a second\n  digitalWrite(ledPin, LOW);    // sets\
+  \ the LED off\n  delay(1000);                  // waits for a second\n}"
+folder: /arduino/
+function: pinMode
+parameters:
+- pin: the number of the pin whose mode you wish to set
+- mode: either INPUT or OUTPUT
+parameters_type: fixed
+return: ''
+section: Digital IO
+summary: Configures pin to behave as INPUT or OUTPUT
+syntax: pinMode(pin, mode)
