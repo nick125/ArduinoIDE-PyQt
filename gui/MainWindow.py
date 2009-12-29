@@ -42,7 +42,7 @@ class MainWindow(QtGui.QMainWindow):
 		self.ut = app.util.Util()
 
 		
-		self.setWindowTitle("Arduino - pyqt - alpha version")
+		self.setWindowTitle("Arduino-pyqt - alpha lily daffodil version | no flashing lights as yet")
 		self.setWindowIcon(Icon(Ico.Arduino))
 		self.setMinimumWidth(1200)
 		self.setMinimumHeight(900)

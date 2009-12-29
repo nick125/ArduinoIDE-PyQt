@@ -100,6 +100,9 @@ class HelpWidget(QtGui.QWidget):
 	####################################################
 	def load(self):
 		pathStr = self.main.settings.help_path()
+		print pathStr
+		if not pathStr:
+			return
 		dirr = QtCore.QDir(pathStr)
 		if not dirr.exists():
 			QtGui.QMessageBox.information(self, "OOps", " the reference dir %s was not found" % pathStr)

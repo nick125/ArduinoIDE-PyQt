@@ -183,7 +183,7 @@ class EditorWidget(QtGui.QWidget):
 
 
 	def load_file(self, file_path, tabIndex=None):
-		
+		print "file_path", file_path
 		fileInfo = QtCore.QFileInfo(file_path)
 
 		if fileInfo.isDir():

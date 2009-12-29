@@ -6,6 +6,17 @@ from PyQt4 import QtCore, QtGui
 from gui.icons import Ico 
 from gui.icons import Icon 
 
+"""
+The general idea is that this handles the shell commandss to Card
+* used QProcess
+* needs tewekaing BIG time for bi-directional hackeers
+
+Currently reads and presents erro + stand and sets icons/message aaccordingly
+* its called terminal cos it leads to frustration ;-)
+"""
+
+
+
 class TerminalWidget(QtGui.QWidget):
 
 	
