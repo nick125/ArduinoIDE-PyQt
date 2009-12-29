@@ -3,7 +3,7 @@
 from PyQt4 import QtCore, QtGui
 from PyQt4.Qsci import QsciScintilla
 
-from gui.EditorWidget import EditorWidget
+from gui.widgets.EditorWidget import EditorWidget
 from gui.icons import Ico 
 from gui.icons import Icon 
 

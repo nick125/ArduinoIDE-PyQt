@@ -2,8 +2,8 @@
 
 from PyQt4 import QtCore, QtGui, QtWebKit
 
-import gui.HelpWidgets
-import gui.widgets
+import gui.widgets.HelpWidgets
+from gui.widgets import GenericWidgets
 from gui.icons import Icon
 from gui.icons import Ico
 	
@@ -22,7 +22,7 @@ class HelpBrowserDialog(QtGui.QDialog):
 		self.setMinimumWidth(800)
 		self.setMinimumHeight(500)
 
-		self.statusLabel = gui.widgets.StatusLabel(self)
+		self.statusLabel = GenericWidgets.StatusLabel(self)
 
 		layout = QtGui.QVBoxLayout()
 		layout.setContentsMargins(0, 0, 0, 0)
@@ -32,7 +32,7 @@ class HelpBrowserDialog(QtGui.QDialog):
 		splitter = QtGui.QSplitter(self)
 		layout.addWidget(splitter)
 
-		self.helpTree = gui.HelpWidgets.HelpTree(self, self.main)
+		self.helpTree = gui.widgets.HelpWidgets.HelpTree(self, self.main)
 		splitter.addWidget(self.helpTree)
 		#splitter.setStretchFactor(0, 1)
 

@@ -4,7 +4,7 @@ import yaml
 from yaml import Loader, Dumper
 from PyQt4 import QtCore, QtGui
 
-import gui.widgets
+from gui.widgets import GenericWidgets
 from gui.icons import Ico 
 from gui.icons import Icon 
 
@@ -116,9 +116,9 @@ class DefEditor(QtGui.QWidget):
 		bbox = QtGui.QHBoxLayout()
 		mainLayout.addLayout(bbox)
 		bbox.addStretch(20)
-		cancelButton = gui.widgets.CancelButton(self, "Cancel")
+		cancelButton = GenericWidgets.CancelButton(self, "Cancel")
 		bbox.addWidget(cancelButton, 1)
-		self.saveButton = gui.widgets.SaveButton(self)
+		self.saveButton = GenericWidgets.SaveButton(self)
 		bbox.addWidget(self.saveButton, 1)
 
 		if self.function_name:

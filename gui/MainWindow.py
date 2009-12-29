@@ -12,9 +12,9 @@ import gui.FileSystemBrowser
 from gui.SettingsDialog import SettingsDialog
 from gui.WebSitesDialog import WebSitesDialog
 
-from gui.HelpWidgets import HelpDockWidget
+from gui.widgets.HelpWidgets import HelpDockWidget
 from gui.APIBrowser import APIBrowser
-from gui.APIWidgets import APIDockWidget
+from gui.widgets.APIWidgets import APIDockWidget
 
 from gui.Browser import Browser
 
@@ -22,8 +22,8 @@ from gui.BoardsDialog import BoardsDialog
 from gui.BootLoadersDialog import BootLoadersDialog
 
 
-from gui.SketchListWidgets import SketchesBrowser
-from gui.EditorWidget import EditorWidget
+from gui.widgets.SketchListWidgets import SketchesBrowser
+from gui.widgets.EditorWidget import EditorWidget
 
 from gui.icons import Ico 
 from gui.icons import Icon 
@@ -61,10 +61,13 @@ class MainWindow(QtGui.QMainWindow):
 			#self.topToolBar.addAction("Load Keywords", self.on_dev_load_keywords)
 
 		##############################################################
-		## Files Menu
+		## File Menu
 		##############################################################
-		menuFiles 	= self.menuBar().addMenu( "Files" )
-		menuSettings = menuFiles.addAction(Icon(Ico.Settings), "Settings", self.on_settings_dialog)
+		menuFile	= self.menuBar().addMenu( "File" )
+		menuSettings = menuFile.addAction(Icon(Ico.Settings), "Settings", self.on_settings_dialog)
+		menuFile.addSeparator()
+		# TODO: Connect this to something
+		menuQuit = menuFile.addAction(Icon(Ico.Quit), "Quit")
 		#self.topToolBar.addAction(menuSettings)
 
 

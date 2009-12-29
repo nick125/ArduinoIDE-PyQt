@@ -26,7 +26,7 @@ class API(QtCore.QObject):
 			self.tree['folder'] = {}
 		for file_entry in sub_dir.entryInfoList(QtCore.QDir.Files | QtCore.QDir.NoDotAndDotDot):
 			if file_entry.suffix() == 'yaml':
-				self.add_yaml_function_node(file_entry, folder)
+				#self.add_yaml_function_node(file_entry, folder)
 				print "YAML", file_entry
 				#api = self.main.ut.load_yaml(sub_entry.filePath())
 	

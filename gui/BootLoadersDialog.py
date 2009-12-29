@@ -6,7 +6,7 @@ from PyQt4.Qsci import QsciScintilla
 from gui.icons import Ico 
 from gui.icons import Icon 
 
-from gui.EditorWidget import EditorWidget
+from gui.widgets.EditorWidget import EditorWidget
 
 class BootLoadersDialog(QtGui.QDialog):
 
@@ -16,8 +16,8 @@ class BootLoadersDialog(QtGui.QDialog):
 
 		self.setWindowTitle("Boot Loaders")
 		self.setWindowIcon(Icon(Ico.BootLoaders))
-		self.setMinimumWidth(700)
-		self.setMinimumHeight(500)
+		self.setMinimumWidth(500)
+		self.setMinimumHeight(400)
 
 		mainLayout = QtGui.QVBoxLayout()
 		m = 0

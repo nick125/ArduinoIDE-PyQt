@@ -78,6 +78,6 @@ class Icons:
 	WriteFile = 'book_next.png'
 
 	Settings = 'cog.png'
-
+	Quit = 'delete.png'
 # XX: Remove this hack once Ico is out of use
 Ico = Icons

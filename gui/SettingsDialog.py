@@ -2,7 +2,7 @@
 
 from PyQt4 import QtCore, QtGui
 
-import gui.widgets
+from gui.widgets import GenericWidgets
 from gui.icons import Ico 
 from gui.icons import Icon 
 
@@ -87,10 +87,10 @@ class SettingsDialog(QtGui.QDialog):
 		mainLayout.addLayout(buttonBox)
 		buttonBox.addStretch(20)
 
-		cancelButton = gui.widgets.CancelButton(self, "Cancel")
+		cancelButton = GenericWidgets.CancelButton(self, "Cancel")
 		buttonBox.addWidget(cancelButton)
 
-		saveButton = gui.widgets.SaveButton(self)
+		saveButton = GenericWidgets.SaveButton(self)
 		buttonBox.addWidget(saveButton)
 
 	def check_file(self, ki):
