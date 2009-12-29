@@ -12,9 +12,9 @@ class Settings(QtCore.QObject):
 		QtCore.QObject.__init__(self)
 		self.qSettings = QtCore.QSettings("arduino-pyqt", "arduino-pyqt")
 
-		self._arduino_path = None
-		self._arduino_svn_path = None
-		self._sketches_path = None
+		#self._arduino_path = None
+		#self._arduino_svn_path = None
+		##self._sketches_path = None
 
 	def load_settings(self):
 		print "foo"
@@ -27,7 +27,6 @@ class Settings(QtCore.QObject):
 	## Pass<>Thru for QSettings class
 	#################################################
 	def value(self, ki, as_string=True):
-		return None
 		v = self.qSettings.value( ki )
 		if v.isNull():
 			return None

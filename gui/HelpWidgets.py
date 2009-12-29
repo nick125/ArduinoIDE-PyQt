@@ -81,6 +81,9 @@ class HelpWidget(QtGui.QWidget):
 		layout.addWidget(self.tree)
 		self.connect(self.tree, QtCore.SIGNAL("clicked(const QModelIndex&)"), self.on_tree_double_clicked)
 
+		self.statusWidget = gui.widgets.StatusWidget(self)
+		
+
 		self.load()
 
 	####################################################
@@ -102,6 +105,7 @@ class HelpWidget(QtGui.QWidget):
 		pathStr = self.main.settings.help_path()
 		print pathStr
 		if not pathStr:
+			self.statusWidget.set_status(self.tree, "Path not found")
 			return
 		dirr = QtCore.QDir(pathStr)
 		if not dirr.exists():
