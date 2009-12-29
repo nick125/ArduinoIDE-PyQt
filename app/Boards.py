@@ -20,9 +20,8 @@ class Boards(QtCore.QObject):
 		self.boards_index = {}
 		self.boards_tree = {}
 		file_path = self.main.settings.hardware_path("boards.txt")
-		print "DEAD", file_path
 		if not file_path:
-			
+			print "TODO" # TODO
 			return
 
 		fileObj = QtCore.QFile(file_path)
@@ -70,7 +69,6 @@ class Boards(QtCore.QObject):
 		return items
 
 	def set_current(self, board):
-		print self.boards_index, board
 		if not board in self.boards_index:
 			return
 		self.main.settings.setValue("current_board", board)

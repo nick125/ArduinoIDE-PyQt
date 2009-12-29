@@ -34,6 +34,16 @@ class Settings(QtCore.QObject):
 		self.qSettings.remove(ki)
 
 
+	#################################################
+	## Window Save/Restore
+	#################################################
+	def save_window(self, windowName, window):
+		self.qSettings.setValue( "window/%s/geometry" % windowName, QtCore.QVariant(window.saveGeometry()) )
+
+	def restore_window(self, windowName, window):
+		geo = self.qSettings.value( "window/%s/geometry" % windowName )
+		window.restoreGeometry( geo.toByteArray() )
+
 
 	#########################################################
 	## Paths
@@ -91,20 +101,17 @@ class Settings(QtCore.QObject):
 
 	## Help HTML files
 	def help_path(self):
-		print "help=", self.arduino_path()
 		if not self.arduino_path():
 			return None
 		return self.arduino_path().append("/reference/")
 
+	## Exmaples Dir
 	def examples_path(self):
-		print "examples=", self.arduino_path()
 		if not self.arduino_path():
 			return None
 		return self.arduino_path().append("/examples/")
 
+	## Sketches Directory
 	def sketches_path(self):
-		## TODO - use prefs
-		#print "path/sketchbooks_path", self.value("path/sketchbooks_path")
 		return self.value("path/sketchbooks_path")
-		#return QtCore.QString(config.SKETCHBOOKS_PATH)
 

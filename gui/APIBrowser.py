@@ -67,16 +67,19 @@ class APIBrowser(QtGui.QWidget):
 		self.connect(self.chkExtendedNodes, QtCore.SIGNAL("clicked()"), self.on_refresh)
 		toolbar.addSeparator()
 		
-		self.actionAddFunction = toolbar.addAction(Icon(Ico.FunctionAdd), "Add Function", self.on_add_function)
-		#self.actionAddFunction.setDisabled(True)
+		#############################################
+		### Function Actions
+		self.actionAddFunction = toolbar.addAction(Icon(Ico.FunctionAdd), "Add", self.on_add_function)
 
-		self.actionEditFunction = toolbar.addAction(Icon(Ico.FunctionEdit), "Edit Function", self.on_edit_function)
+		self.actionEditFunction = toolbar.addAction(Icon(Ico.FunctionEdit), "Edit", self.on_edit_function)
 		self.actionEditFunction.setDisabled(True)
 
-		self.actionDeleteFunction = toolbar.addAction(Icon(Ico.FunctionDelete), "Delete Function", self.on_delete_function)
+		self.actionDeleteFunction = toolbar.addAction(Icon(Ico.FunctionDelete), "Delete", self.on_delete_function)
 		self.actionDeleteFunction.setDisabled(True)
 		toolbar.addSeparator()
 
+		#############################################
+		### Folder Actions
 		self.folderactionGroup = QtGui.QActionGroup(self)
 		self.folderactionGroup.setDisabled(True)
 
@@ -92,15 +95,8 @@ class APIBrowser(QtGui.QWidget):
 
 		self.actionWriteApiFile = toolbar.addAction(Icon(Ico.WriteFile), "Write API file", self.on_write_api_file)
 
-		
-		#toolbar.addWidget(self.chkExtendedNodes)
-		#headerLayout.addWidget(lblTitle)
-		#toolbar.addWidget(QtGui.QLabel("Filter:"))
-		#self.txtFilter = QtGui.QLineEdit()
-		#toolbar.addWidget(self.txtFilter)
-
-		
-
+		#############################################
+		### Tree
 		self.tree = QtGui.QTreeWidget()
 		self.tree.setRootIsDecorated(True)
 		self.tree.setAlternatingRowColors(True)
@@ -110,19 +106,16 @@ class APIBrowser(QtGui.QWidget):
 
 		self.tree.headerItem().setText(self.COLS.icon, "Function")
 		self.tree.headerItem().setText(self.COLS.description, "Description")
-		#self.tree.headerItem().setText(2, "Description")
 		self.tree.headerItem().setText(self.COLS.section, "Section")
 		self.tree.headerItem().setText(self.COLS.function, "Function")
 		self.tree.headerItem().setText(self.COLS.folder, "Folder")
 		self.tree.header().setStretchLastSection(True)
 		self.tree.setColumnWidth(self.COLS.icon, 300)
 		self.tree.setColumnWidth(self.COLS.description, 300)
-		if 1 == 0:
+		if 1 == 0: # ?? umm pedro
 			#self.tree.setColumnHidden(self.COLS.folder, True)
 			self.tree.setColumnHidden(self.COLS.function, True)
 			self.tree.setColumnHidden(self.COLS.folder, True)
-
-		
 
 		self.api_lines = None
 		self.load()
@@ -130,13 +123,11 @@ class APIBrowser(QtGui.QWidget):
 	def on_write_api_file(self):
 		rootItem = self.tree.invisibleRootItem()
 		self.api_lines = []
-		print "write-api-----------------------------------------------"
 		self.extract_api(rootItem)
 		for l in self.api_lines:
 			print l
 		api_string = "\n".join(self.api_lines)
 		file_path = self.main.settings.def_path().append("/autocomplete.txt")
-		#print file_path
 		self.main.ut.write_file(file_path, api_string)
 
 	def extract_api(self, treeItem):

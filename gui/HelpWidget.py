@@ -7,7 +7,7 @@ from gui.HelpBrowser import HelpBrowser
 from gui.icons import Ico 
 from gui.icons import Icon 
 
-class HelpWidget(QtGui.QDockWidget):
+class DDDHelpWidget(QtGui.QDockWidget):
 
 	
 	def __init__(self, main=None):

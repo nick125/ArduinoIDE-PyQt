@@ -131,26 +131,10 @@ class MainWindow(QtGui.QMainWindow):
 		##############################################################
 		menuHelp 	= self.menuBar().addMenu( "Help" )
 
-		##########################################################
-		## Header Label 
-		##########################################################	
-		#lblHeader = HeaderWidget(self)
-		#self.addDockWidget(QtCore.Qt.TopDockWidgetArea, lblHeader)	
-		
-	
-		##########################################################
-		## Left Dock
-		##########################################################
-		
 
-		#self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, userSketchesWidget)	
-		#self.connect(userSketchesWidget, QtCore.SIGNAL("open_sketch"), self.on_open_sketch)
-		"""
-		exampleSketchesWidget = SketchListWidget("Examples", self, self)
-		self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, exampleSketchesWidget)	
-		self.connect(exampleSketchesWidget, QtCore.SIGNAL("open_sketch"), self.on_open_sketch)
-		self.tabifyDockWidget(userSketchesWidget, exampleSketchesWidget)
-		"""
+		####################################
+		## Dock Widgets
+		####################################
 		helpDockWidget = HelpDockWidget("Help", self, self)
 		self.addDockWidget(QtCore.Qt.RightDockWidgetArea, helpDockWidget)
 		
@@ -165,18 +149,10 @@ class MainWindow(QtGui.QMainWindow):
 		self.connect(self.mainTabWidget, QtCore.SIGNAL("tabCloseRequested (int)"), self.on_close_tab_requested)
 
 
+		## Load sketches and Welcone
 		self.on_action_view(QtCore.QString("sketches"))
 		self.on_action_view(QtCore.QString("welcome"))
-
-		
-		#edit = EditorWidget(self, self, arduino_mode=True)
-		#idx = self.mainTabWidget.addTab(edit, Icon(Ico.Sketch), "Foo Bar")
-		#self.mainTabWidget.setCurrentIndex(idx)
-		#edit.load_file("/home/arduino/sketchbook/chicken_shit/chicken_shit.pde", idx)
-
-		
-
-		#self.addDockWidget(QtCore.Qt.RightDockWidgetArea, apiBrowser)
+	
 
 		##########################################################
 		## Status Bar
@@ -199,8 +175,7 @@ class MainWindow(QtGui.QMainWindow):
 		if not self.settings.value("virginity"):
 			self.on_settings_dialog()
 
-
-		#self.api = app.API.API(self)
+		self.settings.restore_window( "main_window", self )
 		self.on_refresh_settings()
 
 
@@ -265,7 +240,6 @@ class MainWindow(QtGui.QMainWindow):
 	#########################################
 	## Open Sketchboox
 	def on_open_sketch(self, file_path):
-		print "OPEN", file_path
 		fileInfo = QtCore.QFileInfo(file_path)
 		newEditor = EditorWidget(self, self, arduino_mode=True)
 		newEditor.load_file(fileInfo.filePath())
@@ -319,3 +293,6 @@ class MainWindow(QtGui.QMainWindow):
 	def on_websites_dialog(self):
 		d = WebSitesDialog(self, self)
 		d.show()
+
+	def closeEvent(self, event ):
+		self.settings.save_window( "main_window", self )
