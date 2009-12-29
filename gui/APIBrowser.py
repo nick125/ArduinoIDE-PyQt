@@ -5,7 +5,7 @@ from PyQt4 import QtCore, QtGui
 import os.path
 
 from gui.FunctionEditDialog import FunctionEditDialog
-#from gui.FileDialogs import FolderEditDialog
+
 from gui.icons import Ico 
 from gui.icons import Icon 
 

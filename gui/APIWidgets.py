@@ -9,11 +9,11 @@ from gui.icons import Ico
 from gui.icons import Icon 
 
 
-class DEADAPIDockWidget(QtGui.QDockWidget):
+class APIDockWidget(QtGui.QDockWidget):
 
 	
-	def __init__(self, parent, main):
-		QtGui.QDockWidget.__init__(self)
+	def __init__(self, title, parent, main):
+		QtGui.QDockWidget.__init__(self, title, parent)
 
 		self.main = main
 
@@ -25,12 +25,12 @@ class DEADAPIDockWidget(QtGui.QDockWidget):
 		layout.setSpacing(0)
 		containerWidget.setLayout(layout)	
 
-		apiWidget = APIBrowser(self, self.main)
+		apiWidget = APITreeWidget(self, self.main)
 		layout.addWidget(apiWidget)
 
 
 
-class APIWidget(QtGui.QWidget):
+class APITreeWidget(QtGui.QWidget):
 
 	class COLS:
 		icon = 0
@@ -50,19 +50,7 @@ class APIWidget(QtGui.QWidget):
 		layout.setSpacing(0)
 		self.setLayout(layout)
 
-		###########################
-		### Toolbar
-		toolbar = QtGui.QToolBar()
-		toolbar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
-		layout.addWidget( toolbar )
-
-		act = toolbar.addAction(Icon(Ico.Refresh), "Refresh", self.on_refresh)
-		self.chkExtendedNodes = QtGui.QCheckBox("Show vars")
-		self.chkExtendedNodes.setChecked(True)
-		toolbar.addWidget(self.chkExtendedNodes)
-		self.connect(self.chkExtendedNodes, QtCore.SIGNAL("clicked()"), self.on_refresh)
-		toolbar.addSeparator()
-		
+	
 
 		##################################################################
 		##  Filter Bar
@@ -82,31 +70,43 @@ class APIWidget(QtGui.QWidget):
 		hBox.addWidget( self.txtFilter, 222 )
 		
 
-		self.tree = QtGui.QTreeWidget()
-		self.tree.setRootIsDecorated(True)
-		self.tree.setAlternatingRowColors(True)
-		layout.addWidget(self.tree)
-		self.connect(self.tree, QtCore.SIGNAL("itemDoubleClicked (QTreeWidgetItem *,int)"), self.on_tree_item_double_clicked)
-		self.connect(self.tree, QtCore.SIGNAL("itemClicked (QTreeWidgetItem *,int)"), self.on_tree_item_clicked)
+	
+		##################################################################
+		### Models
+		##################################################################
+		self.model = QtGui.QStandardItemModel(0, 1, self)
+		self.model.setHeaderData(0, QtCore.Qt.Horizontal, QtCore.QVariant("Topic"))
+		self.proxyModel = QtGui.QSortFilterProxyModel(self)
+		self.proxyModel.setSourceModel( self.model )
 
-		self.tree.headerItem().setText(self.COLS.icon, "Function")
-		self.tree.headerItem().setText(self.COLS.description, "Description")
-		#self.tree.headerItem().setText(2, "Description")
-		self.tree.headerItem().setText(self.COLS.section, "Section")
-		self.tree.headerItem().setText(self.COLS.function, "Function")
-		self.tree.headerItem().setText(self.COLS.folder, "Folder")
-		self.tree.header().setStretchLastSection(True)
-		self.tree.setColumnWidth(self.COLS.icon, 300)
-		self.tree.setColumnWidth(self.COLS.description, 300)
-		if 1 == 0:
-			#self.tree.setColumnHidden(self.COLS.folder, True)
-			self.tree.setColumnHidden(self.COLS.function, True)
-			self.tree.setColumnHidden(self.COLS.folder, True)
+		#################################################################
+		### Tree
+		##################################################################
+		self.tree = QtGui.QTreeView()
+		self.tree.setRootIsDecorated(False)
+		self.tree.setAlternatingRowColors(True)
+		self.tree.setSortingEnabled(True)
+		self.tree.setModel(self.proxyModel)
+		layout.addWidget(self.tree)
+		self.connect(self.tree, QtCore.SIGNAL("clicked(const QModelIndex&)"), self.on_tree_double_clicked)
+
 
 		
 
 		self.api_lines = None
 		self.load()
+
+	####################################################
+	## Filter related
+	####################################################
+	def on_filter_clear(self):
+		self.txtFilter.setText("")
+		self.txtFilter.setFocus()
+
+	def on_filter_changed(self, filterString):
+		self.proxyModel.setFilterKeyColumn(0)
+		regExp = QtCore.QRegExp(self.txtFilter.text(), QtCore.Qt.CaseInsensitive)
+		self.proxyModel.setFilterRegExp(regExp)
 
 	def on_write_api_file(self):
 		rootItem = self.tree.invisibleRootItem()
@@ -203,11 +203,6 @@ class APIWidget(QtGui.QWidget):
 			else:
 				print "error" # TODO
 
-     #if (ok && !text.isEmpty())
-      #   textLabel->setText(text);
-
-		#dialog = FolderEditDialog(self, self.main, folder, parent=parent_folder)
-		#dialog.exec_()
 
 	def on_edit_folder(self):
 		folder = self.tree.currentItem().data(self.COLS.icon, QtCore.Qt.UserRole).toString()
@@ -229,8 +224,9 @@ class APIWidget(QtGui.QWidget):
 
 
 		self.tree.model().removeRows(0, self.tree.model().rowCount())
+		return	
 		rootNode = self.tree.invisibleRootItem()
-		root_path = self.main.settings.api_def_path()
+		root_path = self.main.settings.api_define_path()
 		rootDir = QtCore.QDir(root_path)
 		self.paths = []
 		self.walk_dir(rootDir, '/', rootNode)
@@ -262,17 +258,6 @@ class APIWidget(QtGui.QWidget):
 			section =  api['section']
 		else:
 			section = "#"
-		#items = self.tree.findItems(section_path, QtCore.Qt.MatchExactly, self.COLS.section)
-		#print items, section_path
-		#if len(items) == 0:
-		#	sectionItem = QtGui.QTreeWidgetItem(parentNode)
-		#	sectionItem.setText(self.COLS.icon, api['section'])
-		#	sectionItem.setText(self.COLS.section, section_path)
-		#items = self.tree.findItems(section_path, QtCore.Qt.MatchExactly, self.COLS.section)
-		#print "Second", items, section_path
-		#"""
-		#else:
-		#	print items
 
 		#print api
 		is_fixed = 'parameters_type' in api and api['parameters_type'] == 'fixed'
@@ -299,19 +284,9 @@ class APIWidget(QtGui.QWidget):
 					font.setBold(True)
 					paraSyntax.setFont(self.COLS.icon, font)
 
-					#sss  = "<font color=blue><b>%s</b></font>" % ap.keys()[0]
-					#sss = ap.keys()[0]
-					#p_list.append(sss)
-				#s += "( " + ", ".join(p_list)+ " )"
-				#kidd = QtGui.QTreeWidgetItem(funkFileItem)
-				#kidd.setIcon(self.COLS.icon, Icon(Ico.Green))
-			#else:
-				#s += "()"
-			#s += " - <small>%s</small>" % api['summary']
+				
 					func_name = api['function']
-					#if api['function'].find(".") > 1:
-						#self.api_lines.append(api['function'] + "()")
-						#func_name = "." + api['function'].split(".")[1]
+
 					if ap.keys()[0] == '':
 						s = func_name + "()"
 					else:
@@ -358,7 +333,7 @@ class APIWidget(QtGui.QWidget):
 			funkFileItem.setData(self.COLS.icon, QtCore.Qt.UserRole, QtCore.QVariant(sub_entry.filePath()))
 			#self.tree.setItemExpanded(funkFileItem, True)
 			#print  api['parameters']
-			if  self.chkExtendedNodes.isChecked():
+			if  1 == 0:
 				if len(api['parameters']) > 0: ##TODO Qt'ify python code
 					if 'parameters_type' in api and api['parameters_type'] =='fixed':
 						
@@ -384,7 +359,7 @@ class APIWidget(QtGui.QWidget):
 		self.actionEditFunction.setDisabled(not is_funk)
 		self.actionDeleteFunction.setDisabled(not is_funk)
 
-	def on_tree_item_double_clicked(self, item, column):
+	def on_tree_double_clicked(self, item, column):
 		#print item, column
 		#print item.text(0), item.data(0, QtCore.Qt.UserRole).toString()
 		if item.text(self.COLS.function).length() > 0:

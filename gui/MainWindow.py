@@ -14,7 +14,7 @@ from gui.WebSitesDialog import WebSitesDialog
 
 from gui.HelpWidgets import HelpDockWidget
 from gui.APIBrowser import APIBrowser
-from gui.APIWidget import APIDocWidget
+from gui.APIWidgets import APIDockWidget
 
 from gui.Browser import Browser
 
@@ -140,11 +140,11 @@ class MainWindow(QtGui.QMainWindow):
 		## Dock Widgets
 		####################################
 		helpDockWidget = HelpDockWidget("Help", self, self)
-		self.addDockWidget(QtCore.Qt.RightDockWidgetArea, helpDockWidget)
+		self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, helpDockWidget)
 
-		apiDockWidget = APIDockWidget("Help", self, self)
-		self.addDockWidget(QtCore.Qt.RightDockWidgetArea, apiDockWidget)
-		self.tabifyDocWidget(helpDockWidget, apiDockWidget)
+		apiDockWidget = APIDockWidget("API", self, self)
+		self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, apiDockWidget)
+		#self.tabifyDockWidget(helpDockWidget, apiDockWidget)
 		
 		##########################################################
 		## Central Widget
