@@ -21,7 +21,7 @@ class APIDockWidget(QtGui.QDockWidget):
 		self.setWidget(containerWidget)
 
 		layout = QtGui.QVBoxLayout()
-		layout.setContentsMargins(0,0,0,0)
+		layout.setContentsMargins(0, 0, 0, 0)
 		layout.setSpacing(0)
 		containerWidget.setLayout(layout)	
 
@@ -46,7 +46,7 @@ class APIBrowser(QtGui.QWidget):
 		self.paths = None
 
 		layout = QtGui.QVBoxLayout()
-		layout.setContentsMargins(0,0,0,0)
+		layout.setContentsMargins(0, 0, 0, 0)
 		layout.setSpacing(0)
 		self.setLayout(layout)
 
