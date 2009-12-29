@@ -2,12 +2,12 @@
 
 import yaml
 from PyQt4 import QtCore, QtGui
+import os.path
 
 from gui.FunctionEditDialog import FunctionEditDialog
 #from gui.FileDialogs import FolderEditDialog
 from gui.icons import Ico 
 from gui.icons import Icon 
-
 
 class APIDockWidget(QtGui.QDockWidget):
 
@@ -127,7 +127,7 @@ class APIBrowser(QtGui.QWidget):
 		for l in self.api_lines:
 			print l
 		api_string = "\n".join(self.api_lines)
-		file_path = self.main.settings.def_path().append("/autocomplete.txt")
+		file_path = os.path.join(self.main.settings.def_path(), "autocomplete.txt")
 		self.main.ut.write_file(file_path, api_string)
 
 	def extract_api(self, treeItem):
@@ -204,7 +204,7 @@ class APIBrowser(QtGui.QWidget):
                                           "foo")
 		if ok:
 			#dir_str = parent_folder.append(txt)
-			pth = self.main.settings.def_path().append(parent_folder)
+			pth = os.path.join(self.main.settings.def_path(), parent_folder)
 			print pth
 			dirr = QtCore.QDir(pth)
 			success = dirr.mkdir(txt)
