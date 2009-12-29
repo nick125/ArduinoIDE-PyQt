@@ -1,0 +1,23 @@
+analogRead(pin) 
+analogWrite(pin, value) 
+digitalRead(pin) 
+digitalWrite(pin, value) 
+max(x, y) 
+millis() 
+min(x, y) 
+pinMode(pin, mode) 
+randomSeed(seed) 
+Serial.begin(speed) 
+Serial.println()
+println() Prints a data to the serial port with carriage return
+println(b) Prints a data to the serial port with carriage return
+println(b, DEC) Prints a data to the serial port with carriage return
+println(b, HEX) Prints a data to the serial port with carriage return
+println(b, OCT) Prints a data to the serial port with carriage return
+Serial.read() 
+Serial.write()
+write(val) Writes binary data to the serial port
+write(buf, len) Writes binary data to the serial port
+write(str) Writes binary data to the serial port
+servo.attach(pin, min*, max*) 
+servo.attached() 
