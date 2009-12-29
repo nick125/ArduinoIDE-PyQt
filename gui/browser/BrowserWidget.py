@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from PyQt4 import QtCore, QtGui, QtWebKit
+from gui.browser.BrowserActions import BrowserActions
 
 class Browser(QtWebKit.QWebView):
-
 	def __init__(self, parent, main, page=None):
 		QtWebKit.QWebView.__init__(self, parent)
 		self.main = main
+		self.actions = BrowserActions(main, self)
 
 		if page:
 			html_file_name = self.main.settings.app_path().append("/etc/welcome.html")
