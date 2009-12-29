@@ -1,4 +1,9 @@
-TO DO
+ _____ ___  ____   ___  
+|_   _/ _ \|  _ \ / _ \ 
+  | || | | | | | | | | |
+  | || |_| | |_| | |_| |
+  |_| \___/|____/ \___/ 
+                        
 
 * Think ok a cool name for the project, call it something like a cat.. eg dabbles 
 
