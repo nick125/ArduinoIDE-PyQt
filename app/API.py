@@ -34,23 +34,13 @@ class API(QtCore.QObject):
 			self.tree['folder'] = {}
 		for file_entry in sub_dir.entryInfoList(QtCore.QDir.Files | QtCore.QDir.NoDotAndDotDot):
 			if file_entry.suffix() == 'yaml':
-				#self.add_yaml_function_node(file_entry, folder)
-				#print "YAML", file_entry.completeBaseName()
 				self.functions.append([str(file_entry.completeBaseName()), str(file_entry.filePath())])
-				#api = self.main.ut.load_yaml(sub_entry.filePath())
 	
 		for folder_entry in sub_dir.entryInfoList(QtCore.QDir.Dirs | QtCore.QDir.NoDotAndDotDot):
 			n_folder = folder + folder_entry.fileName() + "/"
-			#dirItem = QtGui.QTreeWidgetItem(parentItem)
-			#dirItem.setText(self.COLS.icon, folder_entry.fileName())
-			#dirItem.setText(self.COLS.folder, n_folder)
-			#dirItem.setIcon(self.COLS.icon, Icon(Ico.Folder))
-			#dirItem.setData(self.COLS.icon, QtCore.Qt.UserRole, QtCore.QVariant(folder_entry.filePath()))
-			#dirItem.setFirstColumnSpanned(False)
-			#self.tree.setItemExpanded(dirItem, True)
+
 
 			self.walk_dir(QtCore.QDir(folder_entry.filePath()), n_folder)
-			#self.paths.append( str(n_folder) )
 		
 	def add_yaml_function_node(self, sub_entry, folder, parentNode):
 		api = self.main.ut.load_yaml(sub_entry.filePath())
