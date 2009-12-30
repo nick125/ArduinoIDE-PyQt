@@ -61,7 +61,7 @@ class BootLoadersDialog(QtGui.QDialog):
 
 	def load_file(self):
 
-		file_path = self.main.settings.hardware_path().append("programmers.txt")
+		file_path = self.main.settings.hardware_path().absoluteFilePath("programmers.txt")
 		#source = self.main.ut.get_file_contents(file_path)
 		self.editor.load_file(file_path)
 		boot_loaders = self.main.ut.load_arduino_config_file(file_path)
