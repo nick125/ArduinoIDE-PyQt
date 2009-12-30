@@ -4,10 +4,10 @@ import yaml
 from PyQt4 import QtCore, QtGui
 import os.path
 
-from gui.FunctionEditDialog import FunctionEditDialog
+from app.settings import settings
 
-from gui.icons import Ico 
-from gui.icons import Icon 
+from gui.FunctionEditDialog import FunctionEditDialog
+from gui.icons import Ico, Icon
 
 class APIBrowserPane(QtGui.QWidget):
 	"""
@@ -109,7 +109,7 @@ class APIBrowserPane(QtGui.QWidget):
 		for l in self.api_lines:
 			print l
 		api_string = "\n".join(self.api_lines)
-		file_path = os.path.join(self.main.settings.def_path(), "autocomplete.txt")
+		file_path = settings.def_path().absoluteFilePath("autocomplete.txt")
 		self.main.ut.write_file(file_path, api_string)
 
 	def extract_api(self, treeItem):
@@ -186,7 +186,7 @@ class APIBrowserPane(QtGui.QWidget):
                                           "foo")
 		if ok:
 			#dir_str = parent_folder.append(txt)
-			pth = os.path.join(self.main.settings.def_path(), parent_folder)
+			pth = settings.def_path().absoluteFilePath(parent_folder)
 			print pth
 			dirr = QtCore.QDir(pth)
 			success = dirr.mkdir(txt)
@@ -215,7 +215,7 @@ class APIBrowserPane(QtGui.QWidget):
 
 		self.tree.model().removeRows(0, self.tree.model().rowCount())
 		rootNode = self.tree.invisibleRootItem()
-		root_path = self.main.settings.api_define_path()
+		root_path = settings.api_define_path()
 		rootDir = QtCore.QDir(root_path)
 		self.paths = []
 		self.walk_dir(rootDir, '/', rootNode)
@@ -227,7 +227,7 @@ class APIBrowserPane(QtGui.QWidget):
 				self.add_yaml_function_node(file_entry, folder, parentItem)
 	
 		for folder_entry in sub_dir.entryInfoList(QtCore.QDir.Dirs | QtCore.QDir.NoDotAndDotDot):
-			n_folder = folder + folder_entry.fileName() + "/"
+			n_folder = folder_entry.fileName() 
 			dirItem = QtGui.QTreeWidgetItem(parentItem)
 			dirItem.setText(self.COLS.icon, folder_entry.fileName())
 			dirItem.setText(self.COLS.folder, n_folder)

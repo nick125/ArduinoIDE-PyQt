@@ -4,6 +4,8 @@ import yaml
 from yaml import Loader, Dumper
 from PyQt4 import QtCore, QtGui
 
+from app.settings import settings
+
 from gui.widgets import GenericWidgets
 from gui.icons import Ico 
 from gui.icons import Icon 
@@ -165,7 +167,7 @@ class DefEditor(QtGui.QWidget):
 	#############################################
 	def load_file(self, file_name=None):
 
-		file_name = self.main.settings.def_path().append("/digitalWrite.yaml")
+		file_name = settings.def_path().append("/digitalWrite.yaml")
 
 		string = self.main.ut.get_file_contents(file_name)
 		#print string
@@ -214,7 +216,7 @@ class DefEditor(QtGui.QWidget):
 		
 		
 		print self.function_name
-		file_path = self.main.settings.def_path().append("/").append(self.function_name).append(".yaml")
+		file_path = settings.def_path().absoluteFilePath("%s.yaml" % (self.function_name))
 		print file_path
 		self.main.ut.write_file(file_path, string)
 		

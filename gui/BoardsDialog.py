@@ -3,6 +3,8 @@
 from PyQt4 import QtCore, QtGui
 from PyQt4.Qsci import QsciScintilla
 
+from app.settings import settings
+
 from gui.widgets.EditorWidget import EditorWidget
 from gui.icons import Ico 
 from gui.icons import Icon 
@@ -59,7 +61,7 @@ class BoardsDialog(QtGui.QDialog):
 		self.load_file()
 
 	def load_file(self):
-		self.editor.load_file(self.main.settings.hardware_path("boards.txt"))
+		self.editor.load_file(settings.hardware_path("boards.txt"))
 		
 		## Loop the boards
 		boards = self.main.boards.all()

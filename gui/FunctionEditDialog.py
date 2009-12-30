@@ -4,6 +4,8 @@ import yaml
 from yaml import Loader, Dumper
 from PyQt4 import QtCore, QtGui
 
+from app.settings import settings
+
 from gui.widgets import GenericWidgets
 from gui.icons import Ico 
 from gui.icons import Icon 
@@ -196,9 +198,9 @@ class FunctionEditDialog(QtGui.QDialog):
 	## Load
 	#############################################
 	def load_file(self):
-
-		#file_name = self.main.settings.def_path().append("/digitalWrite.yaml")
-		file_path = self.main.settings.api_define_path().append(self.path).append(self.function_file)
+		_path = settings.api_define_path()
+		_path.cd(self.path)
+		file_path= _path.absoluteFilePath(self.function_file)
 		#print file_path
 		string = self.main.ut.get_file_contents(file_path)
 		#print string
