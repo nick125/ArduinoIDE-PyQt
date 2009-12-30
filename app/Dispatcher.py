@@ -25,16 +25,15 @@ class Dispatcher(QtCore.QObject):
 			"""
 			if len(args) == 0:
 				self.emit(QtCore.SIGNAL("%s()" % name))
-				print "emitting %s()" % name
 			else:
 				self.emit(QtCore.SIGNAL(name), *args)
-				print "emitting %s with args"
 		return emitter
 
 dispatcher = Dispatcher()
 
 class Test:
-	@QtCore.pyqtSlot()
-	def test():
-		print "test from the handler!"
-	QtCore.QObject.connect(dispatcher, QtCore.SIGNAL("test()"), test)
+	@QtCore.pyqtSlot('QString')
+	def test(t):
+		print "test! %s was passed" % t
+
+	QtCore.QObject.connect(dispatcher, QtCore.SIGNAL("test"), test)
