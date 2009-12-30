@@ -183,10 +183,6 @@ class MainWindow(QtGui.QMainWindow):
 
 		## API
 		
-		#self.connect(self.api, QtCore.SIGNAL("some_signal_here"), self.p)
-		#print self.api.html_index()
-		#print self.api.tree()
-		
 		if not settings.value("virginity"):
 			self.on_settings_dialog()
 
@@ -222,7 +218,6 @@ class MainWindow(QtGui.QMainWindow):
 			self.connect(sketchesWidget, QtCore.SIGNAL("open_sketch"), self.on_open_sketch)
 
 		elif ki == 'welcome':
-			print settings.html_pages_path().absoluteFilePath("welcome.html")
 			welcomePage = Browser(self, self, initial_page="file://%s" % settings.html_pages_path().absoluteFilePath("welcome.html"))
 			self.mainTabWidget.addTab(welcomePage, Icon(Ico.Arduino), "Welcome")
 
@@ -261,9 +256,8 @@ class MainWindow(QtGui.QMainWindow):
 		self.setWindowTitle(self.title_text % self.mainTabWidget.tabText(index))
 
 	#########################################
-	## Open Sketchboox
+	## Open Sketchbox
 	def on_open_sketch(self, file_path):
-		print file_path
 		fileInfo = QtCore.QFileInfo(file_path)
 		newEditor = EditorWidget(self, self, arduino_mode=True)
 		newEditor.load_file(fileInfo.filePath())
@@ -275,8 +269,6 @@ class MainWindow(QtGui.QMainWindow):
 		import app.keywords
 		
 		keyw = app.keywords.Keywords(self)
-		print keyw.index()
-
 
 	def on_settings_dialog(self):
 		d = SettingsDialog(self, self)
@@ -307,7 +299,6 @@ class MainWindow(QtGui.QMainWindow):
 		if QtCore.QFileInfo(file_path).exists():
 			dic = app.utils.load_arduino_config_file(file_path)
 			for ki in dic:
-				print ki
 				act = self.menuBootLoaders.addAction( ki )
 				act.setCheckable(True)
 				self.actionGroupBootLoaders.addAction(act)
