@@ -4,6 +4,8 @@ import yaml
 from yaml import Loader, Dumper
 from PyQt4 import QtCore, QtGui
 
+import app.utils 
+
 from app.settings import settings
 
 from gui.widgets import GenericWidgets
@@ -202,7 +204,7 @@ class FunctionEditDialog(QtGui.QDialog):
 		_path.cd(self.path)
 		file_path= _path.absoluteFilePath(self.function_file)
 		#print file_path
-		string = self.main.ut.get_file_contents(file_path)
+		string = app.utils.get_file_contents(file_path)
 		#print string
 		#print "LOAD", file_name
 		data = yaml.load(str(string))
@@ -297,7 +299,7 @@ class FunctionEditDialog(QtGui.QDialog):
 			if file_path_to_save != original_file_path:
 				QtCore.QFile.remove(original_file_path)
 		
-		self.main.ut.write_file(file_path_to_save, string)
+		app.utils.write_file(file_path_to_save, string)
 		
 
 	def on_function_text_changed(self, string):

@@ -5,6 +5,8 @@ from PyQt4.Qsci import QsciScintilla
 
 from app.settings import settings
 
+import app.utils
+
 from gui.icons import Ico 
 from gui.icons import Icon 
 
@@ -64,9 +66,8 @@ class BootLoadersDialog(QtGui.QDialog):
 	def load_file(self):
 
 		file_path = settings.hardware_path().absoluteFilePath("programmers.txt")
-		#source = self.main.ut.get_file_contents(file_path)
 		self.editor.load_file(file_path)
-		boot_loaders = self.main.ut.load_arduino_config_file(file_path)
+		boot_loaders = app.utils.load_arduino_config_file(file_path)
 
 		c = 0
 		for boot_loader in boot_loaders:

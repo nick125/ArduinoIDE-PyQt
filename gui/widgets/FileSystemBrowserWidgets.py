@@ -8,6 +8,8 @@ from gui.widgets.EditorWidget import EditorWidget
 from gui.icons import Ico 
 from gui.icons import Icon 
 
+import app.utils
+
 class FileSystemBrowser(QtGui.QWidget):
 
 	def __init__(self, parent, main):
@@ -63,7 +65,7 @@ class FileSystemBrowser(QtGui.QWidget):
 			self.editor.setText("")
 			return
 
-		source = self.main.ut.get_file_contents(fileInfo.filePath())
+		source = app.utils.get_file_contents(fileInfo.filePath())
 		## Allowed Extension
 		if fileInfo.fileName() == 'Makefile':
 			self.emit(QtCore.SIGNAL("open_file"), fileInfo.filePath())
@@ -80,15 +82,14 @@ class FileSystemBrowser(QtGui.QWidget):
 			return
 
 		## load file
-		txt = self.main.ut.get_file_contents(fileInfo.filePath())
+		txt = app.utils.get_file_contents(fileInfo.filePath())
 		self.emit(QtCore.SIGNAL("open_file"), fileInfo.filePath())
 		## TODO MAkefile and show images
 		print "YES>>", fileInfo.suffix(), fileInfo.fileName(), fileInfo.filePath()
 
 		self.editor.set_source( txt, fileInfo.suffix())
 		
-
-
+		
 #####################################################
 ## Tree Browser
 #####################################################

@@ -6,6 +6,9 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.Qsci import QsciScintilla, QsciAPIs
 from PyQt4.Qsci import QsciLexerCPP, QsciLexerMakefile, QsciLexerJava, QsciLexerHTML, QsciLexerPerl, QsciLexerPython, QsciLexerYAML
 
+from app.settings import settings
+import app.utils
+
 from gui.widgets import GenericWidgets
 from gui.widgets.TerminalWidget import TerminalWidget
 from gui.icons import Ico 
@@ -153,8 +156,8 @@ class EditorWidget(QtGui.QWidget):
 
 
 	def load_keywords(self):
-		words_file = self.main.settings.keywords_path().append("/keywords_ripped.txt")
-		words_str = self.main.ut.get_file_contents(words_file)
+		words_file = settings.keywords_path().absoluteFilePath("/keywords_ripped.txt")
+		words_str = app.utils.get_file_contents(words_file)
 		word_lines = words_str.split("\n")
 		for line in word_lines:
 			#print line
@@ -205,7 +208,7 @@ class EditorWidget(QtGui.QWidget):
 		self.lblFileName.setText(file_name_string)
 		self.lblFileSize.setText("%sB" % fileInfo.size())
 		self.lblFileModified.setText("%s" % fileInfo.lastModified().toString(QtCore.Qt.SystemLocaleShortDate))
-		source = self.main.ut.get_file_contents(fileInfo.filePath())
+		source = app.utils.get_file_contents(fileInfo.filePath())
 
 		## unique Files
 		if fileInfo.fileName() == 'Makefile':
@@ -226,7 +229,7 @@ class EditorWidget(QtGui.QWidget):
 			return
 
 		## load file
-		txt = self.main.ut.get_file_contents(fileInfo.filePath())
+		txt = app.utils.get_file_contents(fileInfo.filePath())
 		self.emit(QtCore.SIGNAL("open_file"), fileInfo.filePath())
 		#self.editor.set_source(txt)
 			## QsciLexerCPP, QsciLexerMakefile, QsciLexerJava, QsciLexerHTML, QsciLexerPerl, QsciLexerPython, QsciLexerYAML

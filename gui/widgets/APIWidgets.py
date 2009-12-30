@@ -3,6 +3,10 @@
 import yaml
 from PyQt4 import QtCore, QtGui
 
+import app.utils
+
+from app.settings import settings
+
 from gui.FunctionEditDialog import FunctionEditDialog
 #from gui.FileDialogs import FolderEditDialog
 from gui.icons import Ico 
@@ -96,7 +100,7 @@ class APITreeWidget(QtGui.QWidget):
 		api_string = "\n".join(self.api_lines)
 		file_path = self.main.settings.def_path().append("/autocomplete.txt")
 		#print file_path
-		self.main.ut.write_file(file_path, api_string)
+		app.utils.write_file(file_path, api_string)
 
 	def extract_api(self, treeItem):
 		#print "extract"
@@ -106,7 +110,7 @@ class APITreeWidget(QtGui.QWidget):
 				#print item
 				if item.text(self.COLS.function).length() > 0:
 					file_path = item.data(self.COLS.icon, QtCore.Qt.UserRole).toString()
-					api = self.main.ut.load_yaml(file_path)
+					api = app.utils.load_yaml(file_path)
 					#for a in api:
 						#print a
 					#api_str = ''
@@ -172,8 +176,7 @@ class APITreeWidget(QtGui.QWidget):
                                           "foo")
 		if ok:
 			#dir_str = parent_folder.append(txt)
-			pth = self.main.settings.def_path().append(parent_folder)
-			print pth
+			pth = settings.def_path().append(parent_folder)
 			dirr = QtCore.QDir(pth)
 			success = dirr.mkdir(txt)
 			if success:
@@ -204,7 +207,7 @@ class APITreeWidget(QtGui.QWidget):
 		self.tree.model().removeRows(0, self.tree.model().rowCount())
 		return	
 		rootNode = self.tree.invisibleRootItem()
-		root_path = self.main.settings.api_define_path()
+		root_path = settings.api_define_path()
 		rootDir = QtCore.QDir(root_path)
 		self.paths = []
 		self.walk_dir(rootDir, '/', rootNode)
@@ -229,7 +232,7 @@ class APITreeWidget(QtGui.QWidget):
 			self.paths.append( str(n_folder) )
 		
 	def add_yaml_function_node(self, sub_entry, folder, parentNode):
-		api = self.main.ut.load_yaml(sub_entry.filePath())
+		api = app.utils.load_yaml(sub_entry.filePath())
 		#print api
 		## TODO Qtify
 		if 'section' in api and api['section']:

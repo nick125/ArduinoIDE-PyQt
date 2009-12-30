@@ -6,6 +6,7 @@ from PyQt4.Qsci import QsciScintilla, QsciAPIs
 from gui.widgets.EditorWidget import EditorWidget
 from gui.widgets.FileSystemBrowserWidgets import FileSystemTree
 
+import app.utils
 
 from gui.icons import Ico 
 from gui.icons import Icon 
@@ -67,7 +68,7 @@ class FileSystemBrowserPane(QtGui.QWidget):
 			self.editor.setText("")
 			return
 
-		source = self.main.ut.get_file_contents(fileInfo.filePath())
+		source = app.utils.get_file_contents(fileInfo.filePath())
 		## Allowed Extension
 		if fileInfo.fileName() == 'Makefile':
 			self.emit(QtCore.SIGNAL("open_file"), fileInfo.filePath())
@@ -84,7 +85,7 @@ class FileSystemBrowserPane(QtGui.QWidget):
 			return
 
 		## load file
-		txt = self.main.ut.get_file_contents(fileInfo.filePath())
+		txt = app.utils.get_file_contents(fileInfo.filePath())
 		self.emit(QtCore.SIGNAL("open_file"), fileInfo.filePath())
 		## TODO MAkefile and show images
 		print "YES>>", fileInfo.suffix(), fileInfo.fileName(), fileInfo.filePath()

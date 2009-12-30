@@ -4,6 +4,8 @@ import yaml
 from PyQt4 import QtCore, QtGui
 import os.path
 
+import app.utils
+
 from app.settings import settings
 
 from gui.FunctionEditDialog import FunctionEditDialog
@@ -110,7 +112,7 @@ class APIBrowserPane(QtGui.QWidget):
 			print l
 		api_string = "\n".join(self.api_lines)
 		file_path = settings.def_path().absoluteFilePath("autocomplete.txt")
-		self.main.ut.write_file(file_path, api_string)
+		app.utils.write_file(file_path, api_string)
 
 	def extract_api(self, treeItem):
 		#print "extract"
@@ -120,7 +122,7 @@ class APIBrowserPane(QtGui.QWidget):
 				#print item
 				if item.text(self.COLS.function).length() > 0:
 					file_path = item.data(self.COLS.icon, QtCore.Qt.UserRole).toString()
-					api = self.main.ut.load_yaml(file_path)
+					api = app.utils.load_yaml(file_path)
 					#for a in api:
 						#print a
 					#api_str = ''
@@ -240,8 +242,7 @@ class APIBrowserPane(QtGui.QWidget):
 			self.paths.append( str(n_folder) )
 		
 	def add_yaml_function_node(self, sub_entry, folder, parentNode):
-		api = self.main.ut.load_yaml(sub_entry.filePath())
-		#print api
+		api = app.utils.load_yaml(sub_entry.filePath())
 		## TODO Qtify
 		if 'section' in api and api['section']:
 			section =  api['section']

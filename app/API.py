@@ -5,12 +5,12 @@ from PyQt4 import QtCore, QtGui
 from gui.icons import Icon, Ico
 from settings import settings
 
+import app.utils
+
 class API(QtCore.QObject):
 
-	def __init__(self, main):
-		QtCore.QObject.__init__(self, main)
-
-		self.main = main
+	def __init__(self):
+		QtCore.QObject.__init__(self)
 
 		self.html_files = None 
 		self.yaml_files = None
@@ -44,7 +44,7 @@ class API(QtCore.QObject):
 			self.walk_dir(QtCore.QDir(folder_entry.filePath()), n_folder)
 		
 	def add_yaml_function_node(self, sub_entry, folder, parentNode):
-		api = self.main.ut.load_yaml(sub_entry.filePath())
+		api = app.utils.load_yaml(sub_entry.filePath())
 		#print api
 		## TODO Qtify
 		if 'section' in api and api['section']:

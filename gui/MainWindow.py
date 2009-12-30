@@ -6,9 +6,10 @@
 from PyQt4 import QtCore, QtGui
 
 from app.settings import settings
-import app.util
 import app.Boards
 import app.API
+
+import app.utils
 
 from gui.SettingsDialog import SettingsDialog
 from gui.WebSitesDialog import WebSitesDialog
@@ -44,8 +45,8 @@ class MainWindow(QtGui.QMainWindow):
 		self.title_text = "Arduino IDE - %s"
 
 		## Sets up the settings and other global classes
-		self.ut = app.util.Util()
-		self.api = app.API.API(self)
+		self.api = app.API.API()
+		self.ut = None
 		## Set Window Properties		
 		self.setWindowTitle(self.title_text % "")
 		self.setWindowIcon(Icon(Ico.Arduino))
@@ -308,7 +309,7 @@ class MainWindow(QtGui.QMainWindow):
 			self.actionGroupBootLoaders.removeAction(act)
 		file_path = settings.hardware_path().absoluteFilePath("programmers.txt")
 		if QtCore.QFileInfo(file_path).exists():
-			dic = self.ut.load_arduino_config_file(file_path)
+			dic = app.utils.load_arduino_config_file(file_path)
 			for ki in dic:
 				print ki
 				act = self.menuBootLoaders.addAction( ki )
