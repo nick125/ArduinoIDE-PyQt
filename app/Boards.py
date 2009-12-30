@@ -2,6 +2,7 @@
 
 from operator import itemgetter
 from PyQt4 import QtCore
+from settings import settings
 
 class Boards(QtCore.QObject):
 
@@ -19,7 +20,7 @@ class Boards(QtCore.QObject):
 	def load(self):
 		self.boards_index = {}
 		self.boards_tree = {}
-		file_path = self.main.settings.hardware_path().absoluteFilePath("boards.txt")
+		file_path = settings.hardware_path().absoluteFilePath("boards.txt")
 		if not file_path:
 			print "TODO" # TODO
 			return
@@ -60,7 +61,7 @@ class Boards(QtCore.QObject):
 		fileObj.close()
 
 	def load_current(self):
-		curr  = self.main.settings.value("current_board")
+		curr  = settings.value("current_board")
 		self.set_current(curr)
 
 	def index(self):
@@ -71,7 +72,7 @@ class Boards(QtCore.QObject):
 	def set_current(self, board):
 		if not board in self.boards_index:
 			return
-		self.main.settings.setValue("current_board", board)
+		settings.setValue("current_board", board)
 		self.current_board = {'board': board, 'name': self.boards_index[str(board)]}
 		self.emit(QtCore.SIGNAL("board_selected"), self.current_board)
 		return self.current_board

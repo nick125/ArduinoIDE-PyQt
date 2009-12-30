@@ -7,6 +7,8 @@ from gui.widgets import GenericWidgets
 from gui.icons import Ico 
 from gui.icons import Icon 
 
+from app.settings import settings
+
 """
 Displays the directories for sketches
 Currently two modes, broswse USER sketches, or Examples
@@ -61,9 +63,9 @@ class SketchListWidget(QtGui.QWidget):
 
 		self.main = main
 		if title == "Examples": ## TODO sody path to view
-			self.dir_to_browse = self.main.settings.examples_path()
+			self.dir_to_browse = settings.examples_path()
 		else:
-			self.dir_to_browse = self.main.settings.sketches_path()
+			self.dir_to_browse = settings.sketches_path()
 
 		mainLayout = QtGui.QVBoxLayout()
 		mainLayout.setContentsMargins(0, 0, 0, 0)
@@ -86,7 +88,7 @@ class SketchListWidget(QtGui.QWidget):
 			self.treePlaces.setRootIsDecorated(False)
 			self.treePlaces.setAlternatingRowColors(True)
 			self.connect(self.treePlaces, QtCore.SIGNAL("itemClicked (QTreeWidgetItem *,int)"), self.on_tree_place_clicked)
-			for panel in [["Examples", self.main.settings.examples_path()], ["Sketches", self.main.settings.sketchbooks_path()]]:
+			for panel in [["Examples", settings.examples_path()], ["Sketches", settings.sketchbooks_path()]]:
 				item = QtGui.QTreeWidgetItem()
 				self.treePlaces.addTopLevelItem(item)
 				item.setText(0, panel[0])
@@ -205,5 +207,5 @@ class SketchListWidget(QtGui.QWidget):
 				if child.suffix() == 'pde':
 					treeItem = QtGui.QTreeWidgetItem(parentNode)
 					treeItem.setText(0, child.fileName()) 
-					treeItem.setData(0, QtCore.Qt.UserRole, child.fileName())
+					treeItem.setData(0, QtCore.Qt.UserRole, child.filePath())
 					treeItem.setIcon(0, Icon(Ico.Sketch))

@@ -7,9 +7,8 @@ class Settings(QtCore.QObject):
 	date_format = "dd-MM-yyyy"
 	date_time_format = "dd-MM-yyyy HH:mm"
 
-	def __init__(self, main):
-		QtCore.QObject.__init__(self, main)
-		self.main = main
+	def __init__(self):
+		QtCore.QObject.__init__(self)
 		self.qSettings = QtCore.QSettings("arduino-pyqt", "arduino-pyqt")
 
 	#################################################
@@ -118,3 +117,5 @@ class Settings(QtCore.QObject):
 	def examples_path(self):
 		return self.arduino_path('examples')
 
+
+settings = Settings()

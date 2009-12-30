@@ -8,6 +8,8 @@ from PyQt4 import QtCore, QtGui
 from gui.icons import Ico 
 from gui.icons import Icon 
 
+from app.settings import settings
+
 ###########################################################################################
 ## Buttons
 ###########################################################################################
@@ -128,11 +130,7 @@ class HeaderLabel( QtGui.QWidget ):
 	def __init__(self, parent, main, icon=None, title="Foo", wash_to="black", color="black", background="white"):
 	#def __init__(self, configVars, parent):
 		QtGui.QWidget.__init__(self, parent)
-
-		#self.config = configVars
-		self.main = main
 		self.background = background
-		#self.img_dir = main.settin
 		
 		#########################################################
 		## Container Layout
@@ -197,7 +195,7 @@ class HeaderLabel( QtGui.QWidget ):
 		self.gradientLabel.setStyleSheet(style_grad)
 
 	def get_pixmap(self, ico, wh):
-		pixmap = QtGui.QPixmap( self.main.settings.icons_path().absoluteFilePath(ico) )
+		pixmap = QtGui.QPixmap( settings.icons_path().absoluteFilePath(ico) )
 		return pixmap.scaled(wh, wh, QtCore.Qt.IgnoreAspectRatio)
 
 	def setHeaders( self, txt, txt_small = None ):

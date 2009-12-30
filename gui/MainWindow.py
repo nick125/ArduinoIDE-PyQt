@@ -5,7 +5,7 @@
 
 from PyQt4 import QtCore, QtGui
 
-import app.settings
+from app.settings import settings
 import app.util
 import app.Boards
 import app.API
@@ -44,7 +44,6 @@ class MainWindow(QtGui.QMainWindow):
 		self.title_text = "Arduino IDE - %s"
 
 		## Sets up the settings and other global classes
-		self.settings = app.settings.Settings(self) 
 		self.ut = app.util.Util()
 		self.api = app.API.API(self)
 		## Set Window Properties		
@@ -191,10 +190,10 @@ class MainWindow(QtGui.QMainWindow):
 		#print self.api.html_index()
 		#print self.api.tree()
 		
-		if not self.settings.value("virginity"):
+		if not settings.value("virginity"):
 			self.on_settings_dialog()
 
-		self.settings.restore_window( "main_window", self )
+		settings.restore_window( "main_window", self )
 		self.on_refresh_settings()
 
 
@@ -226,8 +225,8 @@ class MainWindow(QtGui.QMainWindow):
 			self.connect(sketchesWidget, QtCore.SIGNAL("open_sketch"), self.on_open_sketch)
 
 		elif ki == 'welcome':
-			print self.settings.html_pages_path().absoluteFilePath("welcome.html")
-			welcomePage = Browser(self, self, initial_page="file://%s" % self.settings.html_pages_path().absoluteFilePath("welcome.html"))
+			print settings.html_pages_path().absoluteFilePath("welcome.html")
+			welcomePage = Browser(self, self, initial_page="file://%s" % settings.html_pages_path().absoluteFilePath("welcome.html"))
 			self.mainTabWidget.addTab(welcomePage, Icon(Ico.Arduino), "Welcome")
 
 		if idx:
@@ -307,7 +306,7 @@ class MainWindow(QtGui.QMainWindow):
 		## Laod bootloaders
 		for act in self.actionGroupBootLoaders.actions():
 			self.actionGroupBootLoaders.removeAction(act)
-		file_path = self.settings.hardware_path().absoluteFilePath("programmers.txt")
+		file_path = settings.hardware_path().absoluteFilePath("programmers.txt")
 		if QtCore.QFileInfo(file_path).exists():
 			dic = self.ut.load_arduino_config_file(file_path)
 			for ki in dic:
@@ -323,4 +322,4 @@ class MainWindow(QtGui.QMainWindow):
 		d.show()
 
 	def closeEvent(self, event ):
-		self.settings.save_window( "main_window", self )
+		settings.save_window( "main_window", self )

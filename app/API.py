@@ -3,6 +3,7 @@
 from operator import itemgetter
 from PyQt4 import QtCore, QtGui
 from gui.icons import Icon, Ico
+from settings import settings
 
 class API(QtCore.QObject):
 
@@ -22,7 +23,7 @@ class API(QtCore.QObject):
 	def load_api(self):
 		self.tree = {}
 		self.functions = []
-		root_path = self.main.settings.api_define_path()
+		root_path = settings.api_define_path()
 		rootDir = QtCore.QDir(root_path)
 		self.tree = {}
 		self.walk_dir(rootDir, '/')
@@ -159,7 +160,7 @@ class API(QtCore.QObject):
 
 
 	def tree(self):
-		api_path = self.main.settings.api_define_path()
+		api_path = settings.api_define_path()
 
 		for file_entry in sub_dir.entryInfoList(QtCore.QDir.Files | QtCore.QDir.NoDotAndDotDot):
 			if file_entry.suffix() == 'yaml':
@@ -178,7 +179,7 @@ class API(QtCore.QObject):
 	### Return a list of the html files which is a single dir listing and files ending with .html
 	def html_index(self):
 		self.html_files = {}
-		pathStr = self.main.settings.help_path()
+		pathStr = settings.help_path()
 		htmlDir = QtCore.QDir(pathStr)
 		if not htmlDir.exists():
 			#QtGui.QMessageBox.information(self, "OOps", " the reference dir %s was not found" % pathStr)
