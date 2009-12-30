@@ -108,8 +108,6 @@ class SketchListWidget(QtGui.QWidget):
 		self.toolButtonGroup.setExclusive(True)
 		self.connect(self.toolButtonGroup, QtCore.SIGNAL("buttonClicked(QAbstractButton *)"), self.on_view_selected)
 
-
-
 		listButton = QtGui.QToolButton()
 		listButton.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
 		listButton.setText("Tree")
@@ -179,39 +177,33 @@ class SketchListWidget(QtGui.QWidget):
 		if not self.dir_to_browse:
 			self.statusWidget.set_status(self.tree, "No directory")
 			return
-		fileInfo = QtCore.QFileInfo(self.dir_to_browse)
-		if not fileInfo.exists():
-			QtGui.QMessageBox.information(self, "OOps", " the dir %s was not found" % self.dir_to_browse)
+		if not self.dir_to_browse.exists('.'):
+			QtGui.QMessageBox.information(self, "Error", "The directory %s was not found" % self.dir_to_browse.absolutePath())
 			return
-		self.walk_dir(fileInfo.filePath(),  self.tree.invisibleRootItem())
+		self.walk_dir(self.dir_to_browse,  self.tree.invisibleRootItem())
 		self.tree.sortItems(0, QtCore.Qt.AscendingOrder)
 
 	def walk_dir(self, dir_path, parentNode):
-		dir_path = QtCore.QDir(dir_path)
-		info_list = dir_path.entryInfoList(QtCore.QDir.AllEntries | QtCore.QDir.NoDotAndDotDot)
-	
-		isList =  self.toolButtonGroup.checkedId() == 1
-
-		
-		for fileInfo in info_list:
-			if fileInfo.isDir():
-	
+		## Grab the children of the path
+		files = dir_path.entryInfoList(QtCore.QDir.AllEntries | QtCore.QDir.NoDotAndDotDot)
+		## The mode of the tree. 
+		isList = (self.toolButtonGroup.checkedId() == 1)
+		## Recurse through the files
+		for child in files:
+			if child.isDir():
+				# Add the child directory and scan it
 				if isList:
-					self.walk_dir(fileInfo.filePath(), parentNode)
+					self.walk_dir(QtCore.QDir(child.absoluteFilePath()), parentNode)
 				else:
 					treeItem = QtGui.QTreeWidgetItem(parentNode)
-					treeItem.setText(0, fileInfo.fileName() ) ## hack to remove .html
+					treeItem.setText(0, child.fileName())
 					treeItem.setIcon(0, Icon(Ico.Folder))
-					self.walk_dir(fileInfo.filePath(), treeItem)
-			#self.tree.addTopLevelItem(treeItem)
-			#self.tree.setItemExpanded(treeItem, True)
-			#return
+					self.walk_dir(QtCore.QDir(child.absoluteFilePath()), treeItem)
+					
 			else:
-				#print "pde" , fileInfo.filePath()
-				if fileInfo.suffix() == 'pde':
+				# Add it as a file
+				if child.suffix() == 'pde':
 					treeItem = QtGui.QTreeWidgetItem(parentNode)
-					treeItem.setText(0, fileInfo.fileName() ) ## hack to remove .html
-					treeItem.setData(0, QtCore.Qt.UserRole, fileInfo.filePath() )
+					treeItem.setText(0, child.fileName()) 
+					treeItem.setData(0, QtCore.Qt.UserRole, child.fileName())
 					treeItem.setIcon(0, Icon(Ico.Sketch))
-					#self.tree.addTopLevelItem(treeItem)
-					#self.tree.setItemExpanded(treeItem, True)

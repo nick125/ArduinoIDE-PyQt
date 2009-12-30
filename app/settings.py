@@ -103,7 +103,7 @@ class Settings(QtCore.QObject):
 		
 	## Aarduino Hardware Dir
 	def hardware_path(self):
-		path = self.arduino_path('hardware')
+		return self.arduino_path('hardware')
 
 	## Help HTML files
 	def html_pages_path(self):

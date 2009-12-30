@@ -226,7 +226,7 @@ class MainWindow(QtGui.QMainWindow):
 			self.connect(sketchesWidget, QtCore.SIGNAL("open_sketch"), self.on_open_sketch)
 
 		elif ki == 'welcome':
-			welcomePage = Browser(self, self, initial_page="file://%s" % self.settings.html_pages_path("welcome.html"))
+			welcomePage = Browser(self, self, initial_page="file://%s" % self.settings.html_pages_path().absoluteFilePath("welcome.html"))
 			self.mainTabWidget.addTab(welcomePage, Icon(Ico.Arduino), "Welcome")
 
 		if idx:
@@ -305,8 +305,8 @@ class MainWindow(QtGui.QMainWindow):
 		## Laod bootloaders
 		for act in self.actionGroupBootLoaders.actions():
 			self.actionGroupBootLoaders.removeAction(act)
-		file_path = self.settings.hardware_path("programmer.txt")
-		if file_path:
+		file_path = self.settings.hardware_path().absoluteFilePath("programmers.txt")
+		if QtCore.QFileInfo(file_path).exists():
 			dic = self.ut.load_arduino_config_file(file_path)
 			for ki in dic:
 				print ki

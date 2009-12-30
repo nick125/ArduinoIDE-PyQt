@@ -33,6 +33,7 @@ class Util:
 	def load_arduino_config_file(self, file_path):
 		#prog_file = self.main.settings.hardware_path().append("boards.txt")
 		fileOb = QtCore.QFile(file_path)
+		print file_path
 		if not fileOb.open(QtCore.QIODevice.ReadOnly | QtCore.QIODevice.Text):
 			print "oops" # TODO error
 			return False

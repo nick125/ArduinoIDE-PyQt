@@ -197,7 +197,7 @@ class HeaderLabel( QtGui.QWidget ):
 		self.gradientLabel.setStyleSheet(style_grad)
 
 	def get_pixmap(self, ico, wh):
-		pixmap = QtGui.QPixmap( self.main.settings.icons_path().append(ico) )
+		pixmap = QtGui.QPixmap( self.main.settings.icons_path().absoluteFilePath(ico) )
 		return pixmap.scaled(wh, wh, QtCore.Qt.IgnoreAspectRatio)
 
 	def setHeaders( self, txt, txt_small = None ):

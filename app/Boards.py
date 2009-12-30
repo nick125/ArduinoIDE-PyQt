@@ -19,7 +19,7 @@ class Boards(QtCore.QObject):
 	def load(self):
 		self.boards_index = {}
 		self.boards_tree = {}
-		file_path = self.main.settings.hardware_path("boards.txt")
+		file_path = self.main.settings.hardware_path().absoluteFilePath("boards.txt")
 		if not file_path:
 			print "TODO" # TODO
 			return
