@@ -80,19 +80,19 @@ class Settings(QtCore.QObject):
 	## API Info Path - directory to yaml
 	def api_define_path(self):
 		## TODO - user QT Object
-		return  self.app_path().append("/etc/api_define/")
+		return  os.path.join(self.app_path(), "/etc/api_define/")
 
 	## Icons Dir
 	def icons_path(self):
-		return  self.app_path().append("/images/icons/")
+		return  os.path.join(self.app_path(), "/images/icons/")
 
 	## Aarduino Hardware Dir
 	def hardware_path(self, append_str=None):
 		if not self.arduino_path():
 			return None
-		path = self.arduino_path().append("/hardware/")
+		path = os.path.join(self.arduino_path(), "hardware")
 		if append_str:
-			return self.check_path(path.append(append_str))
+			return self.check_path(os.path.join(path, append_str))
 		return self.check_path(path)
 
 	## Help HTML files
@@ -100,8 +100,8 @@ class Settings(QtCore.QObject):
 		if not self.app_path():
 			return None
 		if append_file:
-			return self.app_path().append("/etc/html_pages/").append(append_file)
-		return self.app_path().append("/etc/html_pages/")
+			return os.path.join(self.app_path().append(os.path.join("etc", "html_pages")), append_file)
+		return os.path.join(self.app_path(), "/etc/html_pages/")
 
 	## Arduino HTML files
 	def help_path(self):
