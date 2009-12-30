@@ -82,6 +82,7 @@ class Settings(QtCore.QObject):
 	def app_path(self, cd_to=None):
 		path = QtCore.QDir(__file__)
 		path.cdUp()
+		path.cdUp()
 		if cd_to:
 			path.cd(cd_to)
 		return path

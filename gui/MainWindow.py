@@ -226,6 +226,7 @@ class MainWindow(QtGui.QMainWindow):
 			self.connect(sketchesWidget, QtCore.SIGNAL("open_sketch"), self.on_open_sketch)
 
 		elif ki == 'welcome':
+			print self.settings.html_pages_path().absoluteFilePath("welcome.html")
 			welcomePage = Browser(self, self, initial_page="file://%s" % self.settings.html_pages_path().absoluteFilePath("welcome.html"))
 			self.mainTabWidget.addTab(welcomePage, Icon(Ico.Arduino), "Welcome")
 
@@ -266,6 +267,7 @@ class MainWindow(QtGui.QMainWindow):
 	#########################################
 	## Open Sketchboox
 	def on_open_sketch(self, file_path):
+		print file_path
 		fileInfo = QtCore.QFileInfo(file_path)
 		newEditor = EditorWidget(self, self, arduino_mode=True)
 		newEditor.load_file(fileInfo.filePath())

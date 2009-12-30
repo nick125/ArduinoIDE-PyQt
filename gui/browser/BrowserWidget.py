@@ -20,6 +20,7 @@ class Browser(QtWebKit.QWebView):
 			self.actions = BrowserActions(main, self)
 
 		if initial_page:
+			print "INITIAL PAGE: %s" % initial_page
 			self.setUrl(QtCore.QUrl(QtCore.QString(initial_page)))
 	
 		
