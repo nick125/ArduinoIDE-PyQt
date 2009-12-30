@@ -6,6 +6,8 @@ from PyQt4 import QtCore, QtGui
 from gui.icons import Ico 
 from gui.icons import Icon 
 
+from app.settings import settings
+
 """
 The general idea is that this handles the shell commands and to Card
 * uses QProcess
@@ -81,13 +83,13 @@ class TerminalWidget(QtGui.QWidget):
 		self.current_file_path = file_path
 		self.progress.show()
 
-		arduino_path = self.main.settings.arduino_path()
+		arduino_path = settings.arduino_path()
 		if not arduino_path:
 			self.set_error("Arduino root path not found", "..nothing to do ..")
 			return
 		## Set Envoironment
 		env = QtCore.QStringList()
-		env << QtCore.QString("ARDUINO_DIR=").append()
+		env << QtCore.QString("ARDUINO_DIR=").append(settings.arduino_path().absolutePath())
 		env << QtCore.QString("ARDUINO_BOARD=").append("atmega328")
 		env << QtCore.QString("ARDUINO_sPORT=").append("s/ssdev/ttyUSB0")
 		self.process.setEnvironment(env)
@@ -103,7 +105,7 @@ class TerminalWidget(QtGui.QWidget):
 		## Create command sh arduinp_make.sh 
 		#command.append("pwd  ") #.append(QtCore.QFileInfo(self.current_file_path).dir().path())
 		#args = QtCore.QStringList()
-		command.append(self.main.settings.app_path()).append("/etc/arduino_make.sh compile ")
+		command.append(settings.app_path().absoluteFilePath("etc/arduino_make.sh").append(" compile"))
 		#command.append(QtCore.QFileInfo(self.current_file_path).dir().path())
 		print "command=", command
 		self.process.start(command)
