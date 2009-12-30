@@ -65,57 +65,55 @@ class Settings(QtCore.QObject):
 		return ret
 
 	## Arduino Path
-	def arduino_path(self):
-		return self.value("path/arduino_path")
+	def arduino_path(self, cd_to=None):
+		path = QtCore.QDir(self.value("path/arduino_path"))
+		if cd_to:
+			path.cd(cd_to)
+		return path
 
 	## Arduino SVN trunk
-	def arduino_svn_path(self):
-		return self.value("path/arduino_svn_path")
+	def arduino_svn_path(self, cd_to=None):
+		path = QtCore.QDir(self.value("path/arduino_svn_path"))
+		if cd_to:
+			path.cd(cd_to)
+		return path
 
 	## App Path - directory of parent dir
-	def app_path(self):
-		## TODO - user QT Object
-		return  QtCore.QString(os.path.abspath( os.path.dirname(__file__)	+  '/../' ))
+	def app_path(self, cd_to=None):
+		path = QtCore.QDir(__file__)
+		path.cdUp()
+		if cd_to:
+			path.cd(cd_to)
+		return path
+
+	## Sketches Path - Path to the sketchbook
+	def sketches_path(self, cd_to=None):
+		path = QtCore.QDir(self.value("path/sketchbooks_path"))
+		if cd_to:
+			path.cd(cd_to)
+		return path	
 
 	## API Info Path - directory to yaml
 	def api_define_path(self):
-		## TODO - user QT Object
-		return  os.path.join(self.app_path(), "/etc/api_define/")
+		return self.app_path('etc/api_define')
 
 	## Icons Dir
 	def icons_path(self):
-		return  os.path.join(self.app_path(), "/images/icons/")
-
+		return self.app_path('image/icons')
+		
 	## Aarduino Hardware Dir
-	def hardware_path(self, append_str=None):
-		if not self.arduino_path():
-			return None
-		path = os.path.join(self.arduino_path(), "hardware")
-		if append_str:
-			return self.check_path(os.path.join(path, append_str))
-		return self.check_path(path)
+	def hardware_path(self):
+		path = self.arduino_path('hardware')
 
 	## Help HTML files
-	def html_pages_path(self, append_file=None):
-		if not self.app_path():
-			return None
-		if append_file:
-			return os.path.join(self.app_path().append(os.path.join("etc", "html_pages")), append_file)
-		return os.path.join(self.app_path(), "/etc/html_pages/")
+	def html_pages_path(self):
+		return self.app_path('etc/html_pages')
 
 	## Arduino HTML files
 	def help_path(self):
-		if not self.arduino_path():
-			return None
-		return self.arduino_path().append("/reference/")
+		return self.arduino_path('reference')
 
 	## Exmaples Dir
 	def examples_path(self):
-		if not self.arduino_path():
-			return None
-		return self.arduino_path().append("/examples/")
-
-	## Sketches Directory
-	def sketches_path(self):
-		return self.value("path/sketchbooks_path")
+		return self.arduino_path('examples')
 
