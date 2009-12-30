@@ -2,3 +2,5 @@
 *.pyo
 *~
 *.e4p
+.eric4project
+.ropeproject

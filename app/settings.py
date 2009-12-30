@@ -80,8 +80,7 @@ class Settings(QtCore.QObject):
 	## App Path - directory of parent dir
 	def app_path(self, cd_to=None):
 		path = QtCore.QDir(__file__)
-		path.cdUp()
-		path.cdUp()
+		path.cd('../../')
 		if cd_to:
 			path.cd(cd_to)
 		return path
@@ -99,7 +98,7 @@ class Settings(QtCore.QObject):
 
 	## Icons Dir
 	def icons_path(self):
-		return self.app_path('image/icons')
+		return self.app_path('images/icons')
 		
 	## Aarduino Hardware Dir
 	def hardware_path(self):
@@ -116,6 +115,5 @@ class Settings(QtCore.QObject):
 	## Exmaples Dir
 	def examples_path(self):
 		return self.arduino_path('examples')
-
 
 settings = Settings()

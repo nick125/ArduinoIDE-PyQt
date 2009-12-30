@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 import os
 from PyQt4 import QtGui
+from app.settings import settings
 
 class Icon(QtGui.QIcon):
-
+	"""
+		An Icon helper
+	"""
 	def __init__(self, file_name):
-		## TODO - this is assumed that the icons are placed. Its python dependant
-		img_dir = os.path.dirname(__file__) + '../../images/icons/'
-		full_path = img_dir + file_name
-		QtGui.QIcon.__init__(self, full_path)
-
-
+		QtGui.QIcon.__init__(self, settings.icons_path().absoluteFilePath(file_name))
 
 # TODO: Banish this!
 class Icons:
