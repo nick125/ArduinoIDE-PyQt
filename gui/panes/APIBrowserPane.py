@@ -218,7 +218,7 @@ class APIBrowserPane(QtGui.QWidget):
 		root_path = settings.api_define_path()
 		rootDir = QtCore.QDir(root_path)
 		self.paths = []
-		self.walk_dir(rootDir, '/', rootNode)
+		self.walk_dir(rootDir, '', rootNode)
 
 	def walk_dir(self, sub_dir, folder, parentItem):
 	
@@ -227,7 +227,7 @@ class APIBrowserPane(QtGui.QWidget):
 				self.add_yaml_function_node(file_entry, folder, parentItem)
 	
 		for folder_entry in sub_dir.entryInfoList(QtCore.QDir.Dirs | QtCore.QDir.NoDotAndDotDot):
-			n_folder = folder_entry.fileName() 
+			n_folder = folder+ folder_entry.fileName() 
 			dirItem = QtGui.QTreeWidgetItem(parentItem)
 			dirItem.setText(self.COLS.icon, folder_entry.fileName())
 			dirItem.setText(self.COLS.folder, n_folder)
