@@ -171,10 +171,6 @@ class MainWindow(QtGui.QMainWindow):
 		self.lblBoard = QtGui.QLabel("-- none --")
 		self.statusBar().addPermanentWidget(self.lblBoard)
 
-		self.statusBar().addPermanentWidget(QtGui.QLabel("Bootloader:"))
-		self.lblBootloader = QtGui.QLabel("-- none --")
-		self.statusBar().addPermanentWidget(self.lblBootloader)
-
 		##########################################################
 		## Globally Shared Widgets
 		##########################################################
@@ -253,7 +249,7 @@ class MainWindow(QtGui.QMainWindow):
 		d.show()
 
 	def on_action_bootloader_burn(self, act):
-		self.lblBootloader.setText(act.text())
+		pass
 
 
 	#########################################

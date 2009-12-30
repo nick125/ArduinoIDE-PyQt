@@ -306,7 +306,6 @@ class FunctionEditDialog(QtGui.QDialog):
 		self.set_syntax_string()
 
 	def set_syntax_string(self):
-		#print "ere"
 		rootItem = self.tree.invisibleRootItem()
 		s = self.txtFunction.text()
 		if rootItem.childCount() == 0:

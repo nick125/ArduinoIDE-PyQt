@@ -61,7 +61,7 @@ class BoardsDialog(QtGui.QDialog):
 		self.load_file()
 
 	def load_file(self):
-		self.editor.load_file(settings.hardware_path("boards.txt"))
+		self.editor.load_file(settings.hardware_path().absoluteFilePath("boards.txt"))
 		
 		## Loop the boards
 		boards = self.main.boards.all()
