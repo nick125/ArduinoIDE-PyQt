@@ -11,6 +11,7 @@ import app.utils
 
 from gui.widgets import GenericWidgets
 from gui.widgets.TerminalWidget import TerminalWidget
+from gui.widgets.ArduinoCompilerBar import ArduinoCompilerBar
 from gui.icons import Ico 
 from gui.icons import Icon 
 
@@ -23,6 +24,18 @@ extension_map = [
 	(['java'], QsciLexerJava),
 	(['yaml'], QsciLexerYAML),
 ]
+
+"""
+### the current layout
+
+=== File ===
+Editor   | arduinocompiler
+ternimal | ?
+
+
+
+"""
+
 
 class EditorWidget(QtGui.QWidget):
 
@@ -38,103 +51,93 @@ class EditorWidget(QtGui.QWidget):
 		self.setLayout(mainLayout)
 
 		##############################################################
-		### File Info Bar
+		### File Info Bar at the top
 		##############################################################
-		hbox = QtGui.QHBoxLayout()
-		mainLayout.addLayout(hbox)
+		fileInfoBox = QtGui.QHBoxLayout()
+		mainLayout.addLayout(fileInfoBox, 0)
 
 		self.lblFileName = QtGui.QLabel(self)
 		self.lblFileName.setText("Filename")
 		style_grad = "background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #efefef, stop: 1 %s);" % "#6A7885"
 		style_grad += "font-weight: bold; border: 1px outset #41484E; padding: 3px;"
 		self.lblFileName.setStyleSheet(style_grad)
-		hbox.addWidget(self.lblFileName, 4)
+		fileInfoBox.addWidget(self.lblFileName, 4)
 
+		#########################################
+		## Project File Actions
+		butt = QtGui.QPushButton(self)
+		butt.setText("Copy")
+		fileInfoBox.addWidget(butt)
+
+		butt = QtGui.QPushButton(self)
+		butt.setText("Rename")
+		fileInfoBox.addWidget(butt)
+
+		## TODO detect gitor svn or hg etc
+		butt = QtGui.QPushButton(self)
+		butt.setText("Commit")
+		fileInfoBox.addWidget(butt)
+
+		#########################################
+		## File Size and Modified info
 		self.lblFileSize = GenericWidgets.StatusLabel(self, "Size")
-		hbox.addWidget(self.lblFileSize, 1)
+		fileInfoBox.addWidget(self.lblFileSize, 1)
 
 		self.lblFileModified = GenericWidgets.StatusLabel(self, "Modified")
-		hbox.addWidget(self.lblFileModified, 2)
+		fileInfoBox.addWidget(self.lblFileModified, 2)
 
-		##############################################################
-		### Arduino Compiler
-		##############################################################
-		if arduino_mode:
-			toolbar = QtGui.QToolBar()
-			toolbar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
-			mainLayout.addWidget(toolbar)
-
-			## Board Selection
-			toolbar.addWidget(QtGui.QLabel("Board"))
-			self.comboBoard = QtGui.QComboBox(self)
-			toolbar.addWidget(self.comboBoard)
-			## TODO load from app.Boards.index()
-			self.comboBoard.addItem("TODO")
-			self.comboBoard.setCurrentIndex(0)
-
-			## Port Selection
-			toolbar.addWidget(QtGui.QLabel("Port"))
-			self.comboPort = QtGui.QComboBox(self)
-			toolbar.addWidget(self.comboPort)
-			## TODO load from app.Ports.index()
-			self.comboPort.addItem("TODO")
-			self.comboPort.setCurrentIndex(0)
-
-			## spacer for right
-			toolbar.addWidget(GenericWidgets.ToolBarSpacer(self))
-
-			### Action Buttons
-			buttz = []
-			buttz.append(['Compile', Ico.Compile])
-			buttz.append(['Upload', Ico.Upload])
-			buttz.append(['Compile Upload', Ico.CompileUpload])
-			self.buttCompileGroup = QtGui.QButtonGroup()
-			self.connect(self.buttCompileGroup, QtCore.SIGNAL("buttonClicked (QAbstractButton *)"), self.on_compile_group_button)
-			## TODO connect
-			for caption, ico in buttz:
-				butt = QtGui.QPushButton()
-				butt.setText(caption)
-				butt.setIcon(Icon(ico))
-				toolbar.addWidget(butt)
-				self.buttCompileGroup.addButton(butt)
-			toolbar.addSeparator()
+		#########################################
+		## Middle splitter, editor on left, Compiler on right
+		#########################################
+		self.editorCompilerSplitter = QtGui.QSplitter(self)
+		mainLayout.addWidget(self.editorCompilerSplitter, 20)
+		self.editorCompilerSplitter.setOrientation(QtCore.Qt.Horizontal)
 		
-	
+
+			
 		####################################################
 		## Source Editor
 		####################################################
+
+		self.editorTerminalSplitter = QtGui.QSplitter(self)
+		self.editorTerminalSplitter.setOrientation(QtCore.Qt.Vertical)
+		self.editorCompilerSplitter.addWidget(self.editorTerminalSplitter)
+
 		self.editor = QsciScintilla(self)
 		self.editor.setUtf8(True)
 		self.editor.setFolding(QsciScintilla.BoxedTreeFoldStyle)
 		self.editor.setMarginLineNumbers(1, True)
 		self.editor.setAutoIndent(True)
-		mainLayout.addWidget(self.editor, 3)
+		self.editorTerminalSplitter.addWidget(self.editor)
 
 
 
-		## The Syntax Higlighter = standard CPP atmo = cish
-		#self.lexer = ArduinoLexer(self)
-		#self.editor.setLexer(self.lexer)
-	
-		## Aarduino API Functions
-		#self.arduinoFunctionsAPI = QsciAPIs(self.lexer)
-		#keywords_file = self.main.settings.api_path().append("/autocomplete.txt")
+		##############################################################
+		### Arduino Compiler With compile and board selector
+		##############################################################
+		if arduino_mode:
+			self.arduinoBar = ArduinoCompilerBar(self, self.main)
+			self.editorCompilerSplitter.addWidget(self.arduinoBar)
+			pass
 
-		#self.arduinoFunctionsAPI.load(keywords_file)
-		#self.arduinoFunctionsAPI.prepare()
-		#self.lexer.setAPIs(self.arduinoFunctionsAPI)
-
-		#self.editor.setAutoCompletionThreshold(1);
-		#self.editor.setAutoCompletionSource(QsciScintilla.AcsAPIs);
-	
+		
+		self.terminalWidget = None
 		if arduino_mode:
 			self.terminalWidget = TerminalWidget(self, self.main)
-			mainLayout.addWidget(self.terminalWidget, 1)
+			self.editorTerminalSplitter.addWidget(self.terminalWidget)
 
+
+		self.editorCompilerSplitter.setStretchFactor(0, 2)
+ 		self.editorCompilerSplitter.setStretchFactor(1, 0)
+
+		self.editorTerminalSplitter.setStretchFactor(0, 5)
+		self.editorTerminalSplitter.setStretchFactor(1, 1)
 
 	##########################################
 	## Extensions
 	##########################################
+	## TODO - make this a list of allowed extension, we also need png and image viewer, xml etc in browser ?
+	## nick what u think ?
 	def supported(self):
 		"""returns a list of supportes extensions"""
 		extensions = [	'pde', 'c','h','cpp','cxx', 
@@ -148,20 +151,6 @@ class EditorWidget(QtGui.QWidget):
 		"""returns a list of ignored extensions""" ## TODO - image viewer
 		extensions = [	'pyc', 'png','gif','jpeg' ]
 		return extensions
-
-	##########################################
-	## Compile Upload Buttons
-	##########################################	
-	def on_compile_group_button(self, butt):
-		print "COMP", butt.text()
-		if butt.text() == "Compile":
-			self.write_file()
-			self.compile_file()
-		else:
-			self.main.status.showMessage("Not recognised", 4000)
-
-	def compile_file(self):
-		self.terminalWidget.compile(self.current_file_path)
 
 
 

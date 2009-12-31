@@ -18,6 +18,29 @@ class Icons:
 
 	Arduino = 'arduino.png'
 
+	## General
+	Add = 'add.png'
+	Delete = 'delete.png'
+	Remove = 'delete.png'
+	Cancel = 'bullet_black.png'
+	Save = 'accept.png'
+	Refresh = 'refresh.gif'
+
+	Up = 'arrow_up.png'
+	Down = 'arrow_down.png'
+
+	Green = 'bullet_green.png'
+	Blue = 'bullet_blue.png'
+	Black = 'bullet_black.png'
+	Yellow = 'bullet_yellow.png'
+	Pink = 'bullet_ping.png'
+
+	Large = 'bullet_green.png'
+	Medium = 'bullet_orange.png'
+	Small = 'bullet_purple.png'
+
+
+
 	BootLoaderBurn = 'transmit_go.png'
 	BootLoaders = 'transmit_blue.png'
 	BootLoader = 'transmit.png'
@@ -44,23 +67,7 @@ class Icons:
 	FolderEdit = 'folder_edit.png'
 	FolderDelete = 'folder_delete.png'
 
-	## General
-	Add = 'add.png'
-	Delete = 'delete.png'
-	Remove = 'delete.png'
-	Cancel = 'bullet_black.png'
-	Save = 'accept.png'
-	Refresh = 'refresh.gif'
-
-	Up = 'arrow_up.png'
-	Down = 'arrow_down.png'
-
-	Green = 'bullet_green.png'
-	Blue = 'bullet_blue.png'
-	Black = 'bullet_black.png'
-	Yellow = 'bullet_yellow.png'
-	Pink = 'bullet_ping.png'
-
+	
 	# Api and help
 	Functions = 'ruby.png'
 	Function = 'ruby.png'
