@@ -7,27 +7,62 @@ from settings import settings
 
 import app.utils
 
+"""
+The API() class load all the help+ api
+* the html help is a stringlt listing from ARDUINO_DIR/reference
+* the functions are defines in api_define/as yaml_files
+* keywords is TODO
+
+all() returns all items TODO
+"""
+
 class API(QtCore.QObject):
 
 	def __init__(self):
 		QtCore.QObject.__init__(self)
 
-		self.html_files = None 
+
 		self.yaml_files = None
-
 		self.tree = None
+
 		self.functions = None
+		self.keywords = None
 
-		self.load_api()
+		self.html_ref = None 	
 
-	def load_api(self):
+		self.load_functions()
+		#self.load_keywords()
+		self.load_html_ref()
+		
+
+	def list(self):
+		## TODO there's a better way ? BUT, there might be a way to sort here or something..
+		list_of_stuff = []
+		for entry, ico, pth in self.functions_list():
+			list_of_stuff.append([entry, ico, pth])
+
+		for entry, ico, pth in self.html_ref_list():
+			list_of_stuff.append([entry, ico, pth])
+
+		return list_of_stuff
+
+	def functions_list(self):
+		return self.functions
+
+	## TODO
+	def keywords_list(self):		
+		return self.keywords
+
+	def html_ref_list(self):		
+		return self.html_ref
+
+	def load_functions(self):
 		self.tree = {}
 		self.functions = []
 		root_path = settings.api_define_path()
 		rootDir = QtCore.QDir(root_path)
 		self.tree = {}
 		self.walk_dir(rootDir, '/')
-		#print self.functions
 
 	def walk_dir(self, sub_dir, folder):
 	
@@ -35,11 +70,10 @@ class API(QtCore.QObject):
 			self.tree['folder'] = {}
 		for file_entry in sub_dir.entryInfoList(QtCore.QDir.Files | QtCore.QDir.NoDotAndDotDot):
 			if file_entry.suffix() == 'yaml':
-				self.functions.append([str(file_entry.completeBaseName()), str(file_entry.filePath())])
+				self.functions.append([str(file_entry.filePath()), str(file_entry.completeBaseName()), Ico.Function])
 	
 		for folder_entry in sub_dir.entryInfoList(QtCore.QDir.Dirs | QtCore.QDir.NoDotAndDotDot):
 			n_folder = folder + folder_entry.fileName() + "/"
-
 
 			self.walk_dir(QtCore.QDir(folder_entry.filePath()), n_folder)
 		
@@ -149,16 +183,6 @@ class API(QtCore.QObject):
 
 
 
-
-
-
-
-
-
-
-
-
-
 	def tree(self):
 		api_path = settings.api_define_path()
 
@@ -177,9 +201,9 @@ class API(QtCore.QObject):
 			self.tree.setItemExpanded(dirItem, True)
 		
 	### Return a list of the html files which is a single dir listing and files ending with .html
-	def html_index(self):
-		self.html_files = {}
-		pathStr = settings.help_path()
+	def load_html_ref(self):
+		self.html_ref = []
+		pathStr = settings.html_ref_path()
 		htmlDir = QtCore.QDir(pathStr)
 		if not htmlDir.exists():
 			#QtGui.QMessageBox.information(self, "OOps", " the reference dir %s was not found" % pathStr)
@@ -188,6 +212,10 @@ class API(QtCore.QObject):
 		## TODO sort
 		for file_entry in htmlDir.entryInfoList(QtCore.QDir.Files | QtCore.QDir.NoDotAndDotDot):
 			if file_entry.suffix() == 'html':
-				self.html_files[str(file_entry.filePath())] = str(file_entry.baseName())
+				self.html_ref.append([	str(file_entry.filePath()),
+										str(file_entry.completeBaseName()), 
+										Ico.Html
+										
+									])
 
-		return self.html_files
+		return self.html_ref

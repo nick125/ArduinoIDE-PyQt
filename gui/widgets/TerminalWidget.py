@@ -81,7 +81,7 @@ class TerminalWidget(QtGui.QWidget):
 		self.current_file_path = file_path
 		self.progress.show()
 
-		arduino_path = self.main.settings.arduino_path()
+		arduino_path = settings.arduino_path()
 		if not arduino_path:
 			self.set_error("Arduino root path not found", "..nothing to do ..")
 			return

@@ -63,19 +63,6 @@ class Settings(QtCore.QObject):
 		ret.append(['API', self.api_def_path()])
 		return ret
 
-	## Arduino Path
-	def arduino_path(self, cd_to=None):
-		path = QtCore.QDir(self.value("path/arduino_path"))
-		if cd_to:
-			path.cd(cd_to)
-		return path
-
-	## Arduino SVN trunk
-	def arduino_svn_path(self, cd_to=None):
-		path = QtCore.QDir(self.value("path/arduino_svn_path"))
-		if cd_to:
-			path.cd(cd_to)
-		return path
 
 	## App Path - directory of parent dir
 	def app_path(self, cd_to=None):
@@ -84,6 +71,26 @@ class Settings(QtCore.QObject):
 		if cd_to:
 			path.cd(cd_to)
 		return path
+
+
+	## Arduino Path = ARDUINO_DIR in arduino_make.sh
+	def arduino_path(self, cd_to=None):
+		path = QtCore.QDir(self.value("path/arduino_path"))
+		if cd_to:
+			path.cd(cd_to)
+		return path
+
+	## Arduino HTML files
+	def html_ref_path(self):
+		return self.arduino_path('reference')
+
+	## Arduino SVN trunk
+	def arduino_svn_path(self, cd_to=None):
+		path = QtCore.QDir(self.value("path/arduino_svn_path"))
+		if cd_to:
+			path.cd(cd_to)
+		return path
+
 
 	## Sketches Path - Path to the sketchbook
 	def sketches_path(self, cd_to=None):
@@ -108,9 +115,7 @@ class Settings(QtCore.QObject):
 	def html_pages_path(self):
 		return self.app_path('etc/html_pages')
 
-	## Arduino HTML files
-	def help_path(self):
-		return self.arduino_path('reference')
+
 
 	## Exmaples Dir
 	def examples_path(self):

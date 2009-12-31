@@ -67,7 +67,7 @@ class MainWindow(QtGui.QMainWindow):
 		menuSettings = menuFile.addAction(Icon(Ico.Settings), "Settings", self.on_settings_dialog)
 		menuFile.addSeparator()
 		# TODO: Connect this to something
-		menuQuit = menuFile.addAction(Icon(Ico.Quit), "Quit")
+		menuExit = menuFile.addAction(Icon(Ico.Exit), "Exit", self.on_exit)
 		#self.topToolBar.addAction(menuSettings)
 
 
@@ -90,16 +90,14 @@ class MainWindow(QtGui.QMainWindow):
 			self.topToolBar.addAction(act)
 			self.groupViewActions.addAction(act)
 		self.topToolBar.addSeparator()
+		menuView.addAction("View Help in dock - TODO")
+		menuView.addAction("View something else in dock")
 
 		##############################################################
 		## Sketch Menu
 		##############################################################
 
-		menuSketch  = self.menuBar().addMenu( "Sketches" )
-
-
-		
-		
+		menuProjects  = self.menuBar().addMenu( "Projects" )
 		
 
 		##############################################################
@@ -135,8 +133,9 @@ class MainWindow(QtGui.QMainWindow):
 
 		##############################################################
 		## Help Menu
-		##############################################################
 		menuHelp 	= self.menuBar().addMenu( "Help" )
+		menuHelp.addAction( "About This Project", self.on_about)
+		menuHelp.addAction( "About Qt", self.on_about_qt)
 
 
 		####################################
@@ -144,10 +143,6 @@ class MainWindow(QtGui.QMainWindow):
 		####################################
 		helpDockWidget = HelpDock("Help", self, self)
 		self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, helpDockWidget)
-
-		apiDockWidget = APIBrowserDock("API", self, self)
-		self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, apiDockWidget)
-		#self.tabifyDockWidget(helpDockWidget, apiDockWidget)
 		
 		##########################################################
 		## Central Widget
@@ -161,6 +156,7 @@ class MainWindow(QtGui.QMainWindow):
 		self.connect(self.mainTabWidget, QtCore.SIGNAL("currentChanged (int)"), self.on_tab_change)
 
 		## Load sketches and Welcome
+		self.on_open_sketch(settings.app_path().absoluteFilePath("etc/example_project/example.pde"))
 		self.on_action_view(QtCore.QString("welcome"))
 		self.on_action_view(QtCore.QString("sketches"))
 		self.mainTabWidget.setCurrentIndex(0)	
@@ -309,5 +305,19 @@ class MainWindow(QtGui.QMainWindow):
 		d = WebSitesDialog(self, self)
 		d.show()
 
+	##########################################################
+	## About and Quit
+	##########################################################
+	def on_about(self):
+		QtGui.QMessageBox.about(self, "TODO", "LINK to google project page")
+
+	def on_about_qt(self):
+		QtGui.QMessageBox.aboutQt(self)
+
 	def closeEvent(self, event ):
 		settings.save_window( "main_window", self )
+
+	def on_exit(self):
+		#TODO
+		## Crash me
+		print "Bye"

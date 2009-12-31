@@ -27,23 +27,43 @@ class HelpTree(QtGui.QWidget):
 
 
 		##################################################################
-		##  Filter Bar
+		##  Filter Text bar
 		##################################################################
-		hBox = QtGui.QHBoxLayout()
-		layout.addLayout(hBox)
+		filterBarLayout = QtGui.QHBoxLayout()
+		layout.addLayout(filterBarLayout)
 
 		buttClearFilter = QtGui.QPushButton(self)
 		buttClearFilter.setIcon( Icon(Ico.Black) )
 		buttClearFilter.setFlat(True)
 		buttClearFilter.setText("All")
 		self.connect( buttClearFilter, QtCore.SIGNAL("clicked()"), self.on_filter_clear)
-		hBox.addWidget( buttClearFilter, 1 )
+		filterBarLayout.addWidget( buttClearFilter, 1 )
 
 		self.txtFilter = QtGui.QLineEdit("")
 		self.connect(self.txtFilter, QtCore.SIGNAL('textChanged(const QString &)'), self.on_filter_changed)
-		hBox.addWidget( self.txtFilter, 222 )
+		filterBarLayout.addWidget( self.txtFilter, 222 )
 
-		
+		##################################################################
+		##  Filter Buttons
+		##################################################################
+		filterButtonsLayout = QtGui.QHBoxLayout()
+		layout.addLayout(filterButtonsLayout)
+		buttz = []
+		buttz.append(['html', Ico.Html, "Html"])
+		buttz.append(['functions', Ico.Functions, 'Functions'])
+		buttz.append(['keywords',Ico.Help, 'Keywords'])
+		filterButtonsGroup = QtGui.QButtonGroup(self)
+		self.connect(filterButtonsGroup, QtCore.SIGNAL(""), self.on_filter_button_clicked)
+		for ki, ico, caption in buttz:
+			newButton = QtGui.QPushButton()
+			newButton.setText(caption)
+			newButton.setIcon(Icon(ico))
+			newButton.setCheckable(True)
+			newButton.setChecked(True)
+			## TODO restore state
+			filterButtonsLayout.addWidget(newButton)
+
+
 		##################################################################
 		### Models
 		##################################################################
@@ -65,7 +85,7 @@ class HelpTree(QtGui.QWidget):
 
 
 		self.statusWidget = GenericWidgets.StatusWidget(self)
-		self.load()
+		self.load_list()
 
 	####################################################
 	## Filter related
@@ -82,20 +102,23 @@ class HelpTree(QtGui.QWidget):
 	####################################################
 	## Load Files
 	####################################################
-	def load(self):
-		html_files = self.main.api.html_index()
-		for file_path in html_files:
+	def load_list(self):
+		xlist = self.main.api.list()
+		for file_path, entry, ico in xlist:
 			row_idx = self.model.rowCount()
-
-			item = QtGui.QStandardItem( html_files[file_path] )
+			item = QtGui.QStandardItem( entry )
+			item.setIcon(Icon(ico))
 			item.setEditable(False)
 			self.model.setItem(row_idx, 0, item)
 		self.tree.sortByColumn(0, QtCore.Qt.AscendingOrder)	
 
 	def on_tree_double_clicked(self, modelIndex):
+		## TOD open HTML or API
 		item = self.model.itemFromIndex( self.proxyModel.mapToSource( modelIndex ) )
 		page = item.data(QtCore.Qt.UserRole).toString()
-		print page
 		dialog = HelpBrowserDialog(self, self.main)
 		dialog.load_help_page( page )
 		dialog.show()
+
+	def on_filter_button_clicked(self, butt):
+		print butt

@@ -1,6 +1,6 @@
-Python Arduino IDE
+Dawn
 ------------------
-This project is to develop the next-generation of Arduino IDE. 
+This project is to develop the next-generation of Arduino and others IDE. 
 
 Dependencies
 ------------
@@ -22,6 +22,8 @@ http://code.google.com/p/arduino-pyqt/
 
 Source code is at
 http://github.com/nick125/ArduinoIDE-PyQt
+
+ArduinoIDE#irc.freenode.net
 
 
 == The Vision ==

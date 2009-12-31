@@ -64,6 +64,22 @@ class EditorWidget(QtGui.QWidget):
 			toolbar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
 			mainLayout.addWidget(toolbar)
 
+			## Board Selection
+			toolbar.addWidget(QtGui.QLabel("Board"))
+			self.comboBoard = QtGui.QComboBox(self)
+			toolbar.addWidget(self.comboBoard)
+			## TODO load from app.Boards.index()
+			self.comboBoard.addItem("TODO")
+			self.comboBoard.setCurrentIndex(0)
+
+			## Port Selection
+			toolbar.addWidget(QtGui.QLabel("Port"))
+			self.comboPort = QtGui.QComboBox(self)
+			toolbar.addWidget(self.comboPort)
+			## TODO load from app.Ports.index()
+			self.comboPort.addItem("TODO")
+			self.comboPort.setCurrentIndex(0)
+
 			## spacer for right
 			toolbar.addWidget(GenericWidgets.ToolBarSpacer(self))
 
