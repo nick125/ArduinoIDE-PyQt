@@ -24,21 +24,20 @@ class TerminalWidget(QtGui.QWidget):
 		QtGui.QWidget.__init__(self, parent)
 
 		self.main = main
-		
+		self.terminal_string = None
+
+
 		mainLayout = QtGui.QVBoxLayout()
 		mainLayout.setContentsMargins(0, 0, 0, 0)
 		mainLayout.setSpacing(0)
 		self.setLayout(mainLayout)
 
-
-
-		
-		### MAIN Terminal Widget
-		self.textWidget = QtGui.QPlainTextEdit()
-		mainLayout.addWidget(self.textWidget)
-		#self.textWidget.setDocumentTitle("Foo")
-		self.textWidget.setPlainText("> terminal is idling\n>_")
-		self.textWidget.setStyleSheet("color: white; background-color: black;")
+		### MAIN Terminal Text
+		self.terminalTextWidget = QtGui.QTextEdit()
+		mainLayout.addWidget(self.terminalTextWidget)
+		#self.terminalTextWidget.setDocumentTitle("Foo")
+		self.terminalTextWidget.setPlainText("> terminal is idling\n>_")
+		self.terminalTextWidget.setStyleSheet("color: white; background-color: black;")
 
 		## Bottom Box
 		bottomBox = QtGui.QHBoxLayout()
@@ -55,15 +54,6 @@ class TerminalWidget(QtGui.QWidget):
 
 		self.statusMessage = QtGui.QLabel("Status Label")
 		bottomBox.addWidget(self.statusMessage, 100)
-
-		## This is the box with the buttons u set the size u wanna view
-
-		#bottomBox = QtGui.QHBoxLayout()
-		#bottomBox.setContentsMargins(0,0,0,0)
-		#bottomBox.setSpacing(0)
-		#mainLayout.addLayout(bottomBox)
-		#bottomBox.addStretch(100) # stuff the widgets to the right
-
 	
 		
 		self.viewSizeButtonGroup = QtGui.QButtonGroup(self)
@@ -95,7 +85,7 @@ class TerminalWidget(QtGui.QWidget):
 
 	
 	def on_view_size_clicked(self, butt):
-		print "on_view_size_clicked", butt
+		#print "on_view_size_clicked", butt
 		for bu in self.viewSizeButtonGroup.buttons():
 			bu.setChecked(False)
 			bu.setIcon(Icon(Ico.Yellow if bu.isChecked() else Ico.Black))
@@ -108,17 +98,61 @@ class TerminalWidget(QtGui.QWidget):
 
 		self.setFixedHeight(siz)
 
+	def on_compile_log(self, log_type, log_txt):
+		#print "compile_LOG", log_type , log_txt
+		self.statusIcon.setIcon(Icon(Ico.CompileError))
+		self.statusMessage.setText(log_type)
+
+		if log_type == "start_compile":
+			## start compile "resets the string"
+			self.terminal_string = "<font color=magenta>>>Compile: %s</font><br>" % log_txt
+
+		elif log_type == 'env':
+			self.terminal_string += "<font color=yellow>%s</font><br>" % log_txt
+			
+		elif log_type == 'command':
+			self.terminal_string += "<font color=blue>%s</font><br>" % log_txt
+
+		elif log_type == 'error':
+				self.terminal_string += "<font color=red>%s</font><br>" % log_txt
+
+		elif log_type == 'result':
+				self.terminal_string += "<font color=green>%s</font><br>" % log_txt
+
+		else:
+			self.terminal_string += "<font color=white>%s</font><br>" % log_txt
+
+		self.terminalTextWidget.setText(self.terminal_string)
+
+	def on_compile_error(self, txt):
+		return
+		print " >>>>>>>>>>>compile_error", txt
+		self.statusIcon.setIcon(Icon(Ico.CompileError))
+		self.statusMessage.setText("Error")
+		self.terminalTextWidget.setPlainText(txt) 
+
+
+	def on_compile_result(self, txt):
+		return
+		print "on_compile_result", txt
+		self.statusIcon.setIcon(Icon(Ico.CompileOk))
+		self.statusMessage.setText("Cool")
+		self.terminalTextWidget.setPlainText(txt) 
+
+
+
 	def set_text(self, txt, is_error):
 		if is_error:
 			self.headerLabel.setText("Error")
 		else:
 			self.headerLabel.setText("result")
-		self.textWidget.setPlainText(txt)
+		self.terminalTextWidget.setPlainText(txt)
+		self.terminalTextWidget.setPlainText(txt)
 
 	def set_error(self, title, shell):
 		self.actionIcon.setIcon(Icon(Ico.CompileError))
 		self.statusLabel.setText(title)
-		self.textWidget.setPlainText(QtCore.QString(shell))
+		self.terminalTextWidget.setPlainText(QtCore.QString(shell))
 
 	def compile(self, file_path):
 
@@ -161,12 +195,12 @@ class TerminalWidget(QtGui.QWidget):
 				print "is error"
 				self.actionIcon.setIcon(Icon(Ico.CompileError))
 				self.statusLabel.setText("Error")
-				self.textWidget.setPlainText(QtCore.QString(error))
+				self.terminalTextWidget.setPlainText(QtCore.QString(error))
 			else:
 				print "is ok"
 				self.statusLabel.setText("OK")
 				self.actionIcon.setIcon(Icon(Ico.CompileOk))
-				self.textWidget.setPlainText(QtCore.QString(result))
+				self.terminalTextWidget.setPlainText(QtCore.QString(result))
 
 
 
@@ -189,6 +223,6 @@ class TerminalWidget(QtGui.QWidget):
 			#print type(error), error
 			if error:
 			
-				self.textWidget.setPlainText(QtCore.QString(error))
+				self.terminalTextWidget.setPlainText(QtCore.QString(error))
 			else:
-				self.textWidget.setPlainText(QtCore.QString(result))
+				self.terminalTextWidget.setPlainText(QtCore.QString(result))

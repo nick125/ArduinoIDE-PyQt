@@ -36,7 +36,7 @@ class ArduinoCompilerBar(QtGui.QWidget):
 		## Autosave
 		groupBox = QtGui.QGroupBox("Autosave")
 		mainLayout.addWidget(groupBox)
-		groupLayout = QtGui.QVBoxLayout(self)
+		groupLayout = QtGui.QVBoxLayout()
 		groupBox.setLayout(groupLayout)
 		self.checkBoxAutoSave = QtGui.QCheckBox(self)
 		groupLayout.addWidget(self.checkBoxAutoSave)
@@ -44,7 +44,7 @@ class ArduinoCompilerBar(QtGui.QWidget):
 		## Board Selection
 		groupBox = QtGui.QGroupBox("Board")
 		mainLayout.addWidget(groupBox)
-		groupLayout = QtGui.QVBoxLayout(self)
+		groupLayout = QtGui.QVBoxLayout()
 		groupBox.setLayout(groupLayout)
 		self.comboBoard = QtGui.QComboBox(self)
 		groupLayout.addWidget(self.comboBoard)
@@ -55,7 +55,7 @@ class ArduinoCompilerBar(QtGui.QWidget):
 		## Port Selection
 		groupBox = QtGui.QGroupBox("Port")
 		mainLayout.addWidget(groupBox)
-		groupLayout = QtGui.QVBoxLayout(self)
+		groupLayout = QtGui.QVBoxLayout()
 		groupBox.setLayout(groupLayout)
 		self.comboPort = QtGui.QComboBox(self)
 		groupLayout.addWidget(self.comboPort)
@@ -86,7 +86,7 @@ class ArduinoCompilerBar(QtGui.QWidget):
 	## Compile Upload Buttons
 	##########################################	
 	def on_compile_group_button(self, butt):
-		print "COMP", butt.text(), butt.property("compile_action").toString()
+		#print "COMP", butt.text(), butt.property("compile_action").toString()
 		if butt.text() == "Compile":
 			#self.write_file()
 			#self.compile_file()

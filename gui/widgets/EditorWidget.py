@@ -8,6 +8,7 @@ from PyQt4.Qsci import QsciLexerCPP, QsciLexerMakefile, QsciLexerJava, QsciLexer
 
 from app.settings import settings
 import app.utils
+import app.Compiler
 
 from gui.widgets import GenericWidgets
 from gui.widgets.TerminalWidget import TerminalWidget
@@ -44,6 +45,8 @@ class EditorWidget(QtGui.QWidget):
 
 		self.main = main
 		self.current_file_path = None
+		self.board= "board_name"
+		self.port = "Sanderman"
 
 		mainLayout = QtGui.QVBoxLayout()
 		mainLayout.setContentsMargins(0, 0, 0, 0)
@@ -117,6 +120,7 @@ class EditorWidget(QtGui.QWidget):
 		##############################################################
 		if arduino_mode:
 			self.arduinoBar = ArduinoCompilerBar(self, self.main)
+			self.connect(self.arduinoBar, QtCore.SIGNAL("compile_action"), self.on_compile_action)
 			self.editorCompilerSplitter.addWidget(self.arduinoBar)
 			pass
 
@@ -132,6 +136,20 @@ class EditorWidget(QtGui.QWidget):
 
 		self.editorTerminalSplitter.setStretchFactor(0, 5)
 		self.editorTerminalSplitter.setStretchFactor(1, 1)
+
+	def on_compile_action(self, compile_action):
+		print "on_compile_action", compile_action
+		compiler = app.Compiler.Compiler(self)
+		#print compiler
+		
+		#self.connect(compiler, QtCore.SIGNAL("compile_error"), self.terminalWidget.on_compile_error)
+		#self.connect(compiler, QtCore.SIGNAL("compile_result"), self.terminalWidget.on_compile_result)
+		self.connect(compiler, QtCore.SIGNAL("compile_log"), self.terminalWidget.on_compile_log)
+		compiler.ard_make(board = self.board, port=self.port, file_to_compile=self.current_file_path)
+
+	def on_compiler_event(self):
+		print "on_compiler_event"
+		
 
 	##########################################
 	## Extensions
