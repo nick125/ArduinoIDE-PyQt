@@ -49,8 +49,8 @@ class Icons:
 	Boards = 'bricks.png'
 
 	## sketch Related
-	Sketches = 'book_open.png'
-	Sketch = 'page.png'
+	Projects = 'book_open.png'
+	Project = 'page.png'
 
 
 	## Compile related

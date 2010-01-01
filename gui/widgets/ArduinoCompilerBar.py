@@ -13,21 +13,20 @@ class ArduinoCompilerBar(QtGui.QWidget):
 		mainLayout = QtGui.QVBoxLayout()
 		self.setLayout(mainLayout)
 
-	
-
 		### Action Buttons
 		commandButtonBarLayout = QtGui.QHBoxLayout()
 		mainLayout.addLayout(commandButtonBarLayout)
 
 		buttz = []
-		buttz.append(['Compile', Ico.Compile])
-		buttz.append(['Upload', Ico.Upload])
-		buttz.append(['Compile Upload', Ico.CompileUpload])
+		buttz.append(['compile', 'Compile', Ico.Compile])
+		buttz.append(['upload', 'Upload', Ico.Upload])
+		buttz.append(['compile_upload', 'Compile Upload', Ico.CompileUpload])
 		self.buttCompileGroup = QtGui.QButtonGroup()
 		self.connect(self.buttCompileGroup, QtCore.SIGNAL("buttonClicked (QAbstractButton *)"), self.on_compile_group_button)
 		## TODO connect
-		for caption, ico in buttz:
+		for action_ki, caption, ico in buttz:
 			butt = QtGui.QPushButton()
+			butt.setProperty('compile_action', action_ki)
 			butt.setText(caption)
 			butt.setIcon(Icon(ico))
 			commandButtonBarLayout.addWidget(butt)
@@ -87,15 +86,18 @@ class ArduinoCompilerBar(QtGui.QWidget):
 	## Compile Upload Buttons
 	##########################################	
 	def on_compile_group_button(self, butt):
-		print "COMP", butt.text()
+		print "COMP", butt.text(), butt.property("compile_action").toString()
 		if butt.text() == "Compile":
-			self.write_file()
-			self.compile_file()
-		else:
-			self.main.status.showMessage("Not recognised", 4000)
+			#self.write_file()
+			#self.compile_file()
+			print "Compile"
+		#else:
+			#self.main.status.showMessage("Not recognised", 4000)
+		compile_action_string = butt.property("compile_action").toString()
+		self.emit(QtCore.SIGNAL("compile_action"), compile_action_string)
 
-	def compile_file(self):
-		self.terminalWidget.compile(self.current_file_path)
+	#def compile_file(self):
+		#self.terminalWidget.compile(self.current_file_path)
 
 	
 

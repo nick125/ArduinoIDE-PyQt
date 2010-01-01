@@ -25,45 +25,62 @@ class TerminalWidget(QtGui.QWidget):
 
 		self.main = main
 		
-		layout = QtGui.QVBoxLayout()
-		layout.setContentsMargins(0, 0, 0, 0)
-		layout.setSpacing(0)
-		self.setLayout(layout)
+		mainLayout = QtGui.QVBoxLayout()
+		mainLayout.setContentsMargins(0, 0, 0, 0)
+		mainLayout.setSpacing(0)
+		self.setLayout(mainLayout)
 
-		hbox = QtGui.QHBoxLayout()
-		hbox.setContentsMargins(0, 0, 0, 0)
-		hbox.setSpacing(0)
-		layout.addLayout(hbox)
 
-		## This is the box with the buttons u set the size u wanna view
-		sizeButtonsBox = QtGui.QHBoxLayout()
-		layout.addLayout(sizeButtonsBox)
-		sizeButtonsBox.addStretch(100) # stuff the widgets to the right
+
 		
-		self.viewSizeButtonGroup = QtGui.QButtonGroup(self)
-		#self.connect(self.viewSizeButtonGroup, QtCore.SIGNAL("button"), self.on_view_size_clicked)
-		for ico, caption in [[Ico.Small, 'Small'],[Ico.Medium, 'Medium'],[Ico.Large, 'Larger']]:
-			butt = QtGui.QPushButton()
-			sizeButtonsBox.addWidget(butt)
-			butt.setText(caption)
-			butt.setIcon(Icon(ico))
-			butt.setCheckable(True)
-			butt.setChecked(caption == 'Small') # TODO setting
-
-
+		### MAIN Terminal Widget
 		self.textWidget = QtGui.QPlainTextEdit()
-		layout.addWidget(self.textWidget)
-		self.textWidget.setDocumentTitle("Foo")
+		mainLayout.addWidget(self.textWidget)
+		#self.textWidget.setDocumentTitle("Foo")
+		self.textWidget.setPlainText("> terminal is idling\n>_")
 		self.textWidget.setStyleSheet("color: white; background-color: black;")
 
+		## Bottom Box
+		bottomBox = QtGui.QHBoxLayout()
+		bottomBox.setContentsMargins(0, 0, 0, 0)
+		bottomBox.setSpacing(0)
+		mainLayout.addLayout(bottomBox)
 
-		hbox = QtGui.QHBoxLayout()
-		layout.addLayout(hbox)
 
-		self.actionIcon = QtGui.QPushButton()
-		self.actionIcon.setFlat(True)
-		self.actionIcon.setIcon(Icon(Ico.Black))
-		hbox.addWidget(self.actionIcon, 1)
+		##TOD this ned to be just an icon.. push putton is a workaround.. although may be usefile  said pedro
+		self.statusIcon = QtGui.QPushButton()
+		self.statusIcon.setFlat(True)
+		self.statusIcon.setIcon(Icon(Ico.Black))
+		bottomBox.addWidget(self.statusIcon, 0)
+
+		self.statusMessage = QtGui.QLabel("Status Label")
+		bottomBox.addWidget(self.statusMessage, 100)
+
+		## This is the box with the buttons u set the size u wanna view
+
+		#bottomBox = QtGui.QHBoxLayout()
+		#bottomBox.setContentsMargins(0,0,0,0)
+		#bottomBox.setSpacing(0)
+		#mainLayout.addLayout(bottomBox)
+		#bottomBox.addStretch(100) # stuff the widgets to the right
+
+	
+		
+		self.viewSizeButtonGroup = QtGui.QButtonGroup(self)
+		self.connect(self.viewSizeButtonGroup, QtCore.SIGNAL("buttonClicked(QAbstractButton *)"), self.on_view_size_clicked)
+		for ico, caption in [[Ico.Small, 'Small'],[Ico.Medium, 'Medium'],[Ico.Large, 'Larger']]:
+			butt = QtGui.QPushButton()
+			bottomBox.addWidget(butt)
+			self.viewSizeButtonGroup.addButton(butt)
+			butt.setText(caption)
+			butt.setCheckable(True)
+			if caption == 'Small': # TODO - save last state
+				butt.setChecked(True) # TODO setting
+				ico = Ico.Yellow
+			else:
+				ico = Ico.Black
+			butt.setIcon(Icon(ico))
+
 
 		#elf.statusBar.showMessage("ssssssssssssssss-")
 		#self.statusLabel = QtGui.QLabel("Terminal Output")
@@ -77,6 +94,19 @@ class TerminalWidget(QtGui.QWidget):
 		#hbox.addWidget(self.progress)
 
 	
+	def on_view_size_clicked(self, butt):
+		print "on_view_size_clicked", butt
+		for bu in self.viewSizeButtonGroup.buttons():
+			bu.setChecked(False)
+			bu.setIcon(Icon(Ico.Yellow if bu.isChecked() else Ico.Black))
+		if butt.text() == 'Small':
+			siz = 100
+		elif butt.text() == 'Medium':
+			siz = 250
+		else:
+			siz = 500
+
+		self.setFixedHeight(siz)
 
 	def set_text(self, txt, is_error):
 		if is_error:

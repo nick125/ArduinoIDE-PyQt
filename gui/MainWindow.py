@@ -25,7 +25,7 @@ from gui.browser.BrowserWidget import Browser
 from gui.BoardsDialog import BoardsDialog
 from gui.BootLoadersDialog import BootLoadersDialog
 
-from gui.widgets.SketchListWidgets import SketchesBrowser
+from gui.widgets.ProjectsListWidgets import ProjectsBrowser
 from gui.widgets.EditorWidget import EditorWidget
 
 from gui.icons import Ico 
@@ -42,13 +42,14 @@ class MainWindow(QtGui.QMainWindow):
 		QtGui.QApplication.setStyle(QtGui.QStyleFactory.create('Cleanlooks'))
 
 		## Set the title text format
-		self.title_text = "Arduino IDE - %s"
+		self.title_text = "Dawn"
 
 		## Sets up the settings and other global classes
 		self.api = app.API.API()
 		self.ut = None
+
 		## Set Window Properties		
-		self.setWindowTitle(self.title_text % "")
+		self.setWindowTitle(self.title_text)
 		self.setWindowIcon(Icon(Ico.Arduino))
 		self.setMinimumWidth(800)
 		self.setMinimumHeight(600)
@@ -79,7 +80,7 @@ class MainWindow(QtGui.QMainWindow):
 		self.connect(self.groupViewActions, QtCore.SIGNAL("triggered (QAction *)"), self.on_action_view)
 
 		views = []
-		views.append(['sketches', Ico.Sketches, "Sketches"])
+		views.append(['projects', Ico.Projects, "Projects"])
 		views.append(['api_browser', Ico.Function, "API Browser"])
 		views.append(['help', Ico.Help, "Help"])
 		views.append(['file_system_browser', Ico.FileSystemBrowser, "Files Browser"])
@@ -94,11 +95,10 @@ class MainWindow(QtGui.QMainWindow):
 		menuView.addAction("View something else in dock")
 
 		##############################################################
-		## Sketch Menu
+		## Projects Menu
 		##############################################################
-
 		menuProjects  = self.menuBar().addMenu( "Projects" )
-		
+		## TODO populate this menu
 
 		##############################################################
 		## Hardware Menu
@@ -155,10 +155,10 @@ class MainWindow(QtGui.QMainWindow):
 		self.connect(self.mainTabWidget, QtCore.SIGNAL("tabCloseRequested (int)"), self.on_close_tab_requested)
 		self.connect(self.mainTabWidget, QtCore.SIGNAL("currentChanged (int)"), self.on_tab_change)
 
-		## Load sketches and Welcome
-		self.on_open_sketch(settings.app_path().absoluteFilePath("etc/example_project/example.pde"))
+		## Load Projects and Welcome
+		self.on_open_project(settings.app_path().absoluteFilePath("etc/example_project/example.pde"))
 		self.on_action_view(QtCore.QString("welcome"))
-		self.on_action_view(QtCore.QString("sketches"))
+		self.on_action_view(QtCore.QString("projects"))
 		self.mainTabWidget.setCurrentIndex(0)	
 		##########################################################
 		## Status Bar
@@ -208,10 +208,10 @@ class MainWindow(QtGui.QMainWindow):
 			fileSystemBrowser = FileSystemBrowserPane(self, self)
 			idx = self.mainTabWidget.addTab(fileSystemBrowser, Icon(Ico.FileSystemBrowser), "Files Browser")
 
-		elif ki == 'sketches':
-			sketchesWidget = SketchesBrowser( self, self )
-			idx = self.mainTabWidget.addTab(sketchesWidget, Icon(Ico.Sketches), "Sketches")
-			self.connect(sketchesWidget, QtCore.SIGNAL("open_sketch"), self.on_open_sketch)
+		elif ki == 'projects':
+			projectsWidget = ProjectsBrowser( self, self )
+			idx = self.mainTabWidget.addTab(projectsWidget, Icon(Ico.Projects), "Projects")
+			self.connect(projectsWidget, QtCore.SIGNAL("open_project"), self.on_open_project)
 
 		elif ki == 'welcome':
 			welcomePage = Browser(self, self, initial_page="file://%s" % settings.html_pages_path().absoluteFilePath("welcome.html"))
@@ -252,12 +252,12 @@ class MainWindow(QtGui.QMainWindow):
 		self.setWindowTitle(self.title_text % self.mainTabWidget.tabText(index))
 
 	#########################################
-	## Open Sketchbox
-	def on_open_sketch(self, file_path):
+	## Open Project
+	def on_open_project(self, file_path):
 		fileInfo = QtCore.QFileInfo(file_path)
 		newEditor = EditorWidget(self, self, arduino_mode=True)
 		newEditor.load_file(fileInfo.filePath())
-		newTab = self.mainTabWidget.addTab(newEditor, Icon(Ico.Sketch), fileInfo.fileName())
+		newTab = self.mainTabWidget.addTab(newEditor, Icon(Ico.Project), fileInfo.fileName())
 		self.mainTabWidget.setCurrentIndex(newTab)
 
 

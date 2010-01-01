@@ -141,7 +141,7 @@ class EditorWidget(QtGui.QWidget):
 	def supported(self):
 		"""returns a list of supportes extensions"""
 		extensions = [	'pde', 'c','h','cpp','cxx', 
-						'java', 'py',  'pl', 'sh', 
+						'java', 'py', 'pyw',  'pl', 'sh', 
 						'html', 'yaml', 
 						'txt'
 					]
@@ -160,7 +160,7 @@ class EditorWidget(QtGui.QWidget):
 		print "upload"
 
 
-	def load_keywords(self):
+	def DEADload_keywords(self):
 		words_file = settings.keywords_path().absoluteFilePath("/keywords_ripped.txt")
 		words_str = app.utils.get_file_contents(words_file)
 		word_lines = words_str.split("\n")
