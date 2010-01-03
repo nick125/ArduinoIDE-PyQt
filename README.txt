@@ -8,8 +8,9 @@ Dependencies
 * Qt/PyQt 4
 * QScintilla
 
-For debian we'd need the following packaged apt-get
-gcc avr python pyqt pyqt-text 
+Install
+------------
+see INSTALL.txt 
 
 
 Getting Started
@@ -23,7 +24,7 @@ http://code.google.com/p/arduino-pyqt/
 Source code is at
 http://github.com/nick125/ArduinoIDE-PyQt
 
-ArduinoIDE#irc.freenode.net
+chat at: ArduinoIDE#irc.freenode.net
 
 
 == The Vision ==
@@ -32,6 +33,11 @@ To create a integrated IDE for arduino
 * Integrated help browser and api documentation 
 * Ability to monitor a serial in a seperate window
 * speak and code more than one arduino session at a time
+* code wizzards
+* API editor
+* Eventually a shared cloud of snippets and libs integrated
+* Source control embedded
+* Run it on ipod, winme etc
 
 == See Also ==
 * Debian-arduino - http://www.arduino.cc/playground/Linux/Debian#alioth_project

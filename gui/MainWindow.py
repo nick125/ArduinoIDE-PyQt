@@ -131,6 +131,19 @@ class MainWindow(QtGui.QMainWindow):
 		self.menuWebSites.addSeparator()
 		self.actionEditWebsites = self.menuWebSites.addAction( "Edit Sites", self.on_websites_dialog )
 
+		####################################
+		### Style Menu
+		meniw = self.menuBar().addMenu("Style")
+		self.connect( meniw, QtCore.SIGNAL('triggered(QAction *)'), self.on_style_selected)
+		actGroup = QtGui.QActionGroup(self)
+		for i in  QtGui.QStyleFactory.keys():
+			act = meniw.addAction( i )
+			act.setCheckable(True)
+			if QtGui.QApplication.style().objectName() == QtCore.QString(i).toLower():
+				act.setChecked(True)
+			actGroup.addAction( act )
+
+
 		##############################################################
 		## Help Menu
 		menuHelp 	= self.menuBar().addMenu( "Help" )
@@ -307,6 +320,9 @@ class MainWindow(QtGui.QMainWindow):
 	def on_websites_dialog(self):
 		d = WebSitesDialog(self, self)
 		d.show()
+
+ 	def on_style_selected(self, action):
+		QtGui.QApplication.setStyle(QtGui.QStyleFactory.create(action.text()))
 
 	##########################################################
 	## About and Quit
