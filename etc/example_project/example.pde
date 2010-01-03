@@ -1,15 +1,25 @@
-/* Welcome to the snake pit..
+/***********************************
+** Example Pjoject
+************************************
+This is a demonstration of the editor for development.
 
-This file is loaded by default to test and demonstrate the Editor
+Code below won't work, but designed to check syntax highlighting etc 
+
+Has every possible thing  thrown at it ;-)
 
 */
-// comment
+
+// another comment
+/* yet another
+                                                                                    ent */
 
 //#include "MsTimer2.h";
 #include <Messenger.h>;
 #include <Metro.h>;
-//const char NL = '#';
+#include "foo/bar.h" 
 
+//const char NL = '#';
+constant char FOO = BAR
 const int pinRed = 10;
 const int pinYellow = 11;
 const int pinGreen = 12;

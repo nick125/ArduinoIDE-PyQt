@@ -46,7 +46,7 @@ class MainWindow(QtGui.QMainWindow):
 
 		## Sets up the settings and other global classes
 		self.api = app.API.API()
-		self.ut = None
+		#self.ut = app.utils.
 
 		## Set Window Properties		
 		self.setWindowTitle(self.title_text)
@@ -174,13 +174,13 @@ class MainWindow(QtGui.QMainWindow):
 		##########################################################
 
 		## Borads
+        ########## TODO This maybe not required anymore as boards are project based
 		self.boards = app.Boards.Boards(self)
 		self.connect(self.boards, QtCore.SIGNAL("board_selected"), self.on_board_selected)
 		self.boards.load_current() ## THIS actually sets current as event above is not fired in constructor
 
 
 		## API
-		
 		if not settings.value("virginity"):
 			self.on_settings_dialog()
 
@@ -255,12 +255,13 @@ class MainWindow(QtGui.QMainWindow):
 
 	#########################################
 	## Open Project
+	########################################
 	def on_open_project(self, file_path):
 		fileInfo = QtCore.QFileInfo(file_path)
 		newEditor = ArduinoEditorWidget(self, self)
-		newEditor.load_file(fileInfo.filePath())
 		newTab = self.mainTabWidget.addTab(newEditor, Icon(Ico.Project), fileInfo.fileName())
 		self.mainTabWidget.setCurrentIndex(newTab)
+		newEditor.load_project(fileInfo.filePath()) ## load file after adding as child, parented = events ?
 
 
 	def on_dev_load_keywords(self):

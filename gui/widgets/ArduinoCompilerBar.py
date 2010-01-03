@@ -188,7 +188,6 @@ class ArduinoCompilerBar(QtGui.QWidget):
 		## TODO - save setting to project.yaml
 		self.set_compile_buttons_status()
 		self.emit(QtCore.SIGNAL('board_selected'), self.selected_board)
-		self.save_project_settings()
 			
 	##########################################
 	## EerialPort Related
@@ -210,11 +209,6 @@ class ArduinoCompilerBar(QtGui.QWidget):
 		items = self.treeInfo.findItems("serial_port", QtCore.Qt.MatchExactly, 2)
 		items[0].setText(1, self.selected_serial_port['serial_port'])
 		self.set_compile_buttons_status()
-		self.emit(QtCore.SIGNAL('serial_port_selected'), self.selected_board)
-		self.save_project_settings()
-
-
-	def save_project_settings(self):
-		project_dir = self.file_path
+		self.emit(QtCore.SIGNAL('serial_port_selected'), self.selected_serial_port)
 
 

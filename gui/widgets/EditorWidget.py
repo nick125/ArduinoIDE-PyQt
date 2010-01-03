@@ -143,14 +143,6 @@ class EditorWidget(QtGui.QWidget):
 	def on_file_action(self, butt):
 		print "on_file_action", butt # TODO
 
-	def DEADon_compile_action(self, compile_action):
-		#print "on_compile_action", compile_action
-		compiler = app.Compiler.Compiler(self)
-		self.connect(compiler, QtCore.SIGNAL("compile_log"), self.terminalWidget.on_compile_log)
-		compiler.ard_make(board = self.board, port=self.port, file_to_compile=self.current_file_path)
-
-	def DEADon_compiler_event(self):
-		print "on_compiler_event"
 		
 
 	##########################################
@@ -171,13 +163,6 @@ class EditorWidget(QtGui.QWidget):
 		"""returns a list of ignored extensions""" ## TODO - image viewer
 		extensions = [	'pyc', 'png','gif','jpeg' ]
 		return extensions
-
-
-
-
-
-	def on_upload(self):
-		print "upload"
 
 
 	def DEADload_keywords(self):
@@ -216,7 +201,6 @@ class EditorWidget(QtGui.QWidget):
 		self.editor.setLexer(self.lexer)
 
 	def load_file(self, file_path, tabIndex=None):
-		print "file_path", file_path
 		fileInfo = QtCore.QFileInfo(file_path)
 
 		if fileInfo.isDir():
