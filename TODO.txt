@@ -5,7 +5,6 @@
   |_| \___/|____/ \___/ 
                         
 
-* Think ok a cool name for the project, call it something like a cat.. eg dabbles 
 
 Browser Widget
 ---------------
@@ -15,9 +14,32 @@ Browser Widget
   - Should we use the Websites listing? 
   - Add JS API to grab quick links
 
+## I want to have a whole bookmarks system for link relevant
+there are the standard places, and then specific bookmarks
+per session..
+Also a simple editor to "maintain" bookmarks..
+
+The inbuilt browser need to be "clean" and specific to the task at hand.
+
 Autosave
 --------
 We need to add an autosave function. Maybe use a QTimer to periodically save?
 * Add Autosave
 * Add crash handler
 * Add recovery wizard
+
+Icons and Style
+---------------------------
+We Need a graphic designer to create the style, inspiration is #color, however in Qt its QtGui.QColor(125,12,3)
+Its a bit of a mix and match application in the following. The issue is the "stle sheet"
+* the inernal browser uses native html, and style sheet
+* Qt widgets also use a setStyleSheet() but it has problems, eg setting a border on a wodget, will also set borders all all the kids
+* tree's need to be set as an object. eg QtGui.QColor(125,12,3) ie not sing with "css"
+* You can style a treeWidget, instead u need a delegate ?? umm
+
+
+Events and Handlers
+-----------------------------------------------------
+* .Central event handler maybe - OSx style
+
+
