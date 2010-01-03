@@ -39,10 +39,10 @@ class API(QtCore.QObject):
 		## TODO there's a better way ? BUT, there might be a way to sort here or something..
 		list_of_stuff = []
 		for entry, ico, pth in self.functions_list():
-			list_of_stuff.append([entry, ico, pth])
+			list_of_stuff.append(['function', entry, ico, pth])
 
 		for entry, ico, pth in self.html_ref_list():
-			list_of_stuff.append([entry, ico, pth])
+			list_of_stuff.append(['html', entry, ico, pth])
 
 		return list_of_stuff
 

@@ -31,6 +31,9 @@ from gui.widgets.ArduinoEditorWidget import ArduinoEditorWidget
 from gui.icons import Ico 
 from gui.icons import Icon 
 
+
+
+
 class MainWindow(QtGui.QMainWindow):
 	"""
 		Implements the main window
@@ -151,6 +154,10 @@ class MainWindow(QtGui.QMainWindow):
 		menuHelp.addAction( "About Qt", self.on_about_qt)
 
 
+		### ????
+		self.topToolBar.addAction("Syntax Edit", self.on_test_syntax_edit)
+
+
 		####################################
 		## Dock Widgets
 		####################################
@@ -169,7 +176,8 @@ class MainWindow(QtGui.QMainWindow):
 		self.connect(self.mainTabWidget, QtCore.SIGNAL("currentChanged (int)"), self.on_tab_change)
 
 		## Load Projects and Welcome
-		self.on_open_project(settings.app_path().absoluteFilePath("etc/example_project/example.pde"))
+		#self.on_open_project(settings.app_path().absoluteFilePath("etc/example_project/example.pde"))
+		self.on_action_view(QtCore.QString("api_browser"))
 		self.on_action_view(QtCore.QString("welcome"))
 		self.on_action_view(QtCore.QString("projects"))
 		self.mainTabWidget.setCurrentIndex(0)	
@@ -340,3 +348,11 @@ class MainWindow(QtGui.QMainWindow):
 		#TODO
 		## Crash me
 		print "Bye"
+
+	def on_test_syntax_edit(self):
+		#from gui.FunctionEditDialog import SyntaxEditDialog
+		#d = SyntaxEditDialog(self, "foo")
+		#d.exec_()
+		import gui.wizards.FunctionDocWizard
+		d = gui.wizards.FunctionDocWizard.FunctionDocWizard(self)
+		d.exec_()

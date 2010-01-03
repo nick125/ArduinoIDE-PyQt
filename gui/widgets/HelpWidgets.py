@@ -59,7 +59,7 @@ class HelpTree(QtGui.QWidget):
 			newButton.setText(caption)
 			newButton.setIcon(Icon(ico))
 			newButton.setCheckable(True)
-			newButton.setChecked(True)
+			newButton.setChecked(True if ki == 'functions' else False) # TODO remember last view
 			## TODO restore state
 			filterButtonsLayout.addWidget(newButton)
 
@@ -104,12 +104,16 @@ class HelpTree(QtGui.QWidget):
 	####################################################
 	def load_list(self):
 		xlist = self.main.api.list()
-		for file_path, entry, ico in xlist:
-			row_idx = self.model.rowCount()
-			item = QtGui.QStandardItem( entry )
-			item.setIcon(Icon(ico))
-			item.setEditable(False)
-			self.model.setItem(row_idx, 0, item)
+		for entry_type, file_path, entry, ico in xlist:
+			print entry_type, entry
+			if entry_type == 'function':
+				row_idx = self.model.rowCount()
+				item = QtGui.QStandardItem( entry )
+				item.setIcon(Icon(ico))
+				item.setEditable(False)
+				self.model.setItem(row_idx, 0, item)
+				itemki = item = QtGui.QStandardItem( entry_type )
+				self.model.setItem(row_idx, 1, itemki)
 		self.tree.sortByColumn(0, QtCore.Qt.AscendingOrder)	
 
 	def on_tree_double_clicked(self, modelIndex):
