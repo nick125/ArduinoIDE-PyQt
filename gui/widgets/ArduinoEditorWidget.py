@@ -1,21 +1,31 @@
 # -*- coding: utf-8 -*-
 
+"""
+The Arudino Editor contains  an 
+* Editor
+* Terminal Viewer
+* Compiler Bar
+"""
+
 import os
 from PyQt4 import QtCore, QtGui
 
-from PyQt4.Qsci import QsciScintilla, QsciAPIs
-from PyQt4.Qsci import QsciLexerCPP, QsciLexerMakefile, QsciLexerJava, QsciLexerHTML, QsciLexerPerl, QsciLexerPython, QsciLexerYAML
+#from PyQt4.Qsci import QsciScintilla, QsciAPIs
+#from PyQt4.Qsci import QsciLexerCPP, QsciLexerMakefile, QsciLexerJava, QsciLexerHTML, QsciLexerPerl, QsciLexerPython, QsciLexerYAML
 
-from app.settings import settings
-import app.utils
-import app.Compiler
+#from app.settings import settings
+#import app.utils
+#import app.Compiler
 
 from gui.widgets import GenericWidgets
+from gui.widgets.EditorWidget import EditorWidget
 from gui.widgets.TerminalWidget import TerminalWidget
 from gui.widgets.ArduinoCompilerBar import ArduinoCompilerBar
+
 from gui.icons import Ico 
 from gui.icons import Icon 
 
+"""
 extension_map = [
 	(['makefile'], QsciLexerMakefile),
 	(['pde', 'c', 'cpp', 'h'], QsciLexerCPP),
@@ -25,22 +35,22 @@ extension_map = [
 	(['java'], QsciLexerJava),
 	(['yaml'], QsciLexerYAML),
 ]
-
+"""
 """
 ### the current layout
 
 === File ===
 Editor   | arduinocompiler
-ternimal | ?
+ternimal | ""
 
 
 
 """
 
 
-class EditorWidget(QtGui.QWidget):
+class ArduinoEditorWidget(QtGui.QWidget):
 
-	def __init__(self, parent, main, arduino_mode=False):
+	def __init__(self, parent, main):
 		QtGui.QWidget.__init__(self)
 
 		self.main = main
@@ -48,108 +58,54 @@ class EditorWidget(QtGui.QWidget):
 		self.board= "board_name"
 		self.port = "Sanderman"
 
-		mainLayout = QtGui.QVBoxLayout()
+		mainLayout = QtGui.QHBoxLayout()
 		mainLayout.setContentsMargins(0, 0, 0, 0)
 		mainLayout.setSpacing(0)
 		self.setLayout(mainLayout)
 
-		##############################################################
-		### File Info Bar at the top
-		##############################################################
-		fileInfoBox = QtGui.QHBoxLayout()
-		mainLayout.addLayout(fileInfoBox, 0)
-
-		self.lblFileName = QtGui.QLabel(self)
-		self.lblFileName.setText("Filename")
-		style_grad = "background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #efefef, stop: 1 %s);" % "#6A7885"
-		style_grad += "font-weight: bold; border: 1px outset #41484E; padding: 3px;"
-		self.lblFileName.setStyleSheet(style_grad)
-		fileInfoBox.addWidget(self.lblFileName, 4)
+		#########################################
+		## Editor/Terminal on left, Compiler Bar on right
+		self.editorCompilerSplitter = QtGui.QSplitter(self)
+		mainLayout.addWidget(self.editorCompilerSplitter, 20)
+		self.editorCompilerSplitter.setOrientation(QtCore.Qt.Horizontal)
+		
+		####################################################
+		## Editor at top, Terminal at bottom Splitter
+		self.editorTerminalSplitter = QtGui.QSplitter(self)
+		self.editorTerminalSplitter.setOrientation(QtCore.Qt.Vertical)
+		self.editorCompilerSplitter.addWidget(self.editorTerminalSplitter)
 
 		#########################################
-		## Save Button
-		self.buttonSave = QtGui.QPushButton(self)
-		self.buttonSave.setText("Save") 
-		self.buttonSave.setIcon(Icon(Ico.Save))
-		fileInfoBox.addWidget(self.buttonSave)
-		self.connect(self.buttonSave, QtCore.SIGNAL("clicked()"), self.on_save_button_clicked)
-
-		###########################################
-		## Actions button with dropdown menu
-		buttActions = QtGui.QPushButton(self)
-		buttActions.setText("Actions")
-		buttActions.setIcon(Icon(Ico.Green))
-		fileInfoBox.addWidget(buttActions)
-		
-		fileActionsMenu = QtGui.QMenu(buttActions)
-		buttActions.setMenu(fileActionsMenu)
-		self.fileActionsGroup = QtGui.QActionGroup(self)
-		self.connect(self.fileActionsGroup, QtCore.SIGNAL("triggered(QAction*)"), self.on_file_action)
-		for act in [['rename', 'Rename'], ['copy','Copy'],['commit','Commit']]:
-			nuAction = fileActionsMenu.addAction(act[1])
-			nuAction.setProperty('action_name', act[0])
-			# TODO - maybe this should be in button group	
-		
-
-			
-		####################################################
-		## Scintilla Editor
-		####################################################
-		self.editor = QsciScintilla(self)
-		self.editor.setUtf8(True)
-		self.editor.setFolding(QsciScintilla.BoxedTreeFoldStyle)
-		self.editor.setMarginLineNumbers(1, True)
-		self.editor.setAutoIndent(True)
-		mainLayout.addWidget(self.editor, 200)
-
-		bottomStatusBar = QtGui.QStatusBar(self)
-		mainLayout.addWidget(bottomStatusBar, 0)
+		## Editor Widget
+		self.editor = EditorWidget(self, self.main)
+		self.editorTerminalSplitter.addWidget(self.editor)
 
 		#########################################
-		## File Size and Modified info
-		self.lblFileSize = GenericWidgets.StatusLabel(self, "Size")
-		bottomStatusBar.addPermanentWidget(self.lblFileSize)
-
-		self.lblFileModified = GenericWidgets.StatusLabel(self, "Modified")
-		bottomStatusBar.addPermanentWidget(self.lblFileModified)
-
-
-		##############################################################
-		### Arduino Compiler With compile and board selector
-		##############################################################
-		"""if arduino_mode:
-			self.arduinoBar = ArduinoCompilerBar(self, self.main)
-			self.connect(self.arduinoBar, QtCore.SIGNAL("compile_action"), self.on_compile_action)
-			self.editorCompilerSplitter.addWidget(self.arduinoBar)
-			pass
-
+		## Terminal Widget
+		self.terminalWidget = TerminalWidget(self, self.main)
+		self.editorTerminalSplitter.addWidget(self.terminalWidget)
 		
-		self.terminalWidget = None
-		if arduino_mode:
-			self.terminalWidget = TerminalWidget(self, self.main)
-			self.editorTerminalSplitter.addWidget(self.terminalWidget)
 
-			self.editorCompilerSplitter.setStretchFactor(0, 2)
-			self.editorCompilerSplitter.setStretchFactor(1, 0)
+		##############################################################
+		### Arduino Compiler Bar
+		self.arduinoBar = ArduinoCompilerBar(self, self.main)
+		self.connect(self.arduinoBar, QtCore.SIGNAL("compile_action"), self.on_compile_action)
+		self.editorCompilerSplitter.addWidget(self.arduinoBar)
+
+		## Layout tweeks - TODO store thas in project
+		self.editorCompilerSplitter.setStretchFactor(0, 2)
+		self.editorCompilerSplitter.setStretchFactor(1, 0)
 	
-			self.editorTerminalSplitter.setStretchFactor(0, 5)
-			self.editorTerminalSplitter.setStretchFactor(1, 2)
-		"""
+		self.editorTerminalSplitter.setStretchFactor(0, 5)
+		self.editorTerminalSplitter.setStretchFactor(1, 2)
 
-	def on_save_button_clicked(self):
-		self.write_file()
-		self.emit(QtCore.SIGNAL("file_saved"), "file_name") # TODO
-
-	def on_file_action(self, butt):
-		print "on_file_action", butt # TODO
-
-	def DEADon_compile_action(self, compile_action):
+	def on_compile_action(self, compile_action):
 		#print "on_compile_action", compile_action
 		compiler = app.Compiler.Compiler(self)
 		self.connect(compiler, QtCore.SIGNAL("compile_log"), self.terminalWidget.on_compile_log)
 		compiler.ard_make(board = self.board, port=self.port, file_to_compile=self.current_file_path)
 
-	def DEADon_compiler_event(self):
+	def on_compiler_event(self):
 		print "on_compiler_event"
 		
 
@@ -218,7 +174,7 @@ class EditorWidget(QtGui.QWidget):
 	def load_file(self, file_path, tabIndex=None):
 		print "file_path", file_path
 		fileInfo = QtCore.QFileInfo(file_path)
-
+		return
 		if fileInfo.isDir():
 			#self.emit(QtCore.SIGNAL("open_file"), None)
 			self.editor.setText("")

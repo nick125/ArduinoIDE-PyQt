@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-from PyQt4 import QtGui
+from PyQt4 import QtCore, QtGui
 from app.settings import settings
 
 class Icon(QtGui.QIcon):
@@ -47,6 +47,8 @@ class Icons:
 
 	Board = 'brick.png'
 	Boards = 'bricks.png'
+
+	SerialPort = 'joystick.png'
 
 	## sketch Related
 	Projects = 'book_open.png'

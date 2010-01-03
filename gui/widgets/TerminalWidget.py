@@ -36,7 +36,7 @@ class TerminalWidget(QtGui.QWidget):
 		self.terminalTextWidget = QtGui.QTextEdit()
 		mainLayout.addWidget(self.terminalTextWidget)
 		#self.terminalTextWidget.setDocumentTitle("Foo")
-		self.terminalTextWidget.setPlainText("> terminal is idling\n>_")
+		self.terminalTextWidget.setPlainText("Waiting.")
 		self.terminalTextWidget.setStyleSheet("color: white; background-color: black;")
 
 		## Bottom Box
@@ -46,7 +46,7 @@ class TerminalWidget(QtGui.QWidget):
 		mainLayout.addLayout(bottomBox)
 
 
-		##TOD this ned to be just an icon.. push putton is a workaround.. although may be usefile  said pedro
+		##TODO this ned to be just an icon.. push putton is a workaround.. although may be useful  thought pedro
 		self.statusIcon = QtGui.QPushButton()
 		self.statusIcon.setFlat(True)
 		self.statusIcon.setIcon(Icon(Ico.Black))
@@ -70,19 +70,7 @@ class TerminalWidget(QtGui.QWidget):
 			else:
 				ico = Ico.Black
 			butt.setIcon(Icon(ico))
-
-
-		#elf.statusBar.showMessage("ssssssssssssssss-")
-		#self.statusLabel = QtGui.QLabel("Terminal Output")
-		#hbox.addWidget(self.statusLabel, 20)
-
 		
-		#self.progress = QtGui.QProgressBar()
-		#self.progress.setRange(0, 3)
-		#self.progress.setFixedHeight(15)
-		#self.progress.hide()
-		#hbox.addWidget(self.progress)
-
 	
 	def on_view_size_clicked(self, butt):
 		#print "on_view_size_clicked", butt

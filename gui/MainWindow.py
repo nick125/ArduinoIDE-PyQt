@@ -26,7 +26,7 @@ from gui.BoardsDialog import BoardsDialog
 from gui.BootLoadersDialog import BootLoadersDialog
 
 from gui.widgets.ProjectsListWidgets import ProjectsBrowser
-from gui.widgets.EditorWidget import EditorWidget
+from gui.widgets.ArduinoEditorWidget import ArduinoEditorWidget
 
 from gui.icons import Ico 
 from gui.icons import Icon 
@@ -160,6 +160,8 @@ class MainWindow(QtGui.QMainWindow):
 		self.on_action_view(QtCore.QString("welcome"))
 		self.on_action_view(QtCore.QString("projects"))
 		self.mainTabWidget.setCurrentIndex(0)	
+
+
 		##########################################################
 		## Status Bar
 		##########################################################
@@ -255,7 +257,7 @@ class MainWindow(QtGui.QMainWindow):
 	## Open Project
 	def on_open_project(self, file_path):
 		fileInfo = QtCore.QFileInfo(file_path)
-		newEditor = EditorWidget(self, self, arduino_mode=True)
+		newEditor = ArduinoEditorWidget(self, self)
 		newEditor.load_file(fileInfo.filePath())
 		newTab = self.mainTabWidget.addTab(newEditor, Icon(Ico.Project), fileInfo.fileName())
 		self.mainTabWidget.setCurrentIndex(newTab)
