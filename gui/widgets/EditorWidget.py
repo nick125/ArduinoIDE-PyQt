@@ -250,12 +250,14 @@ class EditorWidget(QtGui.QWidget):
 	######################################################################
 	## Write File
 	######################################################################
-	def write_file(self):
+	def save_file(self):
+		#print self.current_file_path
 		file2Write = QtCore.QFile(self.current_file_path)
 		if not file2Write.open(QtCore.QIODevice.WriteOnly | QtCore.QIODevice.Text):
 			print "TODO: error writing file"
-			return
+			return False
 		stream_out = QtCore.QTextStream(file2Write)
 		stream_out << self.editor.text()
 		file2Write.close()
+		return True
 

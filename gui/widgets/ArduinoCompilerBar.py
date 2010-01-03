@@ -140,18 +140,8 @@ class ArduinoCompilerBar(QtGui.QWidget):
 	## Compile Upload Buttons
 	##########################################	
 	def on_compile_group_button(self, butt):
-		#print "COMP", butt.text(), butt.property("compile_action").toString()
-		if butt.text() == "Compile":
-			#self.write_file()
-			#self.compile_file()
-			print "Compile"
-		#else:
-			#self.main.status.showMessage("Not recognised", 4000)
-		compile_action_string = butt.property("compile_action").toString()
+		compile_action_string = str(butt.property("compile_action").toString())
 		self.emit(QtCore.SIGNAL("compile_action"), compile_action_string)
-
-	#def compile_file(self):
-		#self.terminalWidget.compile(self.current_file_path)
 
 	def set_compile_buttons_status(self):
 		return
@@ -207,7 +197,9 @@ class ArduinoCompilerBar(QtGui.QWidget):
 		self.emit(QtCore.SIGNAL('project_settings_changed'), self.project_settings)
 
 
-
+	##########################################
+	## Set Project
+	##########################################	
 	def set_project(self, project_settings):
 		self.project_settings = project_settings
 		if self.project_settings == None:

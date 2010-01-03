@@ -122,14 +122,23 @@ class ArduinoEditorWidget(QtGui.QWidget):
 	## Compile Events
 	##########################################
 	def on_compile_action(self, compile_action):
-		#print "on_compile_action", compile_action
-		compiler = app.Compiler.Compiler(self)
-		self.connect(compiler, QtCore.SIGNAL("compile_log"), self.terminalWidget.on_compile_log)
-		compiler.ard_make(board = self.board, port=self.port, file_to_compile=self.current_file_path)
+		print "on_compile_action", compile_action
 
-	def on_compiler_event(self):
-		print "on_compiler_event"
+		## Save file
+		if self.editor.save_file():
+			
+			## Set up compiler
+			compiler = app.Compiler.Compiler(self)
+			self.connect(compiler, QtCore.SIGNAL("compile_log"), self.terminalWidget.on_compile_log)
+			dic = self.project_settings.copy() ## Dnnt know why, maybe a pass back is them not by red
+			dic['file_path'] = self.project_file_path
 
+			## make, and only upload with "uplod_compile"
+			if compile_action == 'compile'  or compile_action == 'upload_compile':
+				compiler.arduino_make_project(dic)
+			
+			if compile_action == 'upload'  or compile_action == 'upload_compile':
+				compiler.arduino_upload_project(dic)
 
 	##########################################
 	## Project Settings
@@ -141,7 +150,7 @@ class ArduinoEditorWidget(QtGui.QWidget):
 	def save_project_settings(self):
 		yaml_string = yaml.dump(self.project_settings, Dumper=Dumper, default_flow_style=False)
 		app.utils.write_file(self.project_settings_file, yaml_string)
-		print "project_settings_saved", self.project_settings, self.project_settings_file
+		#print "project_settings_saved", self.project_settings, self.project_settings_file
 
 	def load_project_settings(self):
 		fileInfo = QtCore.QFileInfo(self.project_settings_file)
@@ -149,4 +158,4 @@ class ArduinoEditorWidget(QtGui.QWidget):
 			self.project_settings =app.utils.load_yaml(self.project_settings_file)
 		else:
 			self.project_settings = None
-		print "project_settings", self.project_settings
+		#print "project_settings", self.project_settings
