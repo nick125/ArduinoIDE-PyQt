@@ -1,0 +1,5 @@
+board:
+  board: diecimila
+  name: Arduino Diecimila, Duemilanove, or Nano w/ ATmega168
+serial_port:
+  serial_port: /dev/ttyUSB0

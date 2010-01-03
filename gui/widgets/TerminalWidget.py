@@ -2,6 +2,7 @@
 
 from PyQt4 import QtCore, QtGui
 
+import gui.widgets.GenericWidgets
 
 from gui.icons import Ico 
 from gui.icons import Icon 
@@ -27,6 +28,7 @@ class TerminalWidget(QtGui.QWidget):
 
 		self.main = main
 		self.terminal_string = None
+		self.size = 300
 
 
 		mainLayout = QtGui.QVBoxLayout()
@@ -38,93 +40,91 @@ class TerminalWidget(QtGui.QWidget):
 		self.terminalTextWidget = QtGui.QTextEdit()
 		mainLayout.addWidget(self.terminalTextWidget)
 		#self.terminalTextWidget.setDocumentTitle("Foo")
-		self.terminalTextWidget.setPlainText("> terminal is idling\n>_")
+		self.terminalTextWidget.setPlainText("Waiting.")
 		self.terminalTextWidget.setStyleSheet("color: white; background-color: black;")
 
 		## Bottom Box
-		bottomBox = QtGui.QHBoxLayout()
-		bottomBox.setContentsMargins(0, 0, 0, 0)
-		bottomBox.setSpacing(0)
-		mainLayout.addLayout(bottomBox)
+		#bottomBox = QtGui.QHBoxLayout()
+		#bottomBox.setContentsMargins(0, 0, 0, 0)
+		#bottomBox.setSpacing(0)
+		#mainLayout.addLayout(bottomBox)
+		bottomToolBar =QtGui.QToolBar()
+		mainLayout.addWidget(bottomToolBar)
 
 
-		##TOD this ned to be just an icon.. push putton is a workaround.. although may be usefile  said pedro
+		##TODO this ned to be just an icon.. push putton is a workaround.. although may be useful  thought pedro
 		self.statusIcon = QtGui.QPushButton()
 		self.statusIcon.setFlat(True)
 		self.statusIcon.setIcon(Icon(Ico.Black))
-		bottomBox.addWidget(self.statusIcon, 0)
+		bottomToolBar.addWidget(self.statusIcon)
 
-		self.statusMessage = QtGui.QLabel("Status Label")
-		bottomBox.addWidget(self.statusMessage, 100)
-	
+		self.statusMessage = QtGui.QLabel("Status Labelsssssssssssssssssssssssssssssssss")
+		bottomToolBar.addWidget(self.statusMessage)
+
+		bottomToolBar.addWidget(gui.widgets.GenericWidgets.ToolBarSpacer())
 		
 		self.viewSizeButtonGroup = QtGui.QButtonGroup(self)
 		self.connect(self.viewSizeButtonGroup, QtCore.SIGNAL("buttonClicked(QAbstractButton *)"), self.on_view_size_clicked)
-		for ico, caption in [[Ico.Small, 'Small'],[Ico.Medium, 'Medium'],[Ico.Large, 'Larger']]:
-			butt = QtGui.QPushButton()
-			bottomBox.addWidget(butt)
+		for size, caption in [[100, 'Small'],[250, 'Medium'],[500, 'Larger']]:
+			butt = QtGui.QToolButton()
+			bottomToolBar.addWidget(butt)
 			self.viewSizeButtonGroup.addButton(butt)
+
 			butt.setText(caption)
+			butt.setProperty("size", size)
 			butt.setCheckable(True)
-			if caption == 'Small': # TODO - save last state
+			butt.setStyleSheet("padding: 0px; margin: 0px;")
+			butt.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
+			if size == self.size: # TODO - save last state
 				butt.setChecked(True) # TODO setting
 				ico = Ico.Yellow
 			else:
 				ico = Ico.Black
 			butt.setIcon(Icon(ico))
-
-
-		#elf.statusBar.showMessage("ssssssssssssssss-")
-		#self.statusLabel = QtGui.QLabel("Terminal Output")
-		#hbox.addWidget(self.statusLabel, 20)
-
 		
-		#self.progress = QtGui.QProgressBar()
-		#self.progress.setRange(0, 3)
-		#self.progress.setFixedHeight(15)
-		#self.progress.hide()
-		#hbox.addWidget(self.progress)
-
 	
 	def on_view_size_clicked(self, butt):
 		#print "on_view_size_clicked", butt
 		for bu in self.viewSizeButtonGroup.buttons():
 			bu.setChecked(False)
 			bu.setIcon(Icon(Ico.Yellow if bu.isChecked() else Ico.Black))
-		if butt.text() == 'Small':
+		if butt.property("size") == 'Small':
 			siz = 100
 		elif butt.text() == 'Medium':
-			siz = 250
+			siz = 300
 		else:
 			siz = 500
-
 		self.setFixedHeight(siz)
 
 	def on_compile_log(self, log_type, log_txt):
 		#print "compile_LOG", log_type , log_txt
 		self.statusIcon.setIcon(Icon(Ico.CompileError))
 		self.statusMessage.setText(log_type)
-
+		string = ""
 		if log_type == "start_compile":
 			## start compile "resets the string"
-			self.terminal_string = "<font color=magenta>>>Compile: %s</font><br>" % log_txt
+			self.terminalTextWidget.setText("")
+			string = "<font color=magenta>>>Compile: %s</font><br>" % log_txt
 
 		elif log_type == 'env':
-			self.terminal_string += "<font color=yellow>%s</font><br>" % log_txt
+			string = "<font color=yellow>%s</font><br>" % log_txt
 			
 		elif log_type == 'command':
-			self.terminal_string += "<font color=blue>%s</font><br>" % log_txt
+			string = "<font color=blue>%s</font><br>" % log_txt
 
 		elif log_type == 'error':
-				self.terminal_string += "<font color=red>%s</font><br>" % log_txt
+				string = "<font color=red>%s</font><br>" % log_txt
 
 		elif log_type == 'result':
-				self.terminal_string += "<font color=green>%s</font><br>" % log_txt
+				string = "<font color=green>%s</font><br>" % log_txt
 
 		else:
-			self.terminal_string += "<font color=white>%s</font><br>" % log_txt
+			string = "<font color=white>%s</font><br>" % log_txt
 
-		self.terminalTextWidget.setText(self.terminal_string)
+		#self.terminalTextWidget.setText(self.terminal_string)
+		self.terminalTextWidget.insertHtml(string)
+		self.terminalTextWidget.textCursor().setPosition(QtGui.QTextCursor.MoveAnchor)
+		self.terminalTextWidget.scrollToAnchor("")
 
 	def on_compile_error(self, txt):
 		return

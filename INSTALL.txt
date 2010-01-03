@@ -1,0 +1,14 @@
+TODO
+
+For debian the following packages
+
+apt-get
+gcc avr python pyqt pyqt-text ?? todo
+
+
+Windows
+---------------------------------------
+* Download and install Python 2.6 and install
+* Install pyqt 
+* install Qscintilla ?
+* Install arduino JAVA

@@ -67,58 +67,57 @@ class EditorWidget(QtGui.QWidget):
 		fileInfoBox.addWidget(self.lblFileName, 4)
 
 		#########################################
-		## Project File Actions
-		butt = QtGui.QPushButton(self)
-		butt.setText("Copy")
-		fileInfoBox.addWidget(butt)
+		## Save Button
+		self.buttonSave = QtGui.QPushButton(self)
+		self.buttonSave.setText("Save") 
+		self.buttonSave.setIcon(Icon(Ico.Save))
+		fileInfoBox.addWidget(self.buttonSave)
+		self.connect(self.buttonSave, QtCore.SIGNAL("clicked()"), self.on_save_button_clicked)
 
-		butt = QtGui.QPushButton(self)
-		butt.setText("Rename")
-		fileInfoBox.addWidget(butt)
-
-		## TODO detect gitor svn or hg etc
-		butt = QtGui.QPushButton(self)
-		butt.setText("Commit")
-		fileInfoBox.addWidget(butt)
-
-		#########################################
-		## File Size and Modified info
-		self.lblFileSize = GenericWidgets.StatusLabel(self, "Size")
-		fileInfoBox.addWidget(self.lblFileSize, 1)
-
-		self.lblFileModified = GenericWidgets.StatusLabel(self, "Modified")
-		fileInfoBox.addWidget(self.lblFileModified, 2)
-
-		#########################################
-		## Middle splitter, editor on left, Compiler on right
-		#########################################
-		self.editorCompilerSplitter = QtGui.QSplitter(self)
-		mainLayout.addWidget(self.editorCompilerSplitter, 20)
-		self.editorCompilerSplitter.setOrientation(QtCore.Qt.Horizontal)
+		###########################################
+		## Actions button with dropdown menu
+		buttActions = QtGui.QPushButton(self)
+		buttActions.setText("Actions")
+		buttActions.setIcon(Icon(Ico.Green))
+		fileInfoBox.addWidget(buttActions)
+		
+		fileActionsMenu = QtGui.QMenu(buttActions)
+		buttActions.setMenu(fileActionsMenu)
+		self.fileActionsGroup = QtGui.QActionGroup(self)
+		self.connect(self.fileActionsGroup, QtCore.SIGNAL("triggered(QAction*)"), self.on_file_action)
+		for act in [['rename', 'Rename'], ['copy','Copy'],['commit','Commit']]:
+			nuAction = fileActionsMenu.addAction(act[1])
+			nuAction.setProperty('action_name', act[0])
+			# TODO - maybe this should be in button group	
 		
 
 			
 		####################################################
-		## Source Editor
+		## Scintilla Editor
 		####################################################
-
-		self.editorTerminalSplitter = QtGui.QSplitter(self)
-		self.editorTerminalSplitter.setOrientation(QtCore.Qt.Vertical)
-		self.editorCompilerSplitter.addWidget(self.editorTerminalSplitter)
-
 		self.editor = QsciScintilla(self)
 		self.editor.setUtf8(True)
 		self.editor.setFolding(QsciScintilla.BoxedTreeFoldStyle)
 		self.editor.setMarginLineNumbers(1, True)
 		self.editor.setAutoIndent(True)
-		self.editorTerminalSplitter.addWidget(self.editor)
+		mainLayout.addWidget(self.editor, 200)
 
+		bottomStatusBar = QtGui.QStatusBar(self)
+		mainLayout.addWidget(bottomStatusBar, 0)
+
+		#########################################
+		## File Size and Modified info
+		self.lblFileSize = GenericWidgets.StatusLabel(self, "Size")
+		bottomStatusBar.addPermanentWidget(self.lblFileSize)
+
+		self.lblFileModified = GenericWidgets.StatusLabel(self, "Modified")
+		bottomStatusBar.addPermanentWidget(self.lblFileModified)
 
 
 		##############################################################
 		### Arduino Compiler With compile and board selector
 		##############################################################
-		if arduino_mode:
+		"""if arduino_mode:
 			self.arduinoBar = ArduinoCompilerBar(self, self.main)
 			self.connect(self.arduinoBar, QtCore.SIGNAL("compile_action"), self.on_compile_action)
 			self.editorCompilerSplitter.addWidget(self.arduinoBar)
@@ -130,25 +129,20 @@ class EditorWidget(QtGui.QWidget):
 			self.terminalWidget = TerminalWidget(self, self.main)
 			self.editorTerminalSplitter.addWidget(self.terminalWidget)
 
+			self.editorCompilerSplitter.setStretchFactor(0, 2)
+			self.editorCompilerSplitter.setStretchFactor(1, 0)
+	
+			self.editorTerminalSplitter.setStretchFactor(0, 5)
+			self.editorTerminalSplitter.setStretchFactor(1, 2)
+		"""
 
-		self.editorCompilerSplitter.setStretchFactor(0, 2)
- 		self.editorCompilerSplitter.setStretchFactor(1, 0)
+	def on_save_button_clicked(self):
+		self.write_file()
+		self.emit(QtCore.SIGNAL("file_saved"), "file_name") # TODO
 
-		self.editorTerminalSplitter.setStretchFactor(0, 5)
-		self.editorTerminalSplitter.setStretchFactor(1, 1)
+	def on_file_action(self, butt):
+		print "on_file_action", butt # TODO
 
-	def on_compile_action(self, compile_action):
-		print "on_compile_action", compile_action
-		compiler = app.Compiler.Compiler(self)
-		#print compiler
-		
-		#self.connect(compiler, QtCore.SIGNAL("compile_error"), self.terminalWidget.on_compile_error)
-		#self.connect(compiler, QtCore.SIGNAL("compile_result"), self.terminalWidget.on_compile_result)
-		self.connect(compiler, QtCore.SIGNAL("compile_log"), self.terminalWidget.on_compile_log)
-		compiler.ard_make(board = self.board, port=self.port, file_to_compile=self.current_file_path)
-
-	def on_compiler_event(self):
-		print "on_compiler_event"
 		
 
 	##########################################
@@ -169,13 +163,6 @@ class EditorWidget(QtGui.QWidget):
 		"""returns a list of ignored extensions""" ## TODO - image viewer
 		extensions = [	'pyc', 'png','gif','jpeg' ]
 		return extensions
-
-
-
-
-
-	def on_upload(self):
-		print "upload"
 
 
 	def DEADload_keywords(self):
@@ -214,7 +201,6 @@ class EditorWidget(QtGui.QWidget):
 		self.editor.setLexer(self.lexer)
 
 	def load_file(self, file_path, tabIndex=None):
-		print "file_path", file_path
 		fileInfo = QtCore.QFileInfo(file_path)
 
 		if fileInfo.isDir():
@@ -264,12 +250,14 @@ class EditorWidget(QtGui.QWidget):
 	######################################################################
 	## Write File
 	######################################################################
-	def write_file(self):
+	def save_file(self):
+		#print self.current_file_path
 		file2Write = QtCore.QFile(self.current_file_path)
 		if not file2Write.open(QtCore.QIODevice.WriteOnly | QtCore.QIODevice.Text):
 			print "TODO: error writing file"
-			return
+			return False
 		stream_out = QtCore.QTextStream(file2Write)
 		stream_out << self.editor.text()
 		file2Write.close()
+		return True
 
