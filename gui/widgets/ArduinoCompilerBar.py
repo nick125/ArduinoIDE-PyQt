@@ -13,8 +13,7 @@ class ArduinoCompilerBar(QtGui.QWidget):
 	def __init__(self, parent, main):
 		QtGui.QWidget.__init__(self)
 
-		self.selected_board = None
-		self.selected_serial_port = None
+		self.project_settings = None
 
 		## Main Vertical Layout
 		mainLayout = QtGui.QVBoxLayout()
@@ -155,6 +154,7 @@ class ArduinoCompilerBar(QtGui.QWidget):
 		#self.terminalWidget.compile(self.current_file_path)
 
 	def set_compile_buttons_status(self):
+		return
 		disabled = True if self.selected_board == None or self.selected_serial_port == None else False 
 		for butt in self.buttCompileGroup.buttons():
 			butt.setDisabled(disabled)
@@ -164,7 +164,6 @@ class ArduinoCompilerBar(QtGui.QWidget):
 	## Board Related
 	##########################################	
 	def load_boards(self):
-		self.selected_board = None
 		boardsObj = app.Boards.Boards(self)
 		for board, name in boardsObj.index():
 			act = QtGui.QAction(self)
@@ -174,26 +173,22 @@ class ArduinoCompilerBar(QtGui.QWidget):
 			self.actionBoardsGroup.addAction(act)
 			self.menuSelectBoard.addAction(act)
 
-		## Todo load settings from yaml
-		if 1 == 0:
-			idx = self.comboBoard.findData("TODO", QtCore.Qt.UserRole)
-			if idx > 0:
-				self.comboBoard.setCurrentIndex(idx)
-
 	def on_action_select_board(self, act):
-		self.selected_board = {'board': str(act.property("board").toString()),
-								'name': str(act.text()) }
+		if not 'board' in self.project_settings:
+			self.project_settings['board'] = {}
+
+		self.project_settings['board'] = {'board': str(act.property("board").toString()),
+										'name': str(act.text()) }
 		items = self.treeInfo.findItems("board", QtCore.Qt.MatchExactly, 2)
-		items[0].setText(1, self.selected_board['name'])
-		## TODO - save setting to project.yaml
+		items[0].setText(1, self.project_settings['board']['name'])
 		self.set_compile_buttons_status()
-		self.emit(QtCore.SIGNAL('board_selected'), self.selected_board)
+		self.emit(QtCore.SIGNAL('project_settings_changed'), self.project_settings)
 			
 	##########################################
-	## EerialPort Related
+	## Serial Port Related
 	##########################################	
 	def load_serial_ports(self):
-		self.selected_serial_port = None
+		#self.selected_serial_port = None
 		portsObj = app.SerialPorts.SerialPorts(self)
 		for serial_port in portsObj.index():
 			act = QtGui.QAction(self)
@@ -205,10 +200,23 @@ class ArduinoCompilerBar(QtGui.QWidget):
 		
 
 	def on_action_select_port(self, act):
-		self.selected_serial_port = {'serial_port': str(act.property("serial_port").toString())}
+		self.project_settings['serial_port'] = {'serial_port': str(act.property("serial_port").toString())}
 		items = self.treeInfo.findItems("serial_port", QtCore.Qt.MatchExactly, 2)
-		items[0].setText(1, self.selected_serial_port['serial_port'])
+		items[0].setText(1, self.project_settings['serial_port']['serial_port'])
 		self.set_compile_buttons_status()
-		self.emit(QtCore.SIGNAL('serial_port_selected'), self.selected_serial_port)
+		self.emit(QtCore.SIGNAL('project_settings_changed'), self.project_settings)
 
 
+
+	def set_project(self, project_settings):
+		self.project_settings = project_settings
+		if self.project_settings == None:
+			self.project_settings = {}
+			return
+		if 'board' in self.project_settings:
+			items = self.treeInfo.findItems("board", QtCore.Qt.MatchExactly, 2)
+			items[0].setText(1, self.project_settings['board']['name'])
+
+		if 'serial_port' in self.project_settings:
+			items = self.treeInfo.findItems("serial_port", QtCore.Qt.MatchExactly, 2)
+			items[0].setText(1, self.project_settings['serial_port']['serial_port'])

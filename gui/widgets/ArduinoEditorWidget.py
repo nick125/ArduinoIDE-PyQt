@@ -38,10 +38,10 @@ class ArduinoEditorWidget(QtGui.QWidget):
 		QtGui.QWidget.__init__(self, parent)
 
 		self.main = main
-		print main
+
 		self.project_file_path = None
-		self.board = None
-		self.serial_port = None
+		self.project_settings_file = None
+		self.project_settings = None
 
 		mainLayout = QtGui.QHBoxLayout()
 		mainLayout.setContentsMargins(0, 0, 0, 0)
@@ -73,11 +73,11 @@ class ArduinoEditorWidget(QtGui.QWidget):
 
 		##############################################################
 		### Arduino Compiler Bar
-		self.arduinoBar = ArduinoCompilerBar(self, self.main)
-		self.connect(self.arduinoBar, QtCore.SIGNAL("compile_action"), self.on_compile_action)
-		self.connect(self.arduinoBar, QtCore.SIGNAL("board_selected"), self.on_board_selected)
-		self.connect(self.arduinoBar, QtCore.SIGNAL("serial_port_selected"), self.on_serial_port_selected)
-		self.editorCompilerSplitter.addWidget(self.arduinoBar)
+		self.arduinoCompilerBar = ArduinoCompilerBar(self, self.main)
+		self.connect(self.arduinoCompilerBar, QtCore.SIGNAL("compile_action"), self.on_compile_action)
+		self.connect(self.arduinoCompilerBar, QtCore.SIGNAL("project_settings_changed"), self.on_project_settings_changed)
+
+		self.editorCompilerSplitter.addWidget(self.arduinoCompilerBar)
 
 		## Layout tweeks - TODO store thas in project
 		self.editorCompilerSplitter.setStretchFactor(0, 2)
@@ -95,6 +95,9 @@ class ArduinoEditorWidget(QtGui.QWidget):
 		## TODO - maybe check for .pde only
 
 		self.project_file_path = None
+		self.project_settings_file = None
+		self.project_settings = None
+
 		fileInfo = QtCore.QFileInfo(project_file_path)
 		
 		if fileInfo.isDir():
@@ -107,8 +110,11 @@ class ArduinoEditorWidget(QtGui.QWidget):
 			return
 
 		self.project_file_path = fileInfo.filePath()
+
+		self.project_settings_file = fileInfo.absolutePath().append("/project_settings.yaml")			
+		self.load_project_settings()
 		self.editor.load_file(self.project_file_path)
-		
+		self.arduinoCompilerBar.set_project(self.project_settings)
 
 
 
@@ -126,25 +132,21 @@ class ArduinoEditorWidget(QtGui.QWidget):
 
 
 	##########################################
-	## Board/ serial Port Events
-	##########################################
-	def on_board_selected(self, board):
-		self.board = board
-		self.save_project_settings()
-
-	def on_serial_port_selected(self, serial_port):
-		self.serial_port = serial_port
-		self.save_project_settings()
-
-
-	##########################################
 	## Project Settings
 	##########################################
+	def on_project_settings_changed(self, new_project_settings):
+		self.project_settings = new_project_settings
+		self.save_project_settings()
+
 	def save_project_settings(self):
-		dic = {'board': self.board, 'serial_port': self.serial_port}
-		yaml_string = yaml.dump(dic, Dumper=Dumper, default_flow_style=False)
-		settings_file = QtCore.QFileInfo(self.project_file_path).absolutePath().append("/project_settings.yaml")	
-		app.utils.write_file(settings_file, yaml_string)
+		yaml_string = yaml.dump(self.project_settings, Dumper=Dumper, default_flow_style=False)
+		app.utils.write_file(self.project_settings_file, yaml_string)
+		print "project_settings_saved", self.project_settings, self.project_settings_file
 
 	def load_project_settings(self):
-		print "ODO"
+		fileInfo = QtCore.QFileInfo(self.project_settings_file)
+		if fileInfo.exists():
+			self.project_settings =app.utils.load_yaml(self.project_settings_file)
+		else:
+			self.project_settings = None
+		print "project_settings", self.project_settings
