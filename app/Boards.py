@@ -23,10 +23,10 @@ class Boards(QtCore.QObject):
 		filePathDir = settings.hardware_path()
 		if not filePathDir:
 			return 
-		filePathDir.absoluteFilePath("boards.txt")
-		if not file_path:
-			print "TODO" # TODO
-			return
+		file_path = filePathDir.absoluteFilePath("boards.txt")
+		#if not filePathDir:
+		#	print "TODO" # TODO
+		#	return
 
 		fileObj = QtCore.QFile(file_path)
 		if not fileObj.open(QtCore.QIODevice.ReadOnly | QtCore.QIODevice.Text):
