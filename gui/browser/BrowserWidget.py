@@ -16,8 +16,8 @@ class Browser(QtWebKit.QWebView):
 		"""
 		QtWebKit.QWebView.__init__(self, parent)
 		self.main = main
-		if enable_api:
-			self.actions = BrowserActions(main, self)
+		#if enable_api:  - temp removed - http://pastebin.ca/1737254
+		#	self.actions = BrowserActions(main, self)
 
 		if initial_page:
 			print "INITIAL PAGE: %s" % initial_page

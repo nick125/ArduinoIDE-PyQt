@@ -14,11 +14,11 @@ class BrowserActions(QtCore.QObject):
 		self.webview = webview
 		self.connect(self.webview.page().mainFrame(), QtCore.SIGNAL("javaScriptWindowObjectCleared()"), self, QtCore.SLOT("attach()"))
 
-	@QtCore.pyqtSlot()
+	#@QtCore.pyqtSlot() - temp removed as it caused an atribute aerror http://pastebin.ca/1737254
 	def attach(self):
 		self.webview.page().mainFrame().addToJavaScriptWindowObject(QtCore.QString("BrowserActions"), self)
 
-	@QtCore.pyqtSlot()
+	#@QtCore.pyqtSlot()   - temp removed as it caused an atribute aerror http://pastebin.ca/1737254
 	def test_action(self):
 		"""
 			A test action

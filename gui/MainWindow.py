@@ -133,6 +133,7 @@ class MainWindow(QtGui.QMainWindow):
 	
 		self.menuWebSites.addSeparator()
 		self.actionEditWebsites = self.menuWebSites.addAction( "Edit Sites", self.on_websites_dialog )
+		self.topToolBar.addAction(self.actionEditWebsites)
 
 		####################################
 		### Style Menu
