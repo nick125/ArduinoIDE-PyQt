@@ -82,7 +82,7 @@ class Settings(QtCore.QObject):
 
 	## Arduino HTML files
 	def html_ref_path(self):
-		return self.arduino_path('reference')
+		return self.arduino_path().absoluteFilePath('reference/')
 
 	## Arduino SVN trunk
 	def arduino_svn_path(self, cd_to=None):
