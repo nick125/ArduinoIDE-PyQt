@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import yaml
+from yaml import Loader, Dumper
+
 from PyQt4 import QtCore
 
 class FileOpenError(Exception): 
@@ -23,6 +25,9 @@ def write_file(file_path, contents):
 	stream_out << contents
 	file2Write.close()
 
+def write_yaml(file_path, someObj):
+	yaml_string = yaml.dump(someObj, Dumper=Dumper, default_flow_style=False)
+	return write_file(file_path, yaml_string)
 
 def load_yaml(file_path):
 	string = get_file_contents(file_path)

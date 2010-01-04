@@ -2,11 +2,14 @@
 
 from PyQt4 import QtCore, QtGui
 
+from app.settings import settings
+import app.utils
+
 from gui.icons import Ico 
 from gui.icons import Icon 
 
 
-# TODO - Addvalidators to the text
+# TODO - Add validators to the url title
 
 class WebSitesDialog(QtGui.QDialog):
 
@@ -25,6 +28,7 @@ class WebSitesDialog(QtGui.QDialog):
 
 		###############################
 		## Add Website Group
+		###############################
 		grp = QtGui.QGroupBox("Add Website")
 		mainLayout.addWidget(grp)
 		grid = QtGui.QGridLayout()
@@ -53,54 +57,69 @@ class WebSitesDialog(QtGui.QDialog):
 		grid.setColumnStretch(1, 2)
 		grid.setColumnStretch(2, 4)
 
+		##############################################
+		### Toolbar
+		##############################################
+
 		toolbar = QtGui.QToolBar(self)
 		toolbar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
 		mainLayout.addWidget( toolbar )
 	
-
-		#self.actionAdd = toolbar.addAction(Icon(Ico.Help), "Add Site", self.on_add_site)
-		#self.actionAddFunction.setDisabled(True)
-
-		#self.actionEdit = toolbar.addAction(Icon(Ico.SiteEdit), "Edit Site", self.on_edit_site)
-		#self.actionEdite.setDisabled(True)
-
 		self.actionDelete = toolbar.addAction(Icon(Ico.Help), "Delete Site", self.on_delete_site)
 		self.actionDelete.setDisabled(True)
 		toolbar.addSeparator()
 
+		##############################################
+		### Tree
+		##############################################
 		self.tree = QtGui.QTreeWidget()
 		mainLayout.addWidget(self.tree)
 		self.tree.headerItem().setText(0, "Site")
 		self.tree.headerItem().setText(1, "Url")
+		self.tree.setRootIsDecorated(False)
 
-		
+		############################
+		### Storage
+		self.websites_file = settings.app_path().absoluteFilePath("etc/websites.yaml")
+		self.sites = None # list of sites
+		self.load_sites()
+
+	def load_sites(self):
+		sites = app.utils.load_yaml(self.websites_file)
+		print "load_sites", self.sites
+		self.tree.model().removeRows(0, self.tree.model().rowCount())
+		for site in sites:
+			self.add_node(site['title'], site['url'])
+
+	def add_node(self, title, url):
+		item = QtGui.QTreeWidgetItem()
+		item.setText(0, title)
+		item.setText(1, url)
+		self.tree.addTopLevelItem(item)	
+
 	def on_add_site(self):
 		## TODO validate
-		"""
-		if self.txtTitle.text().trimmed().length() ==0:
-			self.txtTitle.setFocus()
-			return
+		if 1 == 0:
+			if self.txtTitle.text().trimmed().length() ==0:
+				self.txtTitle.setFocus()
+				return
 
-		if self.txtUrl.text().trimmed().length() ==0:
-			self.txtUrl.setFocus()
-			return
-		"""
-		## validate URL _ check dupes
-		dic = {	'title': str(self.txtTitle.text().trimmed()),
-				'url':  str(self.txtUrl.text().trimmed())
-				}
+			if self.txtUrl.text().trimmed().length() ==0:
+				self.txtUrl.setFocus()
+				return
+		self.add_node(str(self.txtTitle.text().trimmed()), str(self.txtUrl.text().trimmed()))
 		
-		yaml_string = yaml.dump(dic, Dumper=Dumper, default_flow_style=False)
-		websites_file = settings.app_path().absoluteFilePath("etc/websites.yaml")
-		print websites_file, yaml_string
-		app.utils.write_file(websites_file, yaml_string)
+		self.save_sites()
+
+	def save_sites(self):
+		rootItem = self.tree.invisibleRootItem()
+		sites = []
+		for idx in range(0, rootItem.childCount()):
+			item = rootItem.child(idx)
+			sites.append({'title': str(item.text(0)), 'url': str(item.text(1))})
+		app.utils.write_yaml(self.websites_file, sites)
+		print sites, self.websites_file
 		
 
-	def load_project_settings(self):
-		fileInfo = QtCore.QFileInfo(self.project_settings_file)
-		if fileInfo.exists():
-			self.project_settings =app.utils.load_yaml(self.project_settings_file)
-		else:
-			self.project_settings = None
 	def on_delete_site(self):
 		pass # TODO

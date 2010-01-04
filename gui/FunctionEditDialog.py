@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import yaml
-from yaml import Loader, Dumper
+#import yaml
+#from yaml import Loader, Dumper
+
 from PyQt4 import QtCore, QtGui
 
 import app.utils 
