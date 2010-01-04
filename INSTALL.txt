@@ -1,10 +1,10 @@
 TODO
 
-For debian the following packages
+For debian the following packages ?? todo
 
 apt-get
-gcc avr python pyqt pyqt-text ?? todo
-
+gcc avr python pyqt python-qtext 
+* python-qtext = Qsci = QScintilla
 
 Windows
 ---------------------------------------
