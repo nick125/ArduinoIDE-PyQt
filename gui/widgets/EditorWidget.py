@@ -16,14 +16,75 @@ from gui.widgets.ArduinoCompilerBar import ArduinoCompilerBar
 from gui.icons import Ico 
 from gui.icons import Icon 
 
+## attempt ONE
+"""
+class LexerArduino(QsciLexerCustom):
+
+	def __init__(self):
+		QsciLexerCustom.__init__(self)
+		print "LexerArduino"
+
+	def keywords(self, sett):
+		#return QsciLexerCustom.keywords(self, sett)
+		print sett, foo
+		if sett == 1:
+			return "const int void"
+			
+		elif sett == 3:
+			return "pinMode digitalWrite  HIGH LOW"
+		else:
+			return " delay HIGH LOW"
+
+	def description(self, foo):
+		print foo
+		return "foo"
+
+	def styleText(self, start, end):
+		print start, end
+"""
+
+## attempt 2
+# TODO TODO TODO TODO TODO
+## This hightkight keywords
+class LexerArduinoCPP(QsciLexerCPP):
+
+	def __init__(self):
+		QsciLexerCPP.__init__(self)
+		print "LexerArduino"
+
+	def keywords(self, sett):
+		#print sett
+		if sett == 1:
+			#return "const int void"
+			s =  QsciLexerCPP.keywords(self, sett)
+			s += " HIGH LOW INPUT OUTPUT"
+			return s
+			
+		## umm test looks same ?? and with 3 cPP return loads of stuff
+		#elif sett == 3:
+		#	return "pinMode digitalWrite  HIGH LOW"
+		#else:
+		#	return " delay HIGH LOW"
+		return QsciLexerCPP.keywords(self, sett)
+
+	#def description(self, foo):
+	#	print foo
+	#	return "foo"
+
+	#def styleText(self, start, end):
+	#	print start, end
+
+## Messy but it works atmo
 extension_map = [
 	(['makefile'], QsciLexerMakefile),
-	(['pde', 'c', 'cpp', 'h'], QsciLexerCPP),
+	(['c', 'cpp', 'h'], QsciLexerCPP),
 	(['py', 'pyw'], QsciLexerPython),
 	(['htm', 'html'], QsciLexerHTML),
 	(['pl',], QsciLexerPerl),
 	(['java'], QsciLexerJava),
 	(['yaml'], QsciLexerYAML),
+	(['pde', 'ade', 'arduino'], LexerArduinoCPP),
+
 ]
 
 """
@@ -36,6 +97,9 @@ ternimal | ?
 
 
 """
+
+
+
 
 
 class EditorWidget(QtGui.QWidget):
@@ -99,6 +163,7 @@ class EditorWidget(QtGui.QWidget):
 		self.editor.setUtf8(True)
 		self.editor.setFolding(QsciScintilla.BoxedTreeFoldStyle)
 		self.editor.setMarginLineNumbers(1, True)
+		self.editor.setMarginWidth(1, 30)
 		self.editor.setAutoIndent(True)
 		mainLayout.addWidget(self.editor, 200)
 
@@ -195,11 +260,14 @@ class EditorWidget(QtGui.QWidget):
 		return QsciLexerCPP()
 
 	def set_source(self, source, extension=None):
-
 		self.editor.setText(source)
 		self.lexer = self.find_lexer(extension)
+		print "lex=", self.lexer
 		self.editor.setLexer(self.lexer)
 
+	########################################################
+	## Load file, detects extension and ignores pyc etc
+	########################################################
 	def load_file(self, file_path, tabIndex=None):
 		fileInfo = QtCore.QFileInfo(file_path)
 
@@ -243,7 +311,7 @@ class EditorWidget(QtGui.QWidget):
 		#self.editor.set_source(txt)
 			## QsciLexerCPP, QsciLexerMakefile, QsciLexerJava, QsciLexerHTML, QsciLexerPerl, QsciLexerPython, QsciLexerYAML
 		## TODO MAkefile and show images
-		print "YES>>", fileInfo.suffix(), fileInfo.fileName(), fileInfo.filePath()
+		#print "YES>>", fileInfo.suffix(), fileInfo.fileName(), fileInfo.filePath()
 
 		self.set_source( txt, fileInfo.suffix())
 

@@ -9,7 +9,7 @@ class Settings(QtCore.QObject):
 
 	def __init__(self):
 		QtCore.QObject.__init__(self)
-		self.qSettings = QtCore.QSettings("arduino-pyqt", "arduino-pyqt")
+		self.qSettings = QtCore.QSettings("arduino-pyqt", "arduino-pyqt-1")
 
 	#################################################
 	## Pass<>Thru for QSettings class
@@ -75,14 +75,20 @@ class Settings(QtCore.QObject):
 
 	## Arduino Path = ARDUINO_DIR in arduino_make.sh
 	def arduino_path(self, cd_to=None):
-		path = QtCore.QDir(self.value("path/arduino_path"))
+		string_path = self.value("path/arduino_path")
+		if not string_path:
+			return None
+		path = QtCore.QDir(string_path)
 		if cd_to:
 			path.cd(cd_to)
 		return path
 
 	## Arduino HTML files
 	def html_ref_path(self):
-		return self.arduino_path('reference')
+		ard =  self.arduino_path()
+		if ard:
+			return ard.absoluteFilePath('reference/')
+		return None
 
 	## Arduino SVN trunk
 	def arduino_svn_path(self, cd_to=None):
@@ -94,7 +100,10 @@ class Settings(QtCore.QObject):
 
 	## Sketches Path - Path to the sketchbook
 	def sketches_path(self, cd_to=None):
-		path = QtCore.QDir(self.value("path/sketchbooks_path"))
+		pth = self.value("path/sketchbooks_path")
+		if not pth:
+			return None
+		path = QtCore.QDir(pth)
 		if cd_to:
 			path.cd(cd_to)
 		return path	

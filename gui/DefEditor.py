@@ -12,7 +12,7 @@ from gui.widgets import GenericWidgets
 from gui.icons import Ico 
 from gui.icons import Icon 
 
-class DefEditor(QtGui.QWidget):
+class DEAD_DefEditor(QtGui.QWidget): << now function ????????????????????/
 	
 	def __init__(self, parent, function_name=None):
 		QtGui.QWidget.__init__(self, parent)

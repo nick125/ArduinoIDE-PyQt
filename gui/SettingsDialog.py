@@ -6,6 +6,8 @@ from gui.widgets import GenericWidgets
 from gui.icons import Ico 
 from gui.icons import Icon 
 
+from app.settings import settings
+
 class SettingsDialog(QtGui.QDialog):
 
 	def __init__(self, parent, main):
@@ -22,8 +24,8 @@ class SettingsDialog(QtGui.QDialog):
 
 		self.path_keys = []
 		self.path_keys.append( ['path/arduino_path', 'Arduino Path', 'Directory of arduino installation'] )
-		self.path_keys.append( ['path/sketchbooks_path', 'Sketchbooks',	'Directory to sketchbooks'] )
-		self.path_keys.append( ['path/arduino_svn_path', 'Arduino Svn', 'Path to svn trunk/'] )
+		self.path_keys.append( ['path/projects_path', 'Projects',	'Directory of projects'] )
+		self.path_keys.append( ['path/arduino_svn_path', 'Arduino Svn', 'Path to svn trunk/ * Optional'] )
 
 		vBox = QtGui.QVBoxLayout()
 		vBox.setSpacing(20)
@@ -43,6 +45,9 @@ class SettingsDialog(QtGui.QDialog):
 		for fKey, title, description in self.path_keys:
 
 			grp = QtGui.QGroupBox( "%s" % (title) )
+			#fnt = grp.font()
+			#fnt.setBold(True)
+			#grp.setFont(fnt)
 			vBox.addWidget(grp)
 			vb = QtGui.QVBoxLayout()
 			grp.setLayout(vb)
@@ -50,7 +55,7 @@ class SettingsDialog(QtGui.QDialog):
 			lbl = QtGui.QLabel( description )
 			vb.addWidget(lbl)
 
-			pth = self.main.settings.value(fKey)
+			pth = settings.value(fKey)
 			self.txt[fKey] = QtGui.QLineEdit(pth) #setval.toString())
 			self.txt[fKey].setReadOnly(True)
 			vb.addWidget(self.txt[fKey])
@@ -154,8 +159,8 @@ class SettingsDialog(QtGui.QDialog):
 	def on_save(self):
 		for x in self.path_keys:
 			#print x[0], self.txt[x[0]].text()
-			self.main.settings.setValue(x[0], self.txt[x[0]].text())
-		self.main.settings.setValue("virginity", "NO")
-		self.main.settings.qSettings.sync()
+			settings.setValue(x[0], self.txt[x[0]].text())
+		settings.setValue("virginity", "NO")
+		settings.qSettings.sync()
 		self.emit(QtCore.SIGNAL("refresh_settings"))
 		self.accept()

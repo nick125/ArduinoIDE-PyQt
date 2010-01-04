@@ -1,6 +1,7 @@
 
 
 const int pinRed = 7;
+char x = '';
 
 void setup()
 {

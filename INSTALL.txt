@@ -1,9 +1,15 @@
 TODO
 
-For debian the following packages
+For debian the following packages ?? todo
 
 apt-get
-gcc avr python pyqt pyqt-text ?? todo
+gcc avr python pyqt python-qtext python-qscintilla2 python-serial
+
+Not sure which or whether both of the following are required
+* python-qtext = Qsci = QScintilla
+* python-qscintilla2 = QScintialla
+
+* python-serial = Comms to serial
 
 
 Windows

@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import yaml
-from yaml import Loader, Dumper
+#import yaml
+#from yaml import Loader, Dumper
+
 from PyQt4 import QtCore, QtGui
 
 import app.utils 
@@ -11,6 +12,46 @@ from app.settings import settings
 from gui.widgets import GenericWidgets
 from gui.icons import Ico 
 from gui.icons import Icon 
+
+
+
+
+
+
+
+class SyntaxEditDialog(QtGui.QDialog):
+	
+	def __init__(self, parent, function_name):
+		QtGui.QDialog.__init__(self, parent)
+
+		mainLayout = QtGui.QVBoxLayout()
+		self.setLayout(mainLayout)
+
+		hlplbl = QtGui.QLabel("Enter the paramaters seperated by comma, if any")
+		mainLayout.addWidget(hlplbl)
+
+		## Top Box
+		hBox = QtGui.QHBoxLayout()
+		mainLayout.addLayout(hBox)
+
+		lbl = QtGui.QLabel(function_name + "(")
+		lbl.setStyleSheet("font-weight: bold;")
+	
+		hBox.addWidget(lbl)
+
+		lineEdit = QtGui.QLineEdit(self)
+		hBox.addWidget(lineEdit)
+
+		lbl = QtGui.QLabel(")")
+		lbl.setStyleSheet("font-weight: bold;")
+		hBox.addWidget(lbl)
+
+		
+		
+
+		
+
+
 
 class FunctionEditDialog(QtGui.QDialog):
 	
@@ -66,19 +107,21 @@ class FunctionEditDialog(QtGui.QDialog):
 
 
 		## Syntax
+		"""
 		row  += 1
 		gridLayout.addWidget(QtGui.QLabel("Syntax:"), row, 0, QtCore.Qt.AlignRight)
 		self.txtSyntax = QtGui.QLineEdit()
 		self.txtSyntax.setReadOnly(True)
 		gridLayout.addWidget(self.txtSyntax, row, 1)
 		gridLayout.addWidget(QtGui.QLabel(""), row, 2)
+		"""
 
 		## Summary
 		row  += 1
 		gridLayout.addWidget(QtGui.QLabel("Summary:"), row, 0, QtCore.Qt.AlignRight)
 		self.txtSummary = QtGui.QLineEdit()
-		gridLayout.addWidget(self.txtSummary, row, 1)
-		gridLayout.addWidget(QtGui.QLabel("Brief popup description"), row, 2)
+		gridLayout.addWidget(self.txtSummary, row, 1, 1, 2)
+		#gridLayout.addWidget(QtGui.QLabel("Brief popup description"), row, 2)
 
 		## Parameters Widgets tree
 		row  += 1
@@ -92,14 +135,17 @@ class FunctionEditDialog(QtGui.QDialog):
 		toolbar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
 		grpLayout.addWidget(toolbar)
 
-
+		
 		self.radioFixed = QtGui.QRadioButton("Fixed params", self)
 		toolbar.addWidget(self.radioFixed)
+		self.radioFixed.hide()
 		self.radioVariable = QtGui.QRadioButton("Variable params", self)
+		self.radioVariable.hide()
 		toolbar.addWidget(self.radioVariable)
 		toolbar.addSeparator()
+		
 
-		toolbar.addAction(Icon(Ico.Add), "Add", self.on_add_parameter)
+		toolbar.addAction(Icon(Ico.Add), "Add Syntax", self.on_add_syntax)
 		toolbar.addAction(Icon(Ico.Remove), "Remove", self.on_remove_parameter)
 		toolbar.addSeparator()
 		toolbar.addAction(Icon(Ico.Up), "Up", self.on_move_up)
@@ -173,7 +219,12 @@ class FunctionEditDialog(QtGui.QDialog):
 		self.reject()
 
 	def on_tree_changed(self, item, col):
-		self.set_syntax_string()
+		pass # self.set_syntax_string()
+
+	def on_add_syntax(self):
+		d = SyntaxEditDialog(self, "foo")
+		d.exec_()
+		
 
 	def on_add_parameter(self):
 		treeItem = QtGui.QTreeWidgetItem(self.tree)
@@ -213,7 +264,7 @@ class FunctionEditDialog(QtGui.QDialog):
 		self.txtFunction.setText(data['function'])
 		#self.txtLib.setText(data['lib'])
 		self.txtSection.setText(data['section'])
-		self.txtSyntax.setText(data['syntax'])
+		#self.txtSyntax.setText(data['syntax'])
 		self.txtSummary.setText(data['summary'])
 		if 'return' in data:
 			if data['return'] != '':
@@ -241,7 +292,7 @@ class FunctionEditDialog(QtGui.QDialog):
 			treeItem.setText(0, dic.keys()[0])
 			treeItem.setText(1, dic.values()[0])
 			self.tree.addTopLevelItem(treeItem)
-		self.set_syntax_string()
+		#self.set_syntax_string()
 
 	#############################################
 	## Save
@@ -268,7 +319,7 @@ class FunctionEditDialog(QtGui.QDialog):
 		dic['function'] = str(self.txtFunction.text())
 		dic['folder'] = str(self.comboLib.currentText())
 		dic['section'] = str(self.txtSection.text())
-		dic['syntax'] = str(self.txtSyntax.text())
+		#dic['syntax'] = str(self.txtSyntax.text())
 		dic['summary'] = str(self.txtSummary.text())
 		dic['return'] = str(self.txtReturn.text())
 		dic['description'] = str(self.txtDescription.toPlainText())
@@ -303,9 +354,10 @@ class FunctionEditDialog(QtGui.QDialog):
 		
 
 	def on_function_text_changed(self, string):
-		self.set_syntax_string()
+		pass
+		#self.set_syntax_string()
 
-	def set_syntax_string(self):
+	def DEADset_syntax_string(self):
 		rootItem = self.tree.invisibleRootItem()
 		s = self.txtFunction.text()
 		if rootItem.childCount() == 0:

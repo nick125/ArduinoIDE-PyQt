@@ -31,6 +31,9 @@ from gui.widgets.ArduinoEditorWidget import ArduinoEditorWidget
 from gui.icons import Ico 
 from gui.icons import Icon 
 
+
+
+
 class MainWindow(QtGui.QMainWindow):
 	"""
 		Implements the main window
@@ -127,10 +130,13 @@ class MainWindow(QtGui.QMainWindow):
 		## Websites Menu
 		##############################################################
 		self.menuWebSites 	= self.menuBar().addMenu("Websites" )
-	
-		self.menuWebSites.addSeparator()
-		self.actionEditWebsites = self.menuWebSites.addAction( "Edit Sites", self.on_websites_dialog )
+		self.actionGroupWebsites = QtGui.QActionGroup(self)
+		self.connect(self.actionGroupWebsites, QtCore.SIGNAL("triggered(QAction *)"), self.on_website_action)
 
+		#self.menuWebSites.addSeparator()
+		#self.actionEditWebsites = self.menuWebSites.addAction( "Edit Sites", self.on_websites_dialog )
+		#self.topToolBar.addAction(self.actionEditWebsites)
+		
 		####################################
 		### Style Menu
 		meniw = self.menuBar().addMenu("Style")
@@ -151,6 +157,10 @@ class MainWindow(QtGui.QMainWindow):
 		menuHelp.addAction( "About Qt", self.on_about_qt)
 
 
+		### ????
+		self.topToolBar.addAction("Syntax Edit", self.on_test_syntax_edit)
+
+
 		####################################
 		## Dock Widgets
 		####################################
@@ -168,10 +178,14 @@ class MainWindow(QtGui.QMainWindow):
 		self.connect(self.mainTabWidget, QtCore.SIGNAL("tabCloseRequested (int)"), self.on_close_tab_requested)
 		self.connect(self.mainTabWidget, QtCore.SIGNAL("currentChanged (int)"), self.on_tab_change)
 
-		## Load Projects and Welcome
-		self.on_open_project(settings.app_path().absoluteFilePath("etc/example_project/example.pde"))
-		self.on_action_view(QtCore.QString("welcome"))
+		##################################################
+		## Populate Central Tabs
+		
+		self.on_action_view(QtCore.QString("welcome"))		
 		self.on_action_view(QtCore.QString("projects"))
+		self.on_action_view(QtCore.QString("api_browser"))
+		#self.on_open_project(settings.app_path().absoluteFilePath("etc/example_project/example.pde"))
+
 		self.mainTabWidget.setCurrentIndex(0)	
 
 
@@ -199,6 +213,7 @@ class MainWindow(QtGui.QMainWindow):
 
 		settings.restore_window( "main_window", self )
 		self.on_refresh_settings()
+		self.load_website_menu()
 
 
 	#########################################
@@ -317,9 +332,7 @@ class MainWindow(QtGui.QMainWindow):
 
 			
 
-	def on_websites_dialog(self):
-		d = WebSitesDialog(self, self)
-		d.show()
+	
 
  	def on_style_selected(self, action):
 		QtGui.QApplication.setStyle(QtGui.QStyleFactory.create(action.text()))
@@ -328,7 +341,7 @@ class MainWindow(QtGui.QMainWindow):
 	## About and Quit
 	##########################################################
 	def on_about(self):
-		QtGui.QMessageBox.about(self, "TODO", "LINK to google project page")
+		QtGui.QMessageBox.about(self, "About", "The is project named after 'Dawn', a friend who would have loved this caper.")
 
 	def on_about_qt(self):
 		QtGui.QMessageBox.aboutQt(self)
@@ -340,3 +353,43 @@ class MainWindow(QtGui.QMainWindow):
 		#TODO
 		## Crash me
 		print "Bye"
+
+	def on_test_syntax_edit(self):
+		#from gui.FunctionEditDialog import SyntaxEditDialog
+		#d = SyntaxEditDialog(self, "foo")
+		#d.exec_()
+		import gui.wizards.FunctionDocWizard
+		d = gui.wizards.FunctionDocWizard.FunctionDocWizard(self)
+		d.exec_()
+
+
+	##################################################
+	## Websites menu relates
+	##################################################
+	def on_websites_dialog(self):
+		d = WebSitesDialog(self, self)
+		self.connect(d, QtCore.SIGNAL("websites_changed"), self.load_website_menu)
+		d.show()
+
+
+	def load_website_menu(self):
+		self.menuWebSites.clear()
+		web_sites_file = settings.app_path().absoluteFilePath("etc/websites.yaml")
+		groups_sites = app.utils.load_yaml(web_sites_file)
+		for grp in groups_sites:
+			grpMenu = self.menuWebSites.addMenu(grp)
+			for site in groups_sites[grp]:
+				act = grpMenu.addAction(site['title'])
+				act.setProperty("url", site['url'])
+				self.actionGroupWebsites.addAction(act)
+				
+
+		self.menuWebSites.addSeparator()
+		self.actionEditWebsites = self.menuWebSites.addAction( "Edit Sites", self.on_websites_dialog )
+		#self.topToolBar.addAction(self.actionEditWebsites)
+
+	def on_website_action(self, act):
+		webPage = Browser(self, self, initial_page=act.property("url").toString())
+		newIdx = self.mainTabWidget.addTab(webPage, Icon(Ico.WebPage), act.text())
+		self.mainTabWidget.setCurrentIndex(newIdx)
+		

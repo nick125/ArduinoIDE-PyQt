@@ -85,7 +85,9 @@ class Icons:
 	HelpDoc = 'page_white.png'
 	Html = 'page_white.png'
 
-
+	Back = 'arrow_left.png'
+	Forward = 'arrow_right.png'
+	WebPage = 'page_world.png'
 
 	
 	

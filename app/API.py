@@ -39,10 +39,10 @@ class API(QtCore.QObject):
 		## TODO there's a better way ? BUT, there might be a way to sort here or something..
 		list_of_stuff = []
 		for entry, ico, pth in self.functions_list():
-			list_of_stuff.append([entry, ico, pth])
+			list_of_stuff.append(['function', entry, ico, pth])
 
 		for entry, ico, pth in self.html_ref_list():
-			list_of_stuff.append([entry, ico, pth])
+			list_of_stuff.append(['html', entry, ico, pth])
 
 		return list_of_stuff
 
@@ -204,6 +204,8 @@ class API(QtCore.QObject):
 	def load_html_ref(self):
 		self.html_ref = []
 		pathStr = settings.html_ref_path()
+		if not pathStr:
+			return
 		htmlDir = QtCore.QDir(pathStr)
 		if not htmlDir.exists():
 			#QtGui.QMessageBox.information(self, "OOps", " the reference dir %s was not found" % pathStr)
