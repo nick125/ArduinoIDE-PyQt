@@ -4,7 +4,7 @@ import os
 from PyQt4 import QtCore, QtGui
 
 from PyQt4.Qsci import QsciScintilla, QsciAPIs
-from PyQt4.Qsci import QsciLexerCPP, QsciLexerMakefile, QsciLexerJava, QsciLexerHTML, QsciLexerPerl, QsciLexerPython, QsciLexerYAML, QsciLexerCustom
+from PyQt4.Qsci import QsciLexerCPP, QsciLexerMakefile, QsciLexerJava, QsciLexerHTML, QsciLexerPerl, QsciLexerPython, QsciLexerYAML
 
 from app.settings import settings
 import app.utils

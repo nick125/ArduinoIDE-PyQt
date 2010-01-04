@@ -128,6 +128,7 @@ class HelpTree(QtGui.QWidget):
 				itemki = item = QtGui.QStandardItem( entry_type )
 				self.model.setItem(row_idx, 1, itemki)
 		self.tree.sortByColumn(0, QtCore.Qt.AscendingOrder)	
+		self.tree.setColumnHidden(1, True)
 
 	def on_tree_double_clicked(self, modelIndex):
 		## TOD open HTML or API
