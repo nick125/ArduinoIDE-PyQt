@@ -100,6 +100,8 @@ class WebSitesDialog(QtGui.QDialog):
 		self.tree.setRootIsDecorated(True)
 		self.connect( self.tree, QtCore.SIGNAL("itemSelectionChanged()"), self.on_tree_selection_changed)
 		self.connect( self.tree, QtCore.SIGNAL("itemClicked(QTreeWidgetItem *,int)"), self.on_tree_item_clicked)
+		self.connect( self.tree, QtCore.SIGNAL("itemChanged (QTreeWidgetItem *,int)"), self.save_sites)
+		
 
 		############################
 		### Storage
@@ -125,14 +127,15 @@ class WebSitesDialog(QtGui.QDialog):
 			grpItem = items[0]
 		else:
 			grpItem = QtGui.QTreeWidgetItem()
-			item = QtGui.QTreeWidgetItem()
 			grpItem.setText(self.COLS.group, group)
 			grpItem.setFirstColumnSpanned(True)
+			grpItem.setFlags(QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled )
 			self.tree.addTopLevelItem(grpItem)
 			self.tree.setItemExpanded(grpItem, True)		
 		item = QtGui.QTreeWidgetItem(grpItem)
 		item.setText(self.COLS.title, title)
 		item.setText(self.COLS.url, url)
+		item.setFlags(QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled)
 		
 
 	def on_add_site(self):
@@ -167,7 +170,7 @@ class WebSitesDialog(QtGui.QDialog):
 				dic = {'title': str(item.text(self.COLS.title)), 'url': str(item.text(self.COLS.url))}
 				groups[grp].append(dic)
 		app.utils.write_yaml(self.websites_file, groups)
-		#print groups, self.websites_file
+		self.emit(QtCore.SIGNAL("websites_changed"))
 
 		
 	####################################

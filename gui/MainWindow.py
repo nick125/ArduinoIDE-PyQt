@@ -130,11 +130,12 @@ class MainWindow(QtGui.QMainWindow):
 		## Websites Menu
 		##############################################################
 		self.menuWebSites 	= self.menuBar().addMenu("Websites" )
-	
-		self.menuWebSites.addSeparator()
-		self.actionEditWebsites = self.menuWebSites.addAction( "Edit Sites", self.on_websites_dialog )
-		self.topToolBar.addAction(self.actionEditWebsites)
+		self.actionGroupWebsites = QtGui.QActionGroup(self)
 
+		#self.menuWebSites.addSeparator()
+		#self.actionEditWebsites = self.menuWebSites.addAction( "Edit Sites", self.on_websites_dialog )
+		#self.topToolBar.addAction(self.actionEditWebsites)
+		
 		####################################
 		### Style Menu
 		meniw = self.menuBar().addMenu("Style")
@@ -211,6 +212,7 @@ class MainWindow(QtGui.QMainWindow):
 
 		settings.restore_window( "main_window", self )
 		self.on_refresh_settings()
+		self.load_website_menu()
 
 
 	#########################################
@@ -329,9 +331,7 @@ class MainWindow(QtGui.QMainWindow):
 
 			
 
-	def on_websites_dialog(self):
-		d = WebSitesDialog(self, self)
-		d.show()
+	
 
  	def on_style_selected(self, action):
 		QtGui.QApplication.setStyle(QtGui.QStyleFactory.create(action.text()))
@@ -340,7 +340,7 @@ class MainWindow(QtGui.QMainWindow):
 	## About and Quit
 	##########################################################
 	def on_about(self):
-		QtGui.QMessageBox.about(self, "TODO", "LINK to google project page")
+		QtGui.QMessageBox.about(self, "About", "The is project named after 'Dawn', a friend who would have loved this caper.")
 
 	def on_about_qt(self):
 		QtGui.QMessageBox.aboutQt(self)
@@ -360,3 +360,28 @@ class MainWindow(QtGui.QMainWindow):
 		import gui.wizards.FunctionDocWizard
 		d = gui.wizards.FunctionDocWizard.FunctionDocWizard(self)
 		d.exec_()
+
+
+	##################################################
+	## Websites menu relates
+	##################################################
+	def on_websites_dialog(self):
+		d = WebSitesDialog(self, self)
+		self.connect(d, QtCore.SIGNAL("websites_changed"), self.load_website_menu)
+		d.show()
+
+
+	def load_website_menu(self):
+		self.menuWebSites.clear()
+		web_sites_file = settings.app_path().absoluteFilePath("etc/websites.yaml")
+		groups_sites = app.utils.load_yaml(web_sites_file)
+		for grp in groups_sites:
+			grpMenu = self.menuWebSites.addMenu(grp)
+			for site in groups_sites[grp]:
+				act = grpMenu.addAction(site['title'])
+		
+
+		self.menuWebSites.addSeparator()
+		self.actionEditWebsites = self.menuWebSites.addAction( "Edit Sites", self.on_websites_dialog )
+		#self.topToolBar.addAction(self.actionEditWebsites)
+		
