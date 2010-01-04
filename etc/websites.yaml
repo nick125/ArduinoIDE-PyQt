@@ -1,8 +1,16 @@
 Arduino:
-- title: Arduino
+- title: Arduino Home
   url: http://arduino.cc
-- title: dfs
-  url: dfs
+- title: Forum
+  url: http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl
+- title: Blog
+  url: http://arduino.cc/blog/
+- title: Playground
+  url: http://www.arduino.cc/playground/
+- title: Developers Project
+  url: http://code.google.com/p/arduino/
+- title: Issues / Bugs / Feature Requests
+  url: http://code.google.com/p/arduino/issues/list
 Arduino-pyqt:
 - title: Project Page
   url: http://code.google.com/p/arduino-pyqt/
@@ -11,3 +19,5 @@ Arduino-pyqt:
 Tools:
 - title: Pastebin.ca
   url: http://pastebin.ca/
+- title: Google Search
+  url: http://google.com

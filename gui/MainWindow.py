@@ -131,6 +131,7 @@ class MainWindow(QtGui.QMainWindow):
 		##############################################################
 		self.menuWebSites 	= self.menuBar().addMenu("Websites" )
 		self.actionGroupWebsites = QtGui.QActionGroup(self)
+		self.connect(self.actionGroupWebsites, QtCore.SIGNAL("triggered(QAction *)"), self.on_website_action)
 
 		#self.menuWebSites.addSeparator()
 		#self.actionEditWebsites = self.menuWebSites.addAction( "Edit Sites", self.on_websites_dialog )
@@ -379,9 +380,16 @@ class MainWindow(QtGui.QMainWindow):
 			grpMenu = self.menuWebSites.addMenu(grp)
 			for site in groups_sites[grp]:
 				act = grpMenu.addAction(site['title'])
-		
+				act.setProperty("url", site['url'])
+				self.actionGroupWebsites.addAction(act)
+				
 
 		self.menuWebSites.addSeparator()
 		self.actionEditWebsites = self.menuWebSites.addAction( "Edit Sites", self.on_websites_dialog )
 		#self.topToolBar.addAction(self.actionEditWebsites)
+
+	def on_website_action(self, act):
+		webPage = Browser(self, self, initial_page=act.property("url").toString())
+		newIdx = self.mainTabWidget.addTab(webPage, Icon(Ico.WebPage), act.text())
+		self.mainTabWidget.setCurrentIndex(newIdx)
 		

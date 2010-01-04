@@ -87,7 +87,7 @@ class Icons:
 
 	Back = 'arrow_left.png'
 	Forward = 'arrow_right.png'
-	
+	WebPage = 'page_world.png'
 
 	
 	
