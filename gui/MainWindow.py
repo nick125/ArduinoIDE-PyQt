@@ -175,11 +175,14 @@ class MainWindow(QtGui.QMainWindow):
 		self.connect(self.mainTabWidget, QtCore.SIGNAL("tabCloseRequested (int)"), self.on_close_tab_requested)
 		self.connect(self.mainTabWidget, QtCore.SIGNAL("currentChanged (int)"), self.on_tab_change)
 
-		## Load Projects and Welcome
-		#self.on_open_project(settings.app_path().absoluteFilePath("etc/example_project/example.pde"))
-		self.on_action_view(QtCore.QString("api_browser"))
-		self.on_action_view(QtCore.QString("welcome"))
+		##################################################
+		## Populate Central Tabs
+		
+		self.on_action_view(QtCore.QString("welcome"))		
 		self.on_action_view(QtCore.QString("projects"))
+		self.on_action_view(QtCore.QString("api_browser"))
+		#self.on_open_project(settings.app_path().absoluteFilePath("etc/example_project/example.pde"))
+
 		self.mainTabWidget.setCurrentIndex(0)	
 
 

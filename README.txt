@@ -2,6 +2,8 @@ Dawn
 ------------------
 This project is to develop the next-generation of Arduino and others IDE. 
 
+### This is not quite alpha code as yet ###
+
 Dependencies
 ------------
 * Python
