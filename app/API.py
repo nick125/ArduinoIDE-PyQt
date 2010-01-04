@@ -204,6 +204,8 @@ class API(QtCore.QObject):
 	def load_html_ref(self):
 		self.html_ref = []
 		pathStr = settings.html_ref_path()
+		if not pathStr:
+			return
 		htmlDir = QtCore.QDir(pathStr)
 		if not htmlDir.exists():
 			#QtGui.QMessageBox.information(self, "OOps", " the reference dir %s was not found" % pathStr)

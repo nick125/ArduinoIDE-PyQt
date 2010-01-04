@@ -6,6 +6,8 @@ from gui.widgets import GenericWidgets
 from gui.icons import Ico 
 from gui.icons import Icon 
 
+from app.settings import settings
+
 class SettingsDialog(QtGui.QDialog):
 
 	def __init__(self, parent, main):
@@ -50,7 +52,7 @@ class SettingsDialog(QtGui.QDialog):
 			lbl = QtGui.QLabel( description )
 			vb.addWidget(lbl)
 
-			pth = self.main.settings.value(fKey)
+			pth = settings.value(fKey)
 			self.txt[fKey] = QtGui.QLineEdit(pth) #setval.toString())
 			self.txt[fKey].setReadOnly(True)
 			vb.addWidget(self.txt[fKey])
@@ -154,8 +156,8 @@ class SettingsDialog(QtGui.QDialog):
 	def on_save(self):
 		for x in self.path_keys:
 			#print x[0], self.txt[x[0]].text()
-			self.main.settings.setValue(x[0], self.txt[x[0]].text())
-		self.main.settings.setValue("virginity", "NO")
-		self.main.settings.qSettings.sync()
+			settings.setValue(x[0], self.txt[x[0]].text())
+		settings.setValue("virginity", "NO")
+		settings.qSettings.sync()
 		self.emit(QtCore.SIGNAL("refresh_settings"))
 		self.accept()

@@ -6,7 +6,22 @@
 from PyQt4 import QtCore, QtGui, QtWebKit
 from gui.browser.BrowserActions import BrowserActions
 
-class Browser(QtWebKit.QWebView):
+
+class Browser(QtGui.QWidget):
+
+	def __init__(self, parent, main, initial_page=None, compact=False, enable_api=True):
+		QtGui.QWidget.__init__(self, parent)
+
+		self.main = main
+
+		mainLayout = QtGui.QVBoxLayout()
+		self.setLayout(mainLayout)
+
+		self.browser = BrowserWidget(self, self.main, initial_page=initial_page, compact=compact, enable_api=enable_api)
+		mainLayout.addWidget(self.browser)
+
+
+class BrowserWidget(QtWebKit.QWebView):
 	"""
 		Implements the internal browser
 	"""
