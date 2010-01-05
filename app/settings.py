@@ -77,7 +77,7 @@ class Settings(QtCore.QObject):
 	def arduino_path(self, cd_to=None):
 		string_path = self.value("path/arduino_path")
 		if not string_path:
-			return None
+			string_path = os.path.join(os.path.dirname(__file__))
 		path = QtCore.QDir(string_path)
 		if cd_to:
 			path.cd(cd_to)
@@ -102,7 +102,7 @@ class Settings(QtCore.QObject):
 	def sketches_path(self, cd_to=None):
 		pth = self.value("path/sketchbooks_path")
 		if not pth:
-			return None
+			pth = os.path.dirname(__file__)
 		path = QtCore.QDir(pth)
 		if cd_to:
 			path.cd(cd_to)
@@ -123,8 +123,6 @@ class Settings(QtCore.QObject):
 	## Help HTML files
 	def html_pages_path(self):
 		return self.app_path('etc/html_pages')
-
-
 
 	## Exmaples Dir
 	def examples_path(self):
