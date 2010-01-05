@@ -8,7 +8,7 @@ gcc avr python pyqt python-qtext python-qscintilla2 python-serial
 Not sure which or whether both of the following are required
 * python-qtext = Qsci = QScintilla
 * python-qscintilla2 = QScintialla
-
+* You MUST use PyQt 4.5 or higher. Any bugs reported using 4.4 or below WILL BE CLOSED.
 * python-serial = Comms to serial
 
 

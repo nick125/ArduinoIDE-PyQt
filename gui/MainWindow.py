@@ -20,7 +20,7 @@ from gui.dockwidgets.APIBrowserDock import APIBrowserDock
 from gui.panes.APIBrowserPane import APIBrowserPane
 from gui.panes.FileSystemBrowserPane import FileSystemBrowserPane
 
-from gui.browser.BrowserWidget import Browser
+from gui.browser.BrowserWidget import BrowserPane
 
 from gui.BoardsDialog import BoardsDialog
 from gui.BootLoadersDialog import BootLoadersDialog
@@ -244,7 +244,7 @@ class MainWindow(QtGui.QMainWindow):
 			self.connect(projectsWidget, QtCore.SIGNAL("open_project"), self.on_open_project)
 
 		elif ki == 'welcome':
-			welcomePage = Browser(self, self, initial_page="file://%s" % settings.html_pages_path().absoluteFilePath("welcome.html"))
+			welcomePage = BrowserPane(self, self, initial_page="file://%s" % settings.html_pages_path().absoluteFilePath("welcome.html"), compact=True)
 			self.mainTabWidget.addTab(welcomePage, Icon(Ico.Arduino), "Welcome")
 
 		if idx:
